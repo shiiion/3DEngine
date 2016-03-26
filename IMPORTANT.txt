@@ -1,0 +1,7 @@
+TEAM: Adam K. Ivan K. Adharsh B. Sam P.
+
+Projects:
+	3DGame - Tester project and startup project for the solution, compiled as .exe
+	core - core project includes physics and core threads (world, physics objects, etc), compiled as .dll
+	gameUI - gameUI project controls what will be rendered (menu, game, etc), compiled as .dll
+	render - render project contains gl code and a simple interface for rendering (mesh, lighting, etc), compiled as .dll

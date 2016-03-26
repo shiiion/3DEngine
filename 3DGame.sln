@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3DGame", "3DGame\3DGame.vcxproj", "{F12343C4-166B-478D-B84E-7B5C677C2602}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "core\core.vcxproj", "{525DAF7A-182D-40D6-B2F0-5F8B5D754224}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameUI", "gameUI\gameUI.vcxproj", "{535B3BE0-B9E1-42BD-ABB7-F7ED9DD62AB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F1535FE7-AB6F-41EE-92D6-1584D8A32B02}"
+	ProjectSection(SolutionItems) = preProject
+		IMPORTANT.txt = IMPORTANT.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
