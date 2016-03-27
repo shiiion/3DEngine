@@ -41,12 +41,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\core\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\core\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>COMP_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -69,6 +72,9 @@
   <ItemGroup>
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="IEntity.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="IEntity.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
