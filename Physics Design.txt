@@ -33,9 +33,10 @@ members:
 	-Collision Mesh as CollisionMesh
 	-Material as Materal
 	-canCollide as boolean
-	-isGravitated as boolean
+	-canGravity as boolean
+	-friction as float
 functions:
-	ctor(Material, mesh, pos, canCollide = true, scale = 1,1,1, rot = 0,0,0, vel = 0,0,0, accel = 0,0,0)
+	ctor(friction = .5, Material, mesh, pos, canCollide = true, scale = 1,1,1, rot = 0,0,0, vel = 0,0,0, accel = 0,0,0)
 
 
 }
