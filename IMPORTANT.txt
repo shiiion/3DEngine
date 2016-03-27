@@ -5,4 +5,21 @@ Projects:
 	core - core project includes physics and core threads (world, physics objects, etc), compiled as .dll
 	gameUI - gameUI project controls what will be rendered (menu, game, etc), compiled as .dll
 	render - render project contains gl code and a simple interface for rendering (mesh, lighting, etc), compiled as .dll
-	reeeeeeeeee
+	
+
+
+Ideas:
+	get the person to the goal dude bdroude!
+	1st (or 3rd) person
+	mirrors edge type (running) (wall running)?
+
+World Object Hierarchy:
+	Physics Object  ->      Renderable		->			Entity
+	(collision mesh)  (rendered mesh, scale)   (XYZ, YPR, velocity, accel)
+
+	collision mesh is a struct with a type (sphere, prism)
+
+	collision mesh has function to check collision with another collision mesh
+
+	physicsobjects have a collision time variable which controls how hard it will bounce (result velocity of two objects)
+

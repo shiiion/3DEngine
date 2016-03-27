@@ -1,0 +1,80 @@
+class Entity
+{
+members:
+	-position as vec3
+	-rotation as YPR
+	-accel as vec3
+	-velocity as vec3
+functions:
+	ctor(pos, rot = 0,0,0, vel = 0,0,0, accel = 0,0,0)
+
+	virtual void tick(float elapsed_time)
+	{
+		update pos, vel, rot
+	}
+	
+	gets/sets()
+}
+
+class Renderable : public Entity
+{
+members:
+	-Mesh as render DLL mesh
+	-Scale as vec3
+functions:
+	ctor(mesh, pos, scale = 1,1,1, rot = 0,0,0, vel = 0,0,0, accel = 0,0,0)
+
+	gets/sets()
+}
+
+class PhysicsObject : public Entity 
+{
+members:
+	-Collision Mesh as CollisionMesh
+	-Material as Materal
+	-canCollide as boolean
+	-isGravitated as boolean
+functions:
+	ctor(Material, mesh, pos, canCollide = true, scale = 1,1,1, rot = 0,0,0, vel = 0,0,0, accel = 0,0,0)
+
+
+}
+
+struct Material
+{
+	float collisionTime;
+}
+
+~~~
+
+void run()
+{
+
+	int calltime = curtime
+	while(running)
+	{
+		elapsed = curtime - calltime
+		calltime = curtime;
+		wake up physics
+		wake up render
+		sleep(amt);
+	}
+}
+
+void renderThread()
+{
+	vector<Renderable> aa = core_getRenderables();
+	for(int a=0;a<aa.size();a++)
+	{
+		render(aa.getMesh());
+	}
+
+	render those meshes
+}
+
+void physicsThread()
+{
+	call tick for every entity in entitylist regardless of type, pass elapsed time
+	check collisions
+	resolve collisions
+}
