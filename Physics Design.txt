@@ -10,7 +10,8 @@ functions:
 
 	virtual void tick(float elapsed_time)
 	{
-		update pos, vel, rot
+		vel += accel * elapsed_time;
+		pos += velocity * elapsed_time;
 	}
 	
 	gets/sets()
@@ -27,26 +28,48 @@ functions:
 	gets/sets()
 }
 
-class PhysicsObject : public Entity 
+class PhysicsObject : public Renderable 
 {
 members:
 	-Collision Mesh as CollisionMesh
 	-Material as Materal
+	-mass as float
 	-canCollide as boolean
 	-canGravity as boolean
-	-friction as float
+	-collisionflags as 8 bit thing
+	-vector of collided physicsobjects as vector
 functions:
-	ctor(friction = .5, Material, mesh, pos, canCollide = true, scale = 1,1,1, rot = 0,0,0, vel = 0,0,0, accel = 0,0,0)
+	ctor(mass, Material, mesh, pos, canGravity = true, canCollide = true, scale = 1,1,1, rot = 0,0,0, vel = 0,0,0, accel = 0,0,0)
 
+
+	virtual void tick(float elapsed_time) override
+	{
+		vel.y += getWorld()->getGravity() * elapsed_time;
+		Entity::tick(elapsed_time);
+	}
+
+	virtual void checkCollision()
+	{
+		find object i collide with
+		if there are any add them to the collided list
+	}
+
+	virtual void resolveCollisions()
+	{
+		go thru collided objects and resolve this and the collider
+	}
+
+	gets/sets()
 
 }
 
 struct Material
 {
 	float collisionTime;
+	float friction;
 }
-
-~~~
+	add a layer!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~
 
 void run()
 {
