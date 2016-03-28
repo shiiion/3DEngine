@@ -22,5 +22,3 @@ namespace ginkgo
 	};
 	
 };
-
-DECLSPEC ginkgo::IEntity* GenerateEntity();
