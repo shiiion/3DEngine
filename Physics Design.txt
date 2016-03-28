@@ -1,4 +1,4 @@
-class Entity
+class Entitys
 {
 members:
 	-position as vec3
