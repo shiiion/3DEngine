@@ -1,0 +1,27 @@
+
+Productivity:
+Ctrl K + D -> Formats all lines
+Mouse_Cursor_Drag + Alt over Text -> Vertical Higlight
+
+Try out Visual Assist (Its a free plugin with the Tomato logo) : https://visualstudiogallery.msdn.microsoft.com/D6678A1F-C700-4532-8C5E-A799D875063D
+Handy Things in Visual Assist:
+	-Tools->Options->Environment->Keyboard Vassist.OpenFileInSolutionDialog 
+
+----------------------------------------------------------------------
+Standards: (Just some conventions we should be consistent with)
+
+
+namespace ginkgo{			//instead of ginkgo::ClassName::ClassName(), or using namspace ginkgo
+	ClassName::ClassName()
+	{
+	// blah blah blah
+	};
+
+};
+
+
+----------------------------------------------------------------------
+Errors/Bugs: (username -> error message -> extra message)
+	sciencelord01 -> Error	LNK1104	cannot open file 'core\Debug\core.lib'	->	i dont know why lol, I think the error is just for me though
+
+
