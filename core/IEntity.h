@@ -2,8 +2,6 @@
 
 #include "CoreReource.h"
 #include <glm/vec3.hpp>
-#include <cstdio>
-
 
 
 namespace ginkgo
@@ -19,6 +17,9 @@ namespace ginkgo
 		virtual const glm::vec3& getAngles() const = 0;
 
 		virtual void setPosition(const glm::vec3& pos) = 0;
+		virtual void setVelocity(const glm::vec3& vel) = 0;
+		virtual void setAcceleration(const glm::vec3& acc) = 0;
+		virtual void setAngles(const glm::vec3& ang) = 0;
 	};
-	
+	DECLSPEC IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 };
