@@ -21,7 +21,7 @@ namespace ginkgo{			//instead of ginkgo::ClassName::ClassName(), or using namspa
 
 
 ----------------------------------------------------------------------
-Concerns: ((degreeusername: message)
+Concerns: (username: message)
 	
 	sciencelord01: (very minor concern) we have to pass in a float every we call tick(), is there a better way to do this? (Usually, game engines have a tick() method that has no parameters and doesn't depend on elapsed time) 	
 	sciencelord01: (very minor concern) Do we have to use elapsed time? (Usually, game engines have a tick() method that has no parameters and doesn't depend on elapsed time)
