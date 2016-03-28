@@ -73,9 +73,11 @@
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="IEntity.h" />
+    <ClInclude Include="Renderable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Renderable.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
