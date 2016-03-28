@@ -2,56 +2,61 @@
 
 //	Created by the master and nobody else + loser nerd
 
-ginkgo::Entity::Entity(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
-{
-	position = pos;
-	rotation = rot;
-	velocity = vel;
-	acceleration = accel;
-}
+namespace ginkgo {
 
-const glm::vec3& ginkgo::Entity::getAcceleration() const
-{
-	return acceleration;
-}
 
-const glm::vec3& ginkgo::Entity::getVelocity() const
-{
-	return velocity;
-}
+	Entity::Entity(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	{
+		position = pos;
+		rotation = rot;
+		velocity = vel;
+		acceleration = accel;
+	}
 
-const glm::vec3& ginkgo::Entity::getRotation() const
-{
-	return rotation;
-}
+	const glm::vec3& Entity::getAcceleration() const
+	{
+		return acceleration;
+	}
 
-const glm::vec3& ginkgo::Entity::getPosition() const
-{
-	return position;
-}
+	const glm::vec3& Entity::getVelocity() const
+	{
+		return velocity;
+	}
 
-void ginkgo::Entity::setAcceleration(const glm::vec3& accel)
-{
-	acceleration = accel;
-}
+	const glm::vec3& Entity::getRotation() const
+	{
+		return rotation;
+	}
 
-void ginkgo::Entity::setVelocity(const glm::vec3& vel)
-{
-	velocity = vel;
-}
+	const glm::vec3& Entity::getPosition() const
+	{
+		return position;
+	}
 
-void ginkgo::Entity::setRotation(const glm::vec3& rot)
-{
-	rotation = rot;
-}
+	void Entity::setAcceleration(const glm::vec3& accel)
+	{
+		acceleration = accel;
+	}
 
-void ginkgo::Entity::setPosition(const glm::vec3& pos)
-{
-	position = pos;
-}
+	void Entity::setVelocity(const glm::vec3& vel)
+	{
+		velocity = vel;
+	}
 
-void ginkgo::Entity::tick(float elapsedTime)
-{
-	position += velocity * elapsedTime;
-	velocity += acceleration * elapsedTime;
+	void Entity::setRotation(const glm::vec3& rot)
+	{
+		rotation = rot;
+	}
+
+	void Entity::setPosition(const glm::vec3& pos)
+	{
+		position = pos;
+	}
+
+	void Entity::tick(float elapsedTime)
+	{
+		position += velocity * elapsedTime;
+		velocity += acceleration * elapsedTime;
+	}
+
 }

@@ -10,7 +10,7 @@ namespace ginkgo
 		glm::vec3 rotation;
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
-	
+
 	public:
 		Entity(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 
