@@ -2,7 +2,8 @@
 #include "Entity.h"
 //Should probably double check this
 
-namespace ginkgo {
+namespace ginkgo 
+{
 	class Renderable : public Entity
 	{
 	private:

@@ -2,9 +2,8 @@
 
 //	Created by the master and nobody else + loser nerd
 
-namespace ginkgo {
-
-
+namespace ginkgo 
+{
 	Entity::Entity(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
 	{
 		position = pos;
