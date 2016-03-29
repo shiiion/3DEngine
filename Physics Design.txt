@@ -87,7 +87,7 @@ void run()
 
 void renderThread()
 {
-	vector<Renderable> aa = core_getRenderables();
+	vector<Renderable> aa = core_getRenderables(); ~~note, use > to check if it is a physics object too!!
 	for(int a=0;a<aa.size();a++)
 	{
 		render(aa.getMesh());
@@ -127,6 +127,9 @@ class World
 members:
 	list of entities (stored as IEntity)
 
+functions:
+	function to get entities based on type
+
 }
 
 global func to create thread ex:
@@ -134,3 +137,5 @@ void create()
 {
 	std::thread t(Core::tickThread, instance of core);
 }
+
+
