@@ -11,8 +11,7 @@ Handy Things in Visual Assist:
 Standards: (Just some conventions we should be consistent with)
 
 
-namespace ginkgo
-{			//instead of ginkgo::ClassName::ClassName(), or using namspace ginkgo
+namespace ginkgo{			//instead of ginkgo::ClassName::ClassName(), or using namspace ginkgo
 	ClassName::ClassName()
 	{
 	// blah blah blah

@@ -1,44 +1,58 @@
 IN 3D GAME PROJECT: RenderTest.cpp -> main
 
 GL
+glfwWindow
+glew
 
 RenderEngine()
 {
-
-	glMapBuffer
-
+	//glMapBuffer
 }
+
+(I)RenderMesh (for Visualization) Class + Header
+RenderMesh()
+		addVertex(glm::vec3 vertex, const unsigned int index) // + index
+		setColor(glm::vec4 color)
+//TODO	addColor(glm::vec4 color)
+	
+//TODO	addTexture(texture, uv);
+	
+		setVertices(vectorVertices, vectorIndices)
+//TODO	addVertices(vectorVertices, vectorIndices)
+		setColor(glm::vec4 color);
+//TODO	addTexture(texture, vector);
 
 TextureLoader -> loads imagezz
 
 ObjectLoader -> loads object files
 		Returns (I)RenderMesh (for Visualization) Class + Header
-		texture (image)
+		texture (image), color glm::vec4
 		vertices
-		color glm::vec4
-
-
 
 Shader 
 	Vertex
 	Fragment
+	(last)Lighting
+	(last)Post Processing -> touch ups: anti-aliasing, fxaa, etc. 
 
 
 
 Renderable 
 {
-		vertices;
-		texture;
-
-		Renderable(renderData);
+		IRenderMesh* mesh;
+		
+		Renderable(renderMesh);
 
 		render()
 		{
+		//DONT DO ANYTHING
+
 			vertices->bind();
 			texture->bind();
 	
 			texture->unbind();
 			vertices->unbind();
+		//
 		}
 
 }
