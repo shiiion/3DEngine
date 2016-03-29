@@ -27,6 +27,12 @@
     <ClInclude Include="Renderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IRenderable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IPhysicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">

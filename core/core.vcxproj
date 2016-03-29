@@ -73,6 +73,8 @@
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="IEntity.h" />
+    <ClInclude Include="IPhysicsObject.h" />
+    <ClInclude Include="IRenderable.h" />
     <ClInclude Include="Renderable.h" />
   </ItemGroup>
   <ItemGroup>

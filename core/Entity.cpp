@@ -58,4 +58,9 @@ namespace ginkgo
 		velocity += acceleration * elapsedTime;
 	}
 
+	IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3())
+	{
+		return new Entity(pos, rot, vel, accel);
+	}
+
 }
