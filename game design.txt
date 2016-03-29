@@ -1,0 +1,11 @@
+﻿1st person parkour runner 
+
+full control over movement (in air too) but with friction
+
+starting point on 3d map, reach goal using movement controls:
+	jumping, basic movement, wall running, wall jumping, wall grabbing
+
+aesthetic skyboxes ✓✓✓✓✓✓✓✓
+
+
+instantly get max speed, lose it with friction

@@ -116,7 +116,7 @@ members:
 	-instance of world
 functions:
 	tick thread function : calls tick for each object in world, wakes up render after calculations, wakes up event thread
-	
+	start/stop tick thread
 	
 	gets/sets
 }
@@ -125,11 +125,16 @@ functions:
 class World
 {
 members:
-	list of entities (stored as IEntity)
-
+	list of entities (stored as IEntity) as vector
+	gravity constant as float
 functions:
-	function to get entities based on type
+	function to get entities based on type (templated)
 
+	clear world
+	add entity to world
+	remove entity from world
+
+	gets/sets
 }
 
 global func to create thread ex:
