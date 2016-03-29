@@ -3,8 +3,7 @@
 
 namespace ginkgo 
 {
-	Renderable::Renderable(IRenderMesh const* mesh, const glm::vec3& pos, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel) :
-		Entity::Entity(pos, rot, vel, accel)
+	Renderable::Renderable(IRenderMesh const* mesh, const glm::vec3& pos, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
 	{
 		scale = scl;
 		this->mesh = mesh;
