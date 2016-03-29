@@ -59,6 +59,11 @@ namespace ginkgo
 		
 	}
 
+	EntityType Entity::getEntityType() const
+	{
+		return entity;
+	}
+
 	IEntity* renderableFactory(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
 	{
 		return new Entity(pos, rot, vel, accel);

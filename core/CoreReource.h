@@ -23,6 +23,11 @@ namespace ginkgo
 		float friction;
 	};
 
+	enum EntityType
+	{
+		entity = 1, renderable = 2, physicsObject = 3 
+	};
+
 	typedef unsigned __int8 UBYTE;
 	typedef signed __int32 INT32;
 	typedef unsigned __int32 UINT32;

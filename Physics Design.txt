@@ -68,7 +68,7 @@ struct Material
 	float collisionTime;
 	float friction;
 }
-	add a layer!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~add a layer!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~
 
 void run()
@@ -101,4 +101,36 @@ void physicsThread()
 	call tick for every entity in entitylist regardless of type, pass elapsed time
 	check collisions
 	resolve collisions
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+core class which contains tick function
+this function will manage elapsed time between ticks
+you can set the wait time between tick
+
+
+class Core
+{
+members:
+	-tick time as float
+	-instance of world
+functions:
+	tick thread function : calls tick for each object in world, wakes up render after calculations, wakes up event thread
+	
+	
+	gets/sets
+}
+
+
+class World
+{
+members:
+	list of entities (stored as IEntity)
+
+}
+
+global func to create thread ex:
+void create()
+{
+	std::thread t(Core::tickThread, instance of core);
 }

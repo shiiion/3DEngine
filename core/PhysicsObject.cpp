@@ -147,8 +147,14 @@ namespace ginkgo
 		collisionMesh = collision;
 	}
 
+	EntityType PhysicsObject::getEntityType() const
+	{
+		return physicsObject;
+	}
+
 	void PhysicsObject::tick(float elapsedTime)
 	{
+		//ADD GRAVITY
 		velocity += acceleration * elapsedTime;
 		position += velocity * elapsedTime;
 	}

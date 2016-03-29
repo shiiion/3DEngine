@@ -25,5 +25,7 @@ namespace ginkgo
 		virtual void setVelocity(const glm::vec3& vel) override;
 		virtual void setAcceleration(const glm::vec3& acc) override;
 		virtual void setRotation(const glm::vec3& ang) override;
+
+		EntityType getEntityType() const override;
 	};
 }

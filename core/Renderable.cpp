@@ -80,6 +80,11 @@ namespace ginkgo
 		position += velocity * elapsedTime;
 	}
 
+	EntityType Renderable::getEntityType() const
+	{
+		return renderable;
+	}
+
 	IRenderable* renderableFactory(IRenderMesh const* mesh, const glm::vec3& pos, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
 	{
 		return new Renderable(mesh, pos, scl, rot, vel, accel);
