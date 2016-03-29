@@ -15,6 +15,11 @@ namespace ginkgo
 
 		virtual float getGravity() const = 0;
 		virtual void setGravity(float gravity) = 0;
+		virtual IEntity* getEntity(int id) const = 0;
+		virtual void setEntity(int id) const = 0;
+
+		virtual void addEntity(const IEntity* entity) const = 0;
+		virtual void removeEntity(const IEntity* entity) const = 0;
 
 	};
 }
