@@ -54,8 +54,9 @@ namespace ginkgo
 
 	void Entity::tick(float elapsedTime)
 	{
-		position += velocity * elapsedTime;
 		velocity += acceleration * elapsedTime;
+		position += velocity * elapsedTime;
+		
 	}
 
 	IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3())
