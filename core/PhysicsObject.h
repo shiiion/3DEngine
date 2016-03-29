@@ -20,10 +20,10 @@ namespace ginkgo
 		float mass;
 		bool canCollide;
 		bool canGravity;
-		UBYTE collisionFlags;
+		UINT32 collisionFlags;
 
 	public:
-		PhysicsObject(float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, UBYTE collisionFlags=0, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
+		PhysicsObject(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 		virtual const glm::vec3& getScale() const override;
 		virtual void setScale(const glm::vec3& scl) override;
 		virtual IRenderMesh const* getRenderMesh() const override;
@@ -42,18 +42,20 @@ namespace ginkgo
 		virtual void setAcceleration(const glm::vec3& acc) override;
 		virtual void setRotation(const glm::vec3& ang) override;
 
-		virtual void checkCollisions() = 0;
-		virtual void resolveCollisions() = 0;
+		virtual void checkCollisions() override;
+		virtual void resolveCollisions() override;
 
-		virtual void setMaterial(const Material& mat) = 0;
-		virtual void setMass(float mass) = 0;
-		virtual void setCanCollide(bool collides) = 0;
-		virtual void setCanGravity(bool canGravity) = 0;
+		virtual void setMaterial(const Material& mat) override;
+		virtual void setMass(float mass) override;
+		virtual void setCanCollide(bool collides) override;
+		virtual void setCanGravity(bool canGravity) override;
+		virtual void setCollisionMesh(ICollisionMesh* collision) override;
 
-		virtual const Material& getMaterial() const = 0;
-		virtual float getMass() const = 0;
-		virtual bool doesCollide() const = 0;
-		virtual bool doesHaveGravity() const = 0;
-		virtual UBYTE getCollisionFlags() const = 0;
+		virtual const Material& getMaterial() const override;
+		virtual float getMass() const override;
+		virtual bool doesCollide() const override;
+		virtual bool doesHaveGravity() const override;
+		virtual UINT32 getCollisionFlags() const override;
+		virtual ICollisionMesh* getCollisionMesh() const override;
 	};
 }

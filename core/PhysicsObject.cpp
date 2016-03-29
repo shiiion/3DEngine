@@ -2,12 +2,20 @@
 
 namespace ginkgo
 {
-	PhysicsObject::PhysicsObject(float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, UBYTE collisionFlags, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	PhysicsObject::PhysicsObject(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
 	{
 		this->mass = mass;
 		material = mat;
 		scale = scl;
 		this->mesh = mesh;
+		collisionMesh = collision;
+		position = pos;
+		rotation = rot;
+		acceleration = accel;
+		velocity = vel;
+		this->canCollide = canCollide;
+		this->canGravity = canGravity;
+		collisionFlags = CSTATE_NOCOLLISION;
 	}
 	const glm::vec3& PhysicsObject::getScale() const
 	{
@@ -43,7 +51,7 @@ namespace ginkgo
 	{
 
 	}
-	
+
 	const glm::vec3& PhysicsObject::getAcceleration() const
 	{
 		return acceleration;
@@ -84,11 +92,16 @@ namespace ginkgo
 		return canGravity;
 	}
 
-	UBYTE PhysicsObject::getCollisionFlags() const
+	UINT32 PhysicsObject::getCollisionFlags() const
 	{
 		return collisionFlags;
 	}
-	
+
+	ICollisionMesh* PhysicsObject::getCollisionMesh() const
+	{
+		return collisionMesh;
+	}
+
 	void PhysicsObject::setAcceleration(const glm::vec3& accel)
 	{
 		acceleration = accel;
@@ -113,7 +126,7 @@ namespace ginkgo
 	{
 		material = mat;
 	}
-	
+
 	void PhysicsObject::setMass(float mass)
 	{
 		this->mass = mass;
@@ -128,7 +141,12 @@ namespace ginkgo
 	{
 		this->canGravity = canGravity;
 	}
-	
+
+	void PhysicsObject::setCollisionMesh(ICollisionMesh* collision)
+	{
+		collisionMesh = collision;
+	}
+
 	void PhysicsObject::tick(float elapsedTime)
 	{
 		velocity += acceleration * elapsedTime;

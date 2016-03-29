@@ -7,6 +7,12 @@
 #endif
 #include <vector>
 
+#define SETFLAG(r, f) ((r) |= (f))
+#define RESFLAG(r, f) ((r) &= (~(f)))
+#define TOGFLAG(r, f) ((r) ^= (f))
+#define PI 3.14159265358979324f
+#define DEG_TO_RAD(d) ((d) * (PI / 180.0f))
+#define RAD_TO_DEG(r) ((r) * (180.0f / PI))
 
 namespace ginkgo
 {
