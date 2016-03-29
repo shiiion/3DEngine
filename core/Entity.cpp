@@ -54,8 +54,9 @@ namespace ginkgo
 
 	void Entity::tick(float elapsedTime)
 	{
-		position += velocity * elapsedTime;
 		velocity += acceleration * elapsedTime;
+		position += velocity * elapsedTime;
+		
 	}
 
 }
