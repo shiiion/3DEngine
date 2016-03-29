@@ -75,10 +75,12 @@
     <ClInclude Include="IEntity.h" />
     <ClInclude Include="IPhysicsObject.h" />
     <ClInclude Include="IRenderable.h" />
+    <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Renderable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Renderable.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
