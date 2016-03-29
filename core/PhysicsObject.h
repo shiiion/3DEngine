@@ -23,7 +23,7 @@ namespace ginkgo
 		UBYTE collisionFlags;
 
 	public:
-
+		PhysicsObject(float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, UBYTE collisionFlags=0, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 		virtual const glm::vec3& getScale() const override;
 		virtual void setScale(const glm::vec3& scl) override;
 		virtual IRenderMesh const* getRenderMesh() const override;
