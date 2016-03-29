@@ -80,6 +80,7 @@
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Renderable.h" />
+    <ClInclude Include="IWorld.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
