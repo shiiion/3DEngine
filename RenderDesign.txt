@@ -1,0 +1,59 @@
+IN 3D GAME PROJECT: RenderTest.cpp -> main
+
+GL
+
+RenderEngine()
+{
+
+	glMapBuffer
+
+}
+
+TextureLoader -> loads imagezz
+
+ObjectLoader -> loads object files
+		Returns (I)RenderMesh (for Visualization) Class + Header
+		texture (image)
+		vertices
+		color glm::vec4
+
+
+
+Shader 
+	Vertex
+	Fragment
+
+
+
+Renderable 
+{
+		vertices;
+		texture;
+
+		Renderable(renderData);
+
+		render()
+		{
+			vertices->bind();
+			texture->bind();
+	
+			texture->unbind();
+			vertices->unbind();
+		}
+
+}
+
+
+
+
+
+
+
+renderThread()
+{
+		for( Rendearble* r ; rs)
+		{
+			r->render();
+		}
+
+}
