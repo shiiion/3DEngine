@@ -80,6 +80,11 @@ namespace ginkgo
 		position = pos;
 	}
 
+	void Renderable::setEntityID(long ID)
+	{
+		entityID = ID;
+	}
+
 	void Renderable::tick(float elapsedTime)
 	{
 		velocity += acceleration * elapsedTime;

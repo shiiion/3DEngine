@@ -17,7 +17,8 @@ namespace ginkgo
 	void Core::startCore()
 	{
 		core.running = true;
-		coreThread = new thread(&Core::coreThread, core);
+		core.coreThread = new thread(&Core::coreFunc, core);
+		core.physicsThread = new thread(&Core::physicsFunc, core);
 	}
 
 	Core::Core()
@@ -25,6 +26,14 @@ namespace ginkgo
 		running = false;
 		tickTime = (1.f / 60.f);
 		startTick = GetTickCount64();
+	}
+
+	Core::Core(const Core& copy)
+	{
+		startTick = copy.startTick;
+		running = copy.running;
+		tickTime = copy.tickTime;
+		world = copy.world;
 	}
 
 	float Core::getTickTime() const
@@ -42,7 +51,7 @@ namespace ginkgo
 		return (float)(GetTickCount64() - startTick) / 1000.f;
 	}
 
-	void Core::coreThread()
+	void Core::coreFunc()
 	{
 		running = true;
 		while (running)
@@ -55,7 +64,7 @@ namespace ginkgo
 		}
 	}
 
-	void Core::physicsThread()
+	void Core::physicsFunc()
 	{
 		float tickEnd = getEngineTime(), elapsedTime;
 

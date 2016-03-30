@@ -14,11 +14,11 @@ namespace ginkgo
 		
 		static Core core;
 
-		static thread* coreThread;
-		static thread* physicsThread;
-		static thread* eventThread;
+		thread* coreThread;
+		thread* physicsThread;
+		thread* eventThread;
 
-		long startTick;
+		unsigned long long startTick;
 
 		volatile bool running;
 		volatile float tickTime;
@@ -32,9 +32,10 @@ namespace ginkgo
 
 	public:
 		Core();
+		Core(const Core& copy);
 
-		void coreThread();
-		void physicsThread();
+		void coreFunc();
+		void physicsFunc();
 
 		void setTickTime(float time);
 		float getTickTime() const;

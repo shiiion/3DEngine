@@ -4,7 +4,7 @@
 
 namespace ginkgo
 {
-	class PhysicsObject : IPhysicsObject
+	class PhysicsObject : public IPhysicsObject
 	{
 	private:
 		glm::vec3 scale;
