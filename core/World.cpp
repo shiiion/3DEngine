@@ -1,5 +1,7 @@
 #include "World.h"
 #include "IEntity.h"
+#include "IRenderable.h"
+#include "IPhysicsObject.h"
 
 namespace ginkgo
 {
@@ -22,7 +24,7 @@ namespace ginkgo
 				newEntityList.at(a) = entityList.at(a);
 			}
 			return newEntityList;
-			
+
 		}
 		else if (type == 2) {
 			for (int a = 0; a < entityList.size(); a++)
@@ -46,7 +48,7 @@ namespace ginkgo
 
 	void World::clearWorld()
 	{
-
+		//todo
 	}
 
 	void World::setGravity(float gravity)
@@ -55,10 +57,39 @@ namespace ginkgo
 	}
 	void World::setEntity(long ID, IEntity* entity)
 	{
-		oldEntity = World::getEntity(ID);
+		IEntity* oldEntity = World::getEntity(ID);
+		IEntity* newEntity;
+		if (entity->getEntityType() >= 1 && oldEntity->getEntityType() >= 1) {
+			entity->setPosition(oldEntity->getPosition);
+			entity->setVelocity(oldEntity->getVelocity);
+			entity->setAcceleration(oldEntity->getAcceleration);
+			entity->setRotation(oldEntity->getRotation);
+			entity->setEntityID(oldEntity->getEntityID);
+			newEntity = entity;
+
+			if (entity->getEntityType() >= 2 && oldEntity->getEntityType() >= 2) {
+				IRenderable* renderable = (IRenderable*)entity;
+				IRenderable* oldRenderable = (IRenderable*)oldEntity;
+				renderable->setRenderMesh(oldRenderable->getRenderMesh);
+				renderable->setScale(oldRenderable->getScale);
+				newEntity = renderable;
+
+				if (entity->getEntityType() >= 3 && oldEntity->getEntityType() >= 3) {
+					IPhysicsObject* physicsObject = (IPhysicsObject*)renderable;
+					IPhysicsObject* oldPhysicsObject = (IPhysicsObject*)oldRenderable;
+					physicsObject->setCollisionMesh(oldPhysicsObject->getCollisionMesh);
+					physicsObject->setMass(oldPhysicsObject->getMass);
+					physicsObject->setMaterial(oldPhysicsObject->getMaterial);
+					physicsObject->setCanGravity(oldPhysicsObject->doesHaveGravity);
+					physicsObject->setCanCollide(oldPhysicsObject->doesCollide);
+					newEntity = physicsObject;
+
+				}
+			}
+		}
 
 		World::removeEntity(ID);
-		World::addEntity(entity);
+		World::addEntity(newEntity);
 		//add and remove
 	}
 	float World::getGravity() const
