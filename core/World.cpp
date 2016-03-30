@@ -10,6 +10,7 @@ namespace ginkgo
 	{
 		this->gravity = gravity;
 	}
+
 	const vector<IEntity*>& World::getEntityList() const
 	{
 		return entityList;
@@ -18,7 +19,8 @@ namespace ginkgo
 	vector<IEntity*> World::getEntitiesByType(EntityType type) const
 	{
 		vector<IEntity*> newEntityList;
-		if (type == entity) {
+		if (type == entity)
+		{
 			for (int a = 0; a < entityList.size(); a++)
 			{
 				newEntityList.at(a) = entityList.at(a);
@@ -26,7 +28,8 @@ namespace ginkgo
 			return newEntityList;
 
 		}
-		else if (type == renderable) {
+		else if (type == renderable)
+		{
 			for (int a = 0; a < entityList.size(); a++)
 			{
 				if (entityList.at(a)->getEntityType() > entity)
@@ -34,7 +37,8 @@ namespace ginkgo
 			}
 			return newEntityList;
 		}
-		else if (type == physicsObject) {
+		else if (type == physicsObject)
+		{
 			for (int a = 0; a < entityList.size(); a++)
 			{
 				if (entityList.at(a)->getEntityType() > renderable)
@@ -48,18 +52,24 @@ namespace ginkgo
 
 	void World::clearWorld()
 	{
-		//todo
+		for (int a = 0; a < entityList.size(); a++)
+		{
+			delete entityList.at(a);
+		}
+		entityList.clear();
 	}
 
 	void World::setGravity(float gravity)
 	{
 		this->gravity = gravity;
 	}
+
 	void World::setEntity(long ID, IEntity* entity)
 	{
 		IEntity* oldEntity = World::getEntity(ID);
 		IEntity* newEntity;
-		if (entity->getEntityType() >= 1 && oldEntity->getEntityType() >= 1) {
+		if (entity->getEntityType() >= 1 && oldEntity->getEntityType() >= 1) 
+		{
 			entity->setPosition(oldEntity->getPosition);
 			entity->setVelocity(oldEntity->getVelocity);
 			entity->setAcceleration(oldEntity->getAcceleration);
@@ -67,14 +77,16 @@ namespace ginkgo
 			entity->setEntityID(oldEntity->getEntityID);
 			newEntity = entity;
 
-			if (entity->getEntityType() >= 2 && oldEntity->getEntityType() >= 2) {
+			if (entity->getEntityType() >= 2 && oldEntity->getEntityType() >= 2) 
+			{
 				IRenderable* renderable = (IRenderable*)entity;
 				IRenderable* oldRenderable = (IRenderable*)oldEntity;
 				renderable->setRenderMesh(oldRenderable->getRenderMesh);
 				renderable->setScale(oldRenderable->getScale);
 				newEntity = renderable;
 
-				if (entity->getEntityType() >= 3 && oldEntity->getEntityType() >= 3) {
+				if (entity->getEntityType() >= 3 && oldEntity->getEntityType() >= 3)
+				{
 					IPhysicsObject* physicsObject = (IPhysicsObject*)renderable;
 					IPhysicsObject* oldPhysicsObject = (IPhysicsObject*)oldRenderable;
 					physicsObject->setCollisionMesh(oldPhysicsObject->getCollisionMesh);
@@ -92,10 +104,12 @@ namespace ginkgo
 		World::addEntity(newEntity);
 		//add and remove
 	}
+
 	float World::getGravity() const
 	{
 		return gravity;
 	}
+
 	IEntity* World::getEntity(long ID) const
 	{
 		int a;
@@ -104,6 +118,8 @@ namespace ginkgo
 			if (entityList.at(a)->getEntityID() == ID)
 				break;
 		}
+		if (a == entityList.size())
+			return nullptr;
 		return entityList.at(a);
 	}
 
@@ -111,6 +127,7 @@ namespace ginkgo
 	{
 		entityList.push_back(entity);
 	}
+
 	void World::removeEntity(long ID)
 	{
 		int a;
@@ -119,6 +136,9 @@ namespace ginkgo
 			if (entityList.at(a)->getEntityID() == ID)
 				break;
 		}
+		if (a == entityList.size())
+			return;
+		delete entityList.at(a);
 		entityList.erase(entityList.begin() + a);
 	}
 }

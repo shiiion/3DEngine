@@ -133,7 +133,7 @@ functions:
 	clear world
 	add entity to world
 	remove entity from world
-
+	set entity (copies new entity in with properties of old one)
 	gets/sets
 }
 
