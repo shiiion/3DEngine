@@ -55,6 +55,11 @@ namespace ginkgo
 		position = pos;
 	}
 
+	void Entity::setEntityID(long ID)
+	{
+		entityID = ID;
+	}
+
 	void Entity::tick(float elapsedTime)
 	{
 		velocity += acceleration * elapsedTime;

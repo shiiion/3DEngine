@@ -20,6 +20,9 @@ namespace ginkgo
 		volatile float tickTime;
 		IWorld* world;
 		
+		condition_variable renderConditionVar;
+		condition_variable eventConditionVar;
+
 	public:
 		Core();
 

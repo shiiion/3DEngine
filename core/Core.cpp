@@ -49,7 +49,8 @@ namespace ginkgo
 			}
 
 
-			std::this_thread::sleep_for(tickTime * 1000.f);
+
+			std::this_thread::sleep_for(std::chrono::milliseconds((int)(tickTime * 1000.f)));
 		}
 	}
 }
