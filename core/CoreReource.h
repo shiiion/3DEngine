@@ -6,6 +6,9 @@
 #define DECLSPEC __declspec(dllimport)
 #endif
 #include <vector>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #define SETFLAG(r, f) ((r) |= (f))
 #define RESFLAG(r, f) ((r) &= (~(f)))
@@ -17,6 +20,10 @@
 namespace ginkgo
 {
 	using std::vector;
+	using std::thread;
+	using std::mutex;
+	using std::condition_variable;
+
 	struct Material
 	{
 		float collisionTime;

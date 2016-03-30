@@ -10,7 +10,7 @@ namespace ginkgo
 	{
 	public:
 		virtual vector<IEntity*> getEntitiesByType(EntityType type) const = 0;
-		virtual vector<IEntity*> getEntityList() const = 0;
+		virtual const vector<IEntity*>& getEntityList() const = 0;
 
 		virtual void clearWorld() = 0;
 

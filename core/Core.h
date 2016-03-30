@@ -2,6 +2,8 @@
 
 #include "CoreReource.h"
 
+
+#ifdef COMP_DLL
 namespace ginkgo
 {
 	class IWorld;
@@ -25,3 +27,4 @@ namespace ginkgo
 		static long generateID();
 	};
 }
+#endif
