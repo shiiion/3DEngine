@@ -5,12 +5,19 @@
 
 namespace ginkgo
 {
+	static bool doWakePhysics = false;
 	volatile long Core::entityIDBase = 1;
-	Core Core::core = Core();
+	Core Core::core;
 
 	long Core::generateID()
 	{
 		return entityIDBase++;
+	}
+
+	void Core::startCore()
+	{
+		core.running = true;
+		coreThread = new thread(&Core::coreThread, core);
 	}
 
 	Core::Core()
@@ -38,19 +45,36 @@ namespace ginkgo
 	void Core::coreThread()
 	{
 		running = true;
-		float tickStart = getEngineTime(), tickEnd = getEngineTime(), elapsedTime;
+		while (running)
+		{
+			doWakePhysics = true;
+			physicsConditionVar.notify_one();
+			physicsLock.lock();
+
+			std::this_thread::sleep_for(std::chrono::milliseconds((int)(tickTime * 1000.f)));
+		}
+	}
+
+	void Core::physicsThread()
+	{
+		float tickEnd = getEngineTime(), elapsedTime;
+
 		while (running)
 		{
 			const vector<IEntity*>& entityList = world->getEntityList();
+			physicsConditionVar.wait(physicsLock, [] { return doWakePhysics; });
+			doWakePhysics = false;
+			elapsedTime = getEngineTime() - tickEnd;
 
 			for (IEntity* e : entityList)
 			{
 				e->tick(elapsedTime);
 			}
 
+			//!!COLLISION CODE GOES HERE!!
 
-
-			std::this_thread::sleep_for(std::chrono::milliseconds((int)(tickTime * 1000.f)));
+			elapsedTime = getEngineTime() - tickEnd;
+			tickEnd = getEngineTime();
 		}
 	}
 }

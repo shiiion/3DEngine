@@ -27,7 +27,7 @@ namespace ginkgo
 		virtual float getMass() const = 0;
 		virtual bool doesCollide() const = 0;
 		virtual bool doesHaveGravity() const = 0;
-		virtual UINT32 getCollisionFlags() const = 0;
+		virtual UINT32 getCollisionState() const = 0;
 		virtual ICollisionMesh* getCollisionMesh() const = 0;
 	};
 

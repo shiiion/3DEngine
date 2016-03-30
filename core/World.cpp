@@ -18,7 +18,7 @@ namespace ginkgo
 	vector<IEntity*> World::getEntitiesByType(EntityType type) const
 	{
 		vector<IEntity*> newEntityList;
-		if (type == 1) {
+		if (type == entity) {
 			for (int a = 0; a < entityList.size(); a++)
 			{
 				newEntityList.at(a) = entityList.at(a);
@@ -26,18 +26,18 @@ namespace ginkgo
 			return newEntityList;
 
 		}
-		else if (type == 2) {
+		else if (type == renderable) {
 			for (int a = 0; a < entityList.size(); a++)
 			{
-				if (entityList.at(a)->getEntityType > 1)
+				if (entityList.at(a)->getEntityType() > entity)
 					newEntityList.push_back(entityList.at(a));
 			}
 			return newEntityList;
 		}
-		else if (type == 3) {
+		else if (type == physicsObject) {
 			for (int a = 0; a < entityList.size(); a++)
 			{
-				if (entityList.at(a)->getEntityType > 2)
+				if (entityList.at(a)->getEntityType() > renderable)
 					newEntityList.push_back(entityList.at(a));
 			}
 			return newEntityList;

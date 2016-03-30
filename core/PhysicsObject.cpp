@@ -16,7 +16,7 @@ namespace ginkgo
 		velocity = vel;
 		this->canCollide = canCollide;
 		this->canGravity = canGravity;
-		collisionFlags = CSTATE_NOCOLLISION;
+		collisionState = CSTATE_NOCOLLISION;
 
 		entityID = Core::generateID();
 	}
@@ -95,9 +95,9 @@ namespace ginkgo
 		return canGravity;
 	}
 
-	UINT32 PhysicsObject::getCollisionFlags() const
+	UINT32 PhysicsObject::getCollisionState() const
 	{
-		return collisionFlags;
+		return collisionState;
 	}
 
 	ICollisionMesh* PhysicsObject::getCollisionMesh() const
@@ -155,6 +155,11 @@ namespace ginkgo
 		collisionMesh = collision;
 	}
 
+	void PhysicsObject::setEntityID(long ID)
+	{
+		entityID = ID;
+	}
+
 	EntityType PhysicsObject::getEntityType() const
 	{
 		return physicsObject;
@@ -166,4 +171,10 @@ namespace ginkgo
 		velocity += acceleration * elapsedTime;
 		position += velocity * elapsedTime;
 	}
+
+	IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	{
+		return new PhysicsObject(collision, mass, mat, mesh, pos, canGravity, canCollide, scl, rot, vel, accel);
+	}
+
 }

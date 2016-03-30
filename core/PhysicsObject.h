@@ -22,7 +22,7 @@ namespace ginkgo
 		float mass;
 		bool canCollide;
 		bool canGravity;
-		UINT32 collisionFlags;
+		UINT32 collisionState;
 
 	public:
 		PhysicsObject(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
@@ -44,6 +44,7 @@ namespace ginkgo
 		virtual void setVelocity(const glm::vec3& vel) override;
 		virtual void setAcceleration(const glm::vec3& acc) override;
 		virtual void setRotation(const glm::vec3& ang) override;
+		virtual void setEntityID(long ID) override;
 		EntityType getEntityType() const override;
 
 		virtual void checkCollisions() override;
@@ -59,7 +60,7 @@ namespace ginkgo
 		virtual float getMass() const override;
 		virtual bool doesCollide() const override;
 		virtual bool doesHaveGravity() const override;
-		virtual UINT32 getCollisionFlags() const override;
+		virtual UINT32 getCollisionState() const override;
 		virtual ICollisionMesh* getCollisionMesh() const override;
 	};
 }
