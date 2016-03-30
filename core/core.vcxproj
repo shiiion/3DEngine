@@ -82,12 +82,14 @@
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="IWorld.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
