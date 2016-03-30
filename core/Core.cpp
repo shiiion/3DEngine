@@ -1,5 +1,4 @@
 #include "Core.h"
-#include "IWorld.h"
 
 namespace ginkgo
 {
@@ -11,8 +10,4 @@ namespace ginkgo
 		return entityIDBase++;
 	}
 
-	void Core::coreThread()
-	{
-		vector<
-	}
 }
