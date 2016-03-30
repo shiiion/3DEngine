@@ -10,19 +10,25 @@ namespace ginkgo
 	class Core
 	{
 	private:
-		static long entityIDBase;
+		static volatile long entityIDBase;
 		
 		static Core core;
 
+		long startTick;
 
-
-		float tickTime;
+		volatile bool running;
+		volatile float tickTime;
 		IWorld* world;
 		
 	public:
+		Core();
+
 		void coreThread();
 
+		void setTickTime(float time);
+		float getTickTime() const;
 
+		float getEngineTime() const;
 
 		static long generateID();
 	};

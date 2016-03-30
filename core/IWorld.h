@@ -15,13 +15,13 @@ namespace ginkgo
 		virtual void clearWorld() = 0;
 
 		virtual void setGravity(float gravity) = 0;
-		virtual void setEntity(int ID) = 0;
+		virtual void setEntity(long ID, IEntity* entity) = 0;
 
 		virtual float getGravity() const = 0;
-		virtual IEntity* getEntity(int ID) const = 0;
+		virtual IEntity* getEntity(long ID) const = 0;
 
 		virtual void addEntity(IEntity* entity) = 0;
-		virtual void removeEntity(IEntity* entity) = 0;
+		virtual void removeEntity(long ID) = 0;
 
 	};
 }
