@@ -43,6 +43,7 @@
     <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\core\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\core\$(Configuration)\Intermediates\</IntDir>
+    <LibraryPath>$(SolutionDir)dependencies\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

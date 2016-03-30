@@ -9,17 +9,20 @@ RenderEngine()
 	//glMapBuffer
 }
 
+createWindow -> declspec 
+
+
 (I)RenderMesh (for Visualization) Class + Header
-RenderMesh()
-		addVertex(glm::vec3 vertex, const unsigned int index) // + index
+RenderMesh() //Indices have to be seperately called from vertices
+		addVertex(glm::vec3 vertex) // + index
+		setVertices(vectorVertices)
+		addIndex(const unsigned int);
+		setIndices(const std::vector<unsigned int>& indices);
 		setColor(glm::vec4 color)
+		
+//TODO	addVertices(vectorVertices)
 //TODO	addColor(glm::vec4 color)
-	
 //TODO	addTexture(texture, uv);
-	
-		setVertices(vectorVertices, vectorIndices)
-//TODO	addVertices(vectorVertices, vectorIndices)
-		setColor(glm::vec4 color);
 //TODO	addTexture(texture, vector);
 
 TextureLoader -> loads imagezz
@@ -40,34 +43,39 @@ Shader
 Renderable 
 {
 		IRenderMesh* mesh;
-		
 		Renderable(renderMesh);
-
-		render()
-		{
-		//DONT DO ANYTHING
-
-			vertices->bind();
-			texture->bind();
+	/*
+	Renderables CANNOT have their own render function
+	Each renderable will submit itself to a renderer
+	The renderer will render each Renderable
+		//The data will not control how its rendered, the renderer will
+	Each layer will have its own renderer (otherwise too much buffer data) and control the renderer
+	Without the layer, the renderer will have to be controlled in the main/renderThread
+	*/
 	
-			texture->unbind();
-			vertices->unbind();
-		//
-		}
-
 }
-
-
-
-
-
 
 
 renderThread()
 {
-		for( Rendearble* r ; rs)
-		{
-			r->render();
-		}
+	for(Layer layer : layers)
+		layer->render();
+	
+	---------------------	OR	---------------------
+	//basically in each layer
+
+	renderer->begin();
+
+	for (const Renderable2D* renderable : renderables)
+			renderable->submit(renderer);
+
+	renderer->end();
+	renderer->flush();	//where it actually draws
+
 
 }
+
+Things to Remember:
+	-Octree in OpenGL
+	-Some sort of Culling -> Back and Front
+	-http://gamedev.stackexchange.com/questions/5493/whats-the-state-of-the-art-in-space-partitioning-for-games

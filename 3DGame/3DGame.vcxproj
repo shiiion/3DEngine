@@ -40,7 +40,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)dependencies\include;$(SolutionDir)core;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)dependencies\include;$(SolutionDir)render;$(SolutionDir)core;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\3DGame\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\3DGame\$(Configuration)\Intermediates\</IntDir>
     <LibraryPath>$(SolutionDir)bin;$(LibraryPath)</LibraryPath>
@@ -53,7 +53,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>core\Debug\core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>core\Debug\core.lib;render\Debug\render.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
