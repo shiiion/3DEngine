@@ -13,7 +13,7 @@
   <ItemGroup>
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="RenderMesh.h" />
-    <ClInclude Include="Resource.h" />
+    <ClInclude Include="RenderResource.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

@@ -24,7 +24,7 @@
     <ClInclude Include="RenderMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="RenderResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
