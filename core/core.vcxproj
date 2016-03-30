@@ -73,6 +73,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core.h" />
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="IEntity.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="IWorld.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Renderable.cpp" />

@@ -14,6 +14,8 @@ namespace ginkgo
 		glm::vec3 rotation;
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
+		
+		long entityID;
 
 		ICollisionMesh* collisionMesh;
 		Material material;
@@ -36,6 +38,7 @@ namespace ginkgo
 		virtual const glm::vec3& getVelocity() const override;
 		virtual const glm::vec3& getAcceleration() const override;
 		virtual const glm::vec3& getRotation() const override;
+		virtual long getEntityID() const override;
 
 		virtual void setPosition(const glm::vec3& pos) override;
 		virtual void setVelocity(const glm::vec3& vel) override;

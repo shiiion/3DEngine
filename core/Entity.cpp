@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "Core.h"
 
 //	Created by the master and nobody else + loser nerd
 
@@ -10,6 +11,8 @@ namespace ginkgo
 		rotation = rot;
 		velocity = vel;
 		acceleration = accel;
+
+		entityID = Core::generateID();
 	}
 
 	const glm::vec3& Entity::getAcceleration() const
@@ -57,6 +60,11 @@ namespace ginkgo
 		velocity += acceleration * elapsedTime;
 		position += velocity * elapsedTime;
 		
+	}
+
+	long Entity::getEntityID() const
+	{
+		return entityID;
 	}
 
 	EntityType Entity::getEntityType() const

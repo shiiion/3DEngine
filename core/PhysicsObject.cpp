@@ -1,4 +1,5 @@
 #include "PhysicsObject.h"
+#include "Core.h"
 
 namespace ginkgo
 {
@@ -16,6 +17,8 @@ namespace ginkgo
 		this->canCollide = canCollide;
 		this->canGravity = canGravity;
 		collisionFlags = CSTATE_NOCOLLISION;
+
+		entityID = Core::generateID();
 	}
 	const glm::vec3& PhysicsObject::getScale() const
 	{
@@ -100,6 +103,11 @@ namespace ginkgo
 	ICollisionMesh* PhysicsObject::getCollisionMesh() const
 	{
 		return collisionMesh;
+	}
+
+	long PhysicsObject::getEntityID() const
+	{
+		return entityID;
 	}
 
 	void PhysicsObject::setAcceleration(const glm::vec3& accel)

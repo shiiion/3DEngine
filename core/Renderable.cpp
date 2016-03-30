@@ -1,5 +1,5 @@
 #include "Renderable.h"
-//Should probably double check this
+#include "Core.h"
 
 namespace ginkgo
 {
@@ -7,6 +7,7 @@ namespace ginkgo
 	{
 		scale = scl;
 		this->mesh = mesh;
+		entityID = Core::generateID();
 	}
 
 	const glm::vec3& Renderable::getScale() const
@@ -52,6 +53,11 @@ namespace ginkgo
 	const glm::vec3& Renderable::getPosition() const
 	{
 		return position;
+	}
+
+	long Renderable::getEntityID() const
+	{
+		return entityID;
 	}
 
 	void Renderable::setAcceleration(const glm::vec3& accel)

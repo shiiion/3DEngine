@@ -15,6 +15,7 @@ namespace ginkgo
 		virtual const glm::vec3& getVelocity() const = 0;
 		virtual const glm::vec3& getAcceleration() const = 0;
 		virtual const glm::vec3& getRotation() const = 0;
+		virtual long getEntityID() const = 0;
 
 		virtual void setPosition(const glm::vec3& pos) = 0;
 		virtual void setVelocity(const glm::vec3& vel) = 0;
