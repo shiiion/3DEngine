@@ -27,12 +27,18 @@ namespace ginkgo
 		else if (type == 2) {
 			for (int a = 0; a < entityList.size(); a++)
 			{
-				if (entityList.at(a).getEntityType > 1)
-					entityList.push_back(entityList.at(a));
+				if (entityList.at(a)->getEntityType > 1)
+					newEntityList.push_back(entityList.at(a));
 			}
+			return newEntityList;
 		}
 		else if (type == 3) {
-
+			for (int a = 0; a < entityList.size(); a++)
+			{
+				if (entityList.at(a)->getEntityType > 2)
+					newEntityList.push_back(entityList.at(a));
+			}
+			return newEntityList;
 		}
 		else
 			return newEntityList;
@@ -49,6 +55,10 @@ namespace ginkgo
 	}
 	void World::setEntity(long ID, IEntity* entity)
 	{
+		oldEntity = World::getEntity(ID);
+
+		World::removeEntity(ID);
+		World::addEntity(entity);
 		//add and remove
 	}
 	float World::getGravity() const
