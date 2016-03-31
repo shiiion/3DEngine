@@ -8,7 +8,7 @@ namespace ginkgo
 {
 	volatile long Core::entityIDBase = 1;
 	Core Core::core;
-	static bool doWakePhysics = false;
+	volatile bool doWakePhysics = false;
 
 	long Core::generateID()
 	{
@@ -34,7 +34,7 @@ namespace ginkgo
 	Core::Core()
 	{
 		running = false;
-		tickTime = (1.f / 60.f);
+		tickTime = (1.f / 61.f);
 		startTick = GetTickCount64();
 		world = new World(1.0f);
 	}
@@ -68,8 +68,7 @@ namespace ginkgo
 		while (running)
 		{
 			doWakePhysics = true;
-			physicsConditionVar.notify_one();
-
+			physicsConditionVar.notify_all();
 			std::this_thread::sleep_for(std::chrono::milliseconds((int)(tickTime * 1000.f)));
 		}
 	}
@@ -78,7 +77,6 @@ namespace ginkgo
 	{
 		float tickEnd = getEngineTime(), elapsedTime;
 		std::unique_lock<std::mutex> lck(physicsLock);
-		lck.unlock();
 		while (running)
 		{
 			const vector<IEntity*>& entityList = world->getEntityList();
@@ -96,11 +94,22 @@ namespace ginkgo
 			elapsedTime = getEngineTime() - tickEnd;
 			tickEnd = getEngineTime();
 		}
+		printf("exit");
 	}
 
 	IWorld* Core::getWorld() const
 	{
 		return world;
+	}
+
+	void Core::lockPhysics()
+	{
+		physicsLock.lock();
+	}
+
+	void Core::unlockPhysics()
+	{
+		physicsLock.unlock();
 	}
 
 //~~~~~~~~~~~~~~~~~~~~~~~
@@ -133,5 +142,15 @@ namespace ginkgo
 	IWorld* getWorld()
 	{
 		return Core::core.getWorld();
+	}
+
+	void lockPhysics()
+	{
+		Core::core.lockPhysics();
+	}
+
+	void unlockPhysics()
+	{
+		Core::core.unlockPhysics();
 	}
 }

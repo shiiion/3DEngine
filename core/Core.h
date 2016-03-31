@@ -37,6 +37,9 @@ namespace ginkgo
 		void coreFunc();
 		void physicsFunc();
 
+		void lockPhysics();
+		void unlockPhysics();
+
 		void setTickTime(float time);
 		float getTickTime() const;
 
@@ -56,4 +59,7 @@ namespace ginkgo
 	DECLSPEC_CORE void startCore();
 	DECLSPEC_CORE void stopCore();
 	DECLSPEC_CORE IWorld* getWorld();
+
+	DECLSPEC_CORE void lockPhysics();
+	DECLSPEC_CORE void unlockPhysics();
 }
