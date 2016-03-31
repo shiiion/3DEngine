@@ -32,7 +32,6 @@ namespace ginkgo
 	public:
 		static Core core;
 		Core();
-		Core(const Core& copy);
 
 		void coreFunc();
 		void physicsFunc();

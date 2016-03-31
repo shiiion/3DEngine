@@ -18,8 +18,8 @@ namespace ginkgo
 	void Core::startCore()
 	{
 		core.running = true;
-		core.coreThread = new thread(&Core::coreFunc, core);
-		core.physicsThread = new thread(&Core::physicsFunc, core);
+		core.coreThread = new thread(&Core::coreFunc, &core);
+		core.physicsThread = new thread(&Core::physicsFunc, &core);
 		//TODO: add event thread
 	}
 
@@ -37,14 +37,6 @@ namespace ginkgo
 		tickTime = (1.f / 61.f);
 		startTick = GetTickCount64();
 		world = new World(1.0f);
-	}
-
-	Core::Core(const Core& copy)
-	{
-		startTick = copy.startTick;
-		running = copy.running;
-		tickTime = copy.tickTime;
-		world = copy.world;
 	}
 
 	float Core::getTickTime() const
@@ -67,8 +59,14 @@ namespace ginkgo
 		running = true;
 		while (running)
 		{
-			doWakePhysics = true;
-			physicsConditionVar.notify_all();
+			{
+				std::lock_guard<std::mutex> lck(physicsLock);
+				doWakePhysics = true;
+			}
+			physicsConditionVar.notify_one();
+			{
+				std::lock_guard<std::mutex> lck(physicsLock);
+			}
 			std::this_thread::sleep_for(std::chrono::milliseconds((int)(tickTime * 1000.f)));
 		}
 	}
@@ -79,8 +77,10 @@ namespace ginkgo
 		std::unique_lock<std::mutex> lck(physicsLock);
 		while (running)
 		{
-			const vector<IEntity*>& entityList = world->getEntityList();
 			physicsConditionVar.wait(lck, [] { return doWakePhysics; });
+			doWakePhysics = false;
+
+			const vector<IEntity*>& entityList = world->getEntityList();
 			doWakePhysics = false;
 			elapsedTime = getEngineTime() - tickEnd;
 
@@ -94,7 +94,6 @@ namespace ginkgo
 			elapsedTime = getEngineTime() - tickEnd;
 			tickEnd = getEngineTime();
 		}
-		printf("exit");
 	}
 
 	IWorld* Core::getWorld() const
