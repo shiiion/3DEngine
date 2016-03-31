@@ -1,13 +1,14 @@
 #include "Core.h"
 #include "IWorld.h"
 #include "IEntity.h"
+#include "World.h"
 #include <Windows.h>
 
 namespace ginkgo
 {
-	static bool doWakePhysics = false;
 	volatile long Core::entityIDBase = 1;
 	Core Core::core;
+	static bool doWakePhysics = false;
 
 	long Core::generateID()
 	{
@@ -19,6 +20,15 @@ namespace ginkgo
 		core.running = true;
 		core.coreThread = new thread(&Core::coreFunc, core);
 		core.physicsThread = new thread(&Core::physicsFunc, core);
+		//TODO: add event thread
+	}
+
+	void Core::stopCore()
+	{
+		core.running = false;
+		core.coreThread->join();
+		core.physicsThread->join();
+		core.eventThread->join();
 	}
 
 	Core::Core()
@@ -26,6 +36,7 @@ namespace ginkgo
 		running = false;
 		tickTime = (1.f / 60.f);
 		startTick = GetTickCount64();
+		world = new World(1.0f);
 	}
 
 	Core::Core(const Core& copy)
@@ -58,7 +69,6 @@ namespace ginkgo
 		{
 			doWakePhysics = true;
 			physicsConditionVar.notify_one();
-			physicsLock.lock();
 
 			std::this_thread::sleep_for(std::chrono::milliseconds((int)(tickTime * 1000.f)));
 		}
@@ -67,11 +77,12 @@ namespace ginkgo
 	void Core::physicsFunc()
 	{
 		float tickEnd = getEngineTime(), elapsedTime;
-
+		std::unique_lock<std::mutex> lck(physicsLock);
+		lck.unlock();
 		while (running)
 		{
 			const vector<IEntity*>& entityList = world->getEntityList();
-			physicsConditionVar.wait(physicsLock, [] { return doWakePhysics; });
+			physicsConditionVar.wait(lck, [] { return doWakePhysics; });
 			doWakePhysics = false;
 			elapsedTime = getEngineTime() - tickEnd;
 
@@ -85,5 +96,42 @@ namespace ginkgo
 			elapsedTime = getEngineTime() - tickEnd;
 			tickEnd = getEngineTime();
 		}
+	}
+
+	IWorld* Core::getWorld() const
+	{
+		return world;
+	}
+
+//~~~~~~~~~~~~~~~~~~~~~~~
+
+	float getEngineTime()
+	{
+		return Core::core.getEngineTime();
+	}
+
+	void setTickTime(float time)
+	{
+		Core::core.setTickTime(time);
+	}
+
+	float getTickTime()
+	{
+		return Core::core.getTickTime();
+	}
+
+	void startCore()
+	{
+		Core::core.startCore();
+	}
+
+	void stopCore()
+	{
+		Core::core.stopCore();
+	}
+
+	IWorld* getWorld()
+	{
+		return Core::core.getWorld();
 	}
 }

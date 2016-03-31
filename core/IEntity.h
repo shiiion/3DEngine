@@ -25,5 +25,5 @@ namespace ginkgo
 
 		virtual EntityType getEntityType() const = 0;
 	};
-	DECLSPEC IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
+	DECLSPEC_CORE IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 };

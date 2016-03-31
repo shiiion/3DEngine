@@ -1,9 +1,9 @@
 #pragma once
 
-#ifdef COMP_DLL
-#define DECLSPEC __declspec(dllexport)
+#ifdef COMP_DLL_CORE
+#define DECLSPEC_CORE __declspec(dllexport)
 #else
-#define DECLSPEC __declspec(dllimport)
+#define DECLSPEC_CORE __declspec(dllimport)
 #endif
 #include <vector>
 #include <thread>

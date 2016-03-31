@@ -3,16 +3,15 @@
 #include "CoreReource.h"
 
 
-#ifdef COMP_DLL
 namespace ginkgo
 {
 	class IWorld;
+#ifdef COMP_DLL_CORE
 	class Core
 	{
 	private:
 		static volatile long entityIDBase;
 		
-		static Core core;
 
 		thread* coreThread;
 		thread* physicsThread;
@@ -27,10 +26,11 @@ namespace ginkgo
 		condition_variable eventConditionVar;
 		condition_variable physicsConditionVar;
 
-		std::unique_lock<std::mutex> physicsLock;
-		std::unique_lock<std::mutex> eventLock;
+		std::mutex physicsLock;
+		std::mutex eventLock;
 
 	public:
+		static Core core;
 		Core();
 		Core(const Core& copy);
 
@@ -42,9 +42,18 @@ namespace ginkgo
 
 		float getEngineTime() const;
 
+		IWorld* getWorld() const;
+
 		static long generateID();
 		static void startCore();
 		static void stopCore();
+		
 	};
-}
 #endif
+	DECLSPEC_CORE float getEngineTime();
+	DECLSPEC_CORE void setTickTime(float time);
+	DECLSPEC_CORE float getTickTime();
+	DECLSPEC_CORE void startCore();
+	DECLSPEC_CORE void stopCore();
+	DECLSPEC_CORE IWorld* getWorld();
+}
