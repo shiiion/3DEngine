@@ -22,7 +22,9 @@ namespace ginkgo
 		float mass;
 		bool canCollide;
 		bool canGravity;
+		std::vector<IPhysicsObject*> colliders;
 		UINT32 collisionState;
+		UINT32 movementState;
 
 	public:
 		PhysicsObject(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());

@@ -3,6 +3,7 @@
 #include "IEntity.h"
 #include "World.h"
 #include <Windows.h>
+#include "IPhysicsObject.h"
 
 namespace ginkgo
 {
@@ -89,7 +90,17 @@ namespace ginkgo
 				e->tick(elapsedTime);
 			}
 
-			//!!COLLISION CODE GOES HERE!!
+			const vector<IPhysicsObject*>& physicsObjects = (const vector<IPhysicsObject*>&)world->getEntitiesByType(physicsObject);
+
+			for (IPhysicsObject* p : physicsObjects)
+			{
+				p->checkCollisions();
+			}
+
+			for (IPhysicsObject* p : physicsObjects)
+			{
+				p->resolveCollisions();
+			}
 
 			elapsedTime = getEngineTime() - tickEnd;
 			tickEnd = getEngineTime();

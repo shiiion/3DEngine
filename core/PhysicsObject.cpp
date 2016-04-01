@@ -47,7 +47,8 @@ namespace ginkgo
 
 	void PhysicsObject::checkCollisions()
 	{
-
+		//goes through entire entity list
+		//if collision is found for physicsobject po, add po to collision object vector
 	}
 
 	void PhysicsObject::resolveCollisions()
