@@ -77,7 +77,10 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Surface.h" />
+    <ClInclude Include="ICollisionMesh.h" />
     <ClInclude Include="IEntity.h" />
+    <ClInclude Include="ISurface.h" />
     <ClInclude Include="IPhysicsObject.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="PhysicsObject.h" />
@@ -89,6 +92,7 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
+    <ClCompile Include="Face.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

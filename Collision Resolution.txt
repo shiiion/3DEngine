@@ -6,3 +6,8 @@ a(tf-ti) = v1
 IPhysicsObject* obj = colliders.at(0);
 
 this->setVelocity(x,y,z) = this->getAcceleration()*(this->getMaterial().collisionTime + obj->getMaterial().collisionTime)/2;
+
+hyperplane: The plane that was crossed is an infinitely expanding plane in 3D space
+
+split each collision mesh into faces, split each face into triangles, test collision between triangle and each point of object
+point whose collision occurs earliest gets the entire physics object resolved as such

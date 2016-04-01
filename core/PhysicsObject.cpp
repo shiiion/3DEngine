@@ -45,13 +45,13 @@ namespace ginkgo
 
 	}
 
-	void PhysicsObject::checkCollisions()
+	void PhysicsObject::checkCollisions(float deltaTime)
 	{
 		//goes through entire entity list
 		//if collision is found for physicsobject po, add po to collision object vector
 	}
 
-	void PhysicsObject::resolveCollisions()
+	void PhysicsObject::resolveCollisions(float deltaTime)
 	{
 
 	}

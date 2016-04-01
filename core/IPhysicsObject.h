@@ -11,6 +11,10 @@
 #define MSTATE_GROUND 2
 //MORE STUFF CAN BE ADDED
 
+
+#define CTYPE_WORLDSTATIC 1
+#define CTYPE_WORLDDYNAMIC 2
+
 namespace ginkgo
 {
 	class ICollisionMesh;
@@ -18,8 +22,8 @@ namespace ginkgo
 	class IPhysicsObject : public IRenderable
 	{
 	public:
-		virtual void checkCollisions() = 0;
-		virtual void resolveCollisions() = 0;
+		virtual void checkCollisions(float deltaTime) = 0;
+		virtual void resolveCollisions(float deltaTime) = 0;
 		
 		virtual void setMaterial(const Material& mat) = 0;
 		virtual void setMass(float mass) = 0;
@@ -36,6 +40,8 @@ namespace ginkgo
 		virtual UINT32 getCollisionState() const = 0;
 		virtual ICollisionMesh* getCollisionMesh() const = 0;
 		virtual UINT32 getMovementState() const = 0;
+
+		virtual UINT32 getCollisionType() const = 0;
 	};
 
 	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());

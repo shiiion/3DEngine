@@ -9,6 +9,8 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
 
 #define SETFLAG(r, f) ((r) |= (f))
 #define RESFLAG(r, f) ((r) &= (~(f)))
@@ -33,6 +35,19 @@ namespace ginkgo
 	enum EntityType
 	{
 		entity = 1, renderable = 2, physicsObject = 3 
+	};
+
+	struct Triangle
+	{
+		glm::vec3 P1;
+		glm::vec3 P2;
+		glm::vec3 P3;
+	};
+
+	struct Ray
+	{
+		glm::vec3 point;
+		glm::vec3 direction;
 	};
 
 	typedef unsigned __int8 UBYTE;

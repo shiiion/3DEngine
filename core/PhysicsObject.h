@@ -49,8 +49,8 @@ namespace ginkgo
 		virtual void setEntityID(long ID) override;
 		EntityType getEntityType() const override;
 
-		virtual void checkCollisions() override;
-		virtual void resolveCollisions() override;
+		virtual void checkCollisions(float deltaTime) override;
+		virtual void resolveCollisions(float deltaTime) override;
 
 		virtual void setMaterial(const Material& mat) override;
 		virtual void setMass(float mass) override;
