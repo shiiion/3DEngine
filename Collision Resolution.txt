@@ -1,0 +1,8 @@
+
+
+object hitting ground:
+a(tf-ti) = v1
+
+IPhysicsObject* obj = colliders.at(0);
+
+this->setVelocity(x,y,z) = this->getAcceleration()*(this->getMaterial().collisionTime + obj->getMaterial().collisionTime)/2;
