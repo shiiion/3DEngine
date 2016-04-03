@@ -1,9 +1,11 @@
 #include "PhysicsObject.h"
 #include "Core.h"
+#include "IWorld.h"
+#include "ICollisionMesh.h"
 
 namespace ginkgo
 {
-	PhysicsObject::PhysicsObject(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	PhysicsObject::PhysicsObject(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
 	{
 		this->mass = mass;
 		material = mat;
@@ -17,7 +19,7 @@ namespace ginkgo
 		this->canCollide = canCollide;
 		this->canGravity = canGravity;
 		collisionState = CSTATE_NOCOLLISION;
-
+		this->collisionType = collisionType;
 		entityID = Core::generateID();
 	}
 	const glm::vec3& PhysicsObject::getScale() const
@@ -42,17 +44,19 @@ namespace ginkgo
 
 	void PhysicsObject::render()
 	{
-
+		//TODO: implement me
 	}
 
-	void PhysicsObject::checkCollisions()
+	void PhysicsObject::checkCollisions(float deltaTime)
 	{
-
+		if (collisionType == CTYPE_WORLDSTATIC)
+			return;
 	}
 
-	void PhysicsObject::resolveCollisions()
+	void PhysicsObject::resolveCollisions(float deltaTime)
 	{
-
+		if (collisionType == CTYPE_WORLDSTATIC)
+			return;
 	}
 
 	const glm::vec3& PhysicsObject::getAcceleration() const
@@ -165,16 +169,27 @@ namespace ginkgo
 		return physicsObject;
 	}
 
+	UINT32 PhysicsObject::getMovementState() const
+	{
+		return movementState;
+	}
+
+	UINT32 PhysicsObject::getCollisionType() const
+	{
+		return collisionType;
+	}
+
 	void PhysicsObject::tick(float elapsedTime)
 	{
-		//ADD GRAVITY
+		collisionMesh->generateVertexPath(elapsedTime, this);
+		velocity.y -= getWorld()->getGravity() * elapsedTime;
 		velocity += acceleration * elapsedTime;
 		position += velocity * elapsedTime;
 	}
 
-	IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
 	{
-		return new PhysicsObject(collision, mass, mat, mesh, pos, canGravity, canCollide, scl, rot, vel, accel);
+		return new PhysicsObject(collision, collisionType, mass, mat, mesh, pos, canGravity, canCollide, scl, rot, vel, accel);
 	}
 
 }

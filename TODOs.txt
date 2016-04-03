@@ -25,7 +25,7 @@ Put TODO: Message anywhere you think you want to add stuff in the future but not
 
 ----------------------------------------------------------------------
 Concerns/Questions: (username: message)
-
+	(Sam): y axis is vertical, positive y axis goes up, negative y axis goes down 
 
 ----------------------------------------------------------------------
 Errors/Bugs: (username -> error message -> extra message)

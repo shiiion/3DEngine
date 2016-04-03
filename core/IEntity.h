@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreReource.h"
-#include <glm/vec3.hpp>
 
 
 namespace ginkgo
