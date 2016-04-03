@@ -11,6 +11,7 @@ namespace ginkgo
 	void Surface::makeTwoTriangles(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4)
 	{
 		//TODO: check if points are in clockwise order
+		//possible solution: if normal direction (based on P2-P1 X P3-P2) is closer to origin, swap P2 and P3
 		glm::vec3 diagonalPoint, nonDiag1, nonDiag2;
 
 		float l1 = (v2 - v1).length();
@@ -53,10 +54,10 @@ namespace ginkgo
 	
 	void Surface::getNormal(const Triangle& t, glm::vec3& normOut) const
 	{
-		normOut = glm::normalize(glm::cross((t1.P2 - t1.P1), (t1.P3 - t1.P2)));
+		normOut = glm::normalize(glm::cross((t.P2 - t.P1), (t.P3 - t.P2)));
 	}
 
-	bool Surface::intersectsWith(const Triangle& t, const Ray& ray, float distance) const
+	bool Surface::testIntersection(const Triangle& t, const Ray& ray, float distance) const
 	{
 		UINT32 posI;
 		UINT32 posF;
@@ -101,11 +102,11 @@ namespace ginkgo
 		return false;
 	}
 
-	bool Surface::doesIntersect(const Ray& ray, float distance) const
+	bool Surface::intersectsWithSurface(const Ray& ray, float distance) const
 	{
 		Ray normRay = ray;
 		normRay.direction = glm::normalize(normRay.direction);
-		return (intersectsWith(t1, normRay, distance) || (intersectsWith(t2, normRay, distance)));
+		return (testIntersection(t1, normRay, distance) || (testIntersection(t2, normRay, distance))); //TODO: possible optimization, test intersection with square rather than 2 Tris
 	}
 
 	float Surface::getIntersectionValue(const Ray& ray) const
@@ -121,4 +122,9 @@ namespace ginkgo
 		return -(d + glm::dot(normal, normRay.point)) / glm::dot(normal, normRay.direction);
 	}
 
+
+	ISurface* createSurface(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4)
+	{
+		return new Surface(v1, v2, v3, v4);
+	}
 }

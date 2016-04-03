@@ -34,7 +34,7 @@ namespace ginkgo
 
 	enum EntityType
 	{
-		entity = 1, renderable = 2, physicsObject = 3 
+		entity = 1, renderable = 2, physicsObject = 3
 	};
 
 	struct Triangle
@@ -48,6 +48,19 @@ namespace ginkgo
 	{
 		glm::vec3 point;
 		glm::vec3 direction;
+	};
+
+	struct MoveInfo
+	{
+		glm::vec3 start;
+		glm::vec3 end;
+
+		glm::vec3 velStart;
+		glm::vec3 velEnd;
+
+		glm::vec3 accel;
+
+		float deltaTime;
 	};
 
 	typedef unsigned __int8 UBYTE;

@@ -25,9 +25,10 @@ namespace ginkgo
 		std::vector<IPhysicsObject*> colliders;
 		UINT32 collisionState;
 		UINT32 movementState;
+		UINT32 collisionType;
 
 	public:
-		PhysicsObject(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
+		PhysicsObject(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 		virtual const glm::vec3& getScale() const override;
 		virtual void setScale(const glm::vec3& scl) override;
 		virtual IRenderMesh const* getRenderMesh() const override;
@@ -57,6 +58,8 @@ namespace ginkgo
 		virtual void setCanCollide(bool collides) override;
 		virtual void setCanGravity(bool canGravity) override;
 		virtual void setCollisionMesh(ICollisionMesh* collision) override;
+		virtual void setCollisionState(UINT32 state) override;
+		virtual void setMovementState(UINT32 state) override;
 
 		virtual const Material& getMaterial() const override;
 		virtual float getMass() const override;
@@ -64,5 +67,7 @@ namespace ginkgo
 		virtual bool doesHaveGravity() const override;
 		virtual UINT32 getCollisionState() const override;
 		virtual ICollisionMesh* getCollisionMesh() const override;
+		virtual UINT32 getMovementState() const override;
+		virtual UINT32 getCollisionType() const override;
 	};
 }

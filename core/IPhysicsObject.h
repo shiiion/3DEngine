@@ -11,8 +11,11 @@
 #define MSTATE_GROUND 2
 //MORE STUFF CAN BE ADDED
 
-
+//object is never resolved (pushes objects out of the way)
+//typically for objects which will never move, such as floor, wall, etc
 #define CTYPE_WORLDSTATIC 1
+//object is always resolved (pushed out of the way)
+//typically for the player object or objects the player will use
 #define CTYPE_WORLDDYNAMIC 2
 
 namespace ginkgo
@@ -44,5 +47,5 @@ namespace ginkgo
 		virtual UINT32 getCollisionType() const = 0;
 	};
 
-	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
+	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 }
