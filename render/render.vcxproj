@@ -15,7 +15,9 @@
     <ClInclude Include="buffers\IndexBuffer.h" />
     <ClInclude Include="buffers\VertexArray.h" />
     <ClInclude Include="IRenderEngine.h" />
+    <ClInclude Include="meshs\CubeMesh.h" />
     <ClInclude Include="meshs\IRenderMesh.h" />
+    <ClInclude Include="meshs\SphereMesh.h" />
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="meshs\RenderMesh.h" />
     <ClInclude Include="RenderResource.h" />
@@ -25,6 +27,8 @@
     <ClCompile Include="buffers\Buffer.cpp" />
     <ClCompile Include="buffers\IndexBuffer.cpp" />
     <ClCompile Include="buffers\VertexArray.cpp" />
+    <ClCompile Include="meshs\CubeMesh.cpp" />
+    <ClCompile Include="meshs\SphereMesh.cpp" />
     <ClCompile Include="RenderEngine.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

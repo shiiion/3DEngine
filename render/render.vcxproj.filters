@@ -42,6 +42,12 @@
     <ClInclude Include="meshs\RenderMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="meshs\CubeMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="meshs\SphereMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window.cpp">
@@ -57,6 +63,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="buffers\VertexArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="meshs\CubeMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="meshs\SphereMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
