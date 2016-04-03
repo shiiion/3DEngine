@@ -11,6 +11,8 @@ namespace ginkgo
 		virtual bool testIntersection(const Triangle& t, const Ray& ray, float distance) const = 0;
 		virtual bool intersectsWithSurface(const Ray& ray, float distance) const = 0;
 		virtual float getIntersectionValue(const Ray& ray) const = 0;
+
+		virtual void translateSurface(const glm::vec3& translation) = 0;
 	};
 
 	DECLSPEC_CORE ISurface* createSurface(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4);

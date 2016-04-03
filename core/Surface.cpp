@@ -122,6 +122,16 @@ namespace ginkgo
 		return -(d + glm::dot(normal, normRay.point)) / glm::dot(normal, normRay.direction);
 	}
 
+	void Surface::translateSurface(const glm::vec3& translation)
+	{
+		t1.P1 += translation;
+		t1.P2 += translation;
+		t1.P3 += translation;
+
+		t2.P1 += translation;
+		t2.P2 += translation;
+		t2.P3 += translation;
+	}
 
 	ISurface* createSurface(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4)
 	{

@@ -17,5 +17,6 @@ namespace ginkgo
 		virtual bool testIntersection(const Triangle& t, const Ray& ray, float distance) const override;
 		virtual bool intersectsWithSurface(const Ray& ray, float distance) const override;
 		virtual float getIntersectionValue(const Ray& ray) const override;
+		virtual void translateSurface(const glm::vec3& translation) override;
 	};
 }

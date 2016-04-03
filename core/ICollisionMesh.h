@@ -10,9 +10,10 @@ namespace ginkgo
 	class ICollisionMesh
 	{
 	public:
-		virtual void getFaces(vector<ISurface*>& surfaceList) const = 0;
+		virtual ISurface** getFaces() const = 0;
 		virtual void getBoundingVertices(vector<glm::vec3>& vertexList) const = 0;
+		virtual void generateVertexPath(float deltaTime) = 0;
 
-		virtual void generateVertexPath(float deltaTime, IPhysicsObject* owner) = 0;
+		virtual void setOwner(IPhysicsObject const* owner) = 0;
 	};
 }

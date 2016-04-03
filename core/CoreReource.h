@@ -52,8 +52,8 @@ namespace ginkgo
 
 	struct MoveInfo
 	{
-		glm::vec3 start;
-		glm::vec3 end;
+		glm::vec3 start[8];
+		glm::vec3 end[8];
 
 		glm::vec3 velStart;
 		glm::vec3 velEnd;

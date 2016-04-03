@@ -94,12 +94,12 @@ namespace ginkgo
 
 			for (IPhysicsObject* p : physicsObjects)
 			{
-				p->checkCollisions();
+				p->checkCollisions(elapsedTime);
 			}
 
 			for (IPhysicsObject* p : physicsObjects)
 			{
-				p->resolveCollisions();
+				p->resolveCollisions(elapsedTime);
 			}
 
 			elapsedTime = getEngineTime() - tickEnd;

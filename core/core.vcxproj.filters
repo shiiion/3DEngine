@@ -54,6 +54,9 @@
     <ClInclude Include="ISurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Surface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
