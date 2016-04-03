@@ -38,8 +38,6 @@ Shader
 	(last)Lighting
 	(last)Post Processing -> touch ups: anti-aliasing, fxaa, etc. 
 
-
-
 Renderable 
 {
 		IRenderMesh* mesh;
@@ -74,6 +72,11 @@ renderThread()
 
 
 }
+
+#include CoreResource
+#include Core
+
+getWorld()->getEntitiesByType(renderable);
 
 Things to Remember:
 	-Octree in OpenGL

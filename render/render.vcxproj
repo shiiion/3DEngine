@@ -11,12 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="buffers\Buffer.h" />
+    <ClInclude Include="buffers\IndexBuffer.h" />
+    <ClInclude Include="buffers\VertexArray.h" />
+    <ClInclude Include="IRenderEngine.h" />
+    <ClInclude Include="meshs\IRenderMesh.h" />
     <ClInclude Include="RenderEngine.h" />
-    <ClInclude Include="RenderMesh.h" />
+    <ClInclude Include="meshs\RenderMesh.h" />
     <ClInclude Include="RenderResource.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="buffers\Buffer.cpp" />
+    <ClCompile Include="buffers\IndexBuffer.cpp" />
+    <ClCompile Include="buffers\VertexArray.cpp" />
     <ClCompile Include="RenderEngine.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

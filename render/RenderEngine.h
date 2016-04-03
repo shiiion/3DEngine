@@ -1,19 +1,31 @@
 #pragma once
 
-#include "../core/Renderable.h"
-#include "RenderMesh.h"
+#include <GL/glew.h>
+
+#include "IRenderEngine.h"
+#include "buffers/IndexBuffer.h"
 
 namespace ginkgo
 {
-	#define RENDERER_VERTEX_SIZE
 
-	class RenderEngine
+	class RenderEngine : public IRenderEngine
 	{
 	private:
+		GLuint VAO;
+		GLuint VBO;
+		IndexBuffer* IBO;
+		GLsizei indexCount;
 		VertexData* buffer;
 	public:
-		void init();
-
+		RenderEngine();
+		~RenderEngine();
+	private:
+		void init() override;
+	public:
+		void begin() override;
+		void submit(const RenderMesh* mesh) override;
+		void end() override;
+		void flush() override;
 
 	};
 
