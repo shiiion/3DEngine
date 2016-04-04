@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "IWorld.h"
 #include "ICollisionMesh.h"
+#include "ISurface.h"
 
 namespace ginkgo
 {
@@ -47,16 +48,40 @@ namespace ginkgo
 		//TODO: implement me
 	}
 
-	void PhysicsObject::checkCollisions(float deltaTime)
+	void PhysicsObject::checkCollision(float deltaTime, IPhysicsObject* other)
 	{
 		if (collisionType == CTYPE_WORLDSTATIC)
 			return;
+		ICollisionMesh* otherCollision = other->getCollisionMesh();
+		ISurface const* const* collisionSurfaces = otherCollision->getFaces();
+
+		MoveInfo const& thisMove = collisionMesh->getLastMove();
+		for (int a = 0; a < CMESH_NUM_SURFACES; a++)
+		{
+			for (int b = 0; b < CMESH_NUM_VERTICES; b++)
+			{
+				Ray moveRay;
+				moveRay.point = thisMove.start[b];
+				moveRay.direction = glm::normalize(thisMove.end[b] - thisMove.start[b]);
+				float amount = (thisMove.end[b] - thisMove.start[b]).length();
+				if (collisionSurfaces[a]->intersectsWithSurface(moveRay, amount))
+				{
+					colliders.push_back(other);
+					collisionState = CSTATE_FIRSTCOLLIDE;
+				}
+
+			}
+		}
 	}
 
 	void PhysicsObject::resolveCollisions(float deltaTime)
 	{
 		if (collisionType == CTYPE_WORLDSTATIC)
 			return;
+		if (collisionState == CSTATE_NOCOLLISION)
+			return;
+		//TODO: resolve this and other (if other is dynamic)
+		//TODO: walking: get parallel vector to surface, project velocity onto parallel vector
 	}
 
 	const glm::vec3& PhysicsObject::getAcceleration() const

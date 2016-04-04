@@ -31,10 +31,10 @@ namespace ginkgo
 		float width;
 		float height;
 
-		ISurface* faces[6];
+		ISurface* faces[CMESH_NUM_SURFACES];
 
 		//buffer for functions
-		glm::vec3 vertices[8];
+		glm::vec3 vertices[CMESH_NUM_VERTICES];
 
 		IPhysicsObject const* owner;
 
@@ -45,6 +45,7 @@ namespace ginkgo
 		CollisionMesh(IPhysicsObject const* owner, float l, float w, float h);
 		virtual ISurface const* const* getFaces() const override;
 		virtual glm::vec3 const* getBoundingVertices() const override;
+		virtual MoveInfo const& getLastMove() const override;
 		virtual void generateVertexPath(float deltaTime) override;
 
 		virtual void setOwner(IPhysicsObject const* owner) override;

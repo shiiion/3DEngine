@@ -19,8 +19,9 @@ namespace ginkgo
 
 	void CollisionMesh::createFaces()
 	{
+		//TODO: rotations
 		glm::vec3 const& origin = owner->getPosition();
-
+		
 		vertices[0] = origin + glm::vec3(width / 2, height / 2, length / 2);
 		vertices[1] = origin + glm::vec3(-width / 2, height / 2, length / 2);
 		vertices[2] = origin + glm::vec3(-width / 2, -height / 2, length / 2);
@@ -48,9 +49,17 @@ namespace ginkgo
 		return vertices;
 	}
 
+	MoveInfo const& CollisionMesh::getLastMove() const
+	{
+		return lastMove;
+	}
+
 	void CollisionMesh::generateVertexPath(float deltaTime)
 	{
+		//TODO: rotations
 		if (owner == nullptr)
+			return;
+		if (!owner->isMoving())
 			return;
 		lastMove.accel = owner->getAcceleration();
 		lastMove.velStart = owner->getVelocity();

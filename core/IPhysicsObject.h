@@ -25,7 +25,7 @@ namespace ginkgo
 	class IPhysicsObject : public IRenderable
 	{
 	public:
-		virtual void checkCollisions(float deltaTime) = 0;
+		virtual void checkCollision(float deltaTime, IPhysicsObject* other) = 0;
 		virtual void resolveCollisions(float deltaTime) = 0;
 		
 		virtual void setMaterial(const Material& mat) = 0;
