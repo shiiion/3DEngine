@@ -43,8 +43,8 @@ namespace ginkgo
 		void createFaces();
 	public:
 		CollisionMesh(IPhysicsObject const* owner, float l, float w, float h);
-		virtual ISurface** getFaces() const override;
-		virtual void getBoundingVertices(vector<glm::vec3>& vertexList) const override;
+		virtual ISurface const* const* getFaces() const override;
+		virtual glm::vec3 const* getBoundingVertices() const override;
 		virtual void generateVertexPath(float deltaTime) override;
 
 		virtual void setOwner(IPhysicsObject const* owner) override;

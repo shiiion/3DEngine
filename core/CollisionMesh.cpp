@@ -1,6 +1,9 @@
 #include "CollisionMesh.h"
 #include "IPhysicsObject.h"
 #include "ISurface.h"
+#include <glm/gtx/rotate_vector.hpp>
+#include "Core.h"
+#include "IWorld.h"
 
 namespace ginkgo
 {
@@ -35,20 +38,30 @@ namespace ginkgo
 		faces[5] = createSurface(vertices[3], vertices[2], vertices[6], vertices[7]);
 	}
 
-	ISurface** CollisionMesh::getFaces() const
+	ISurface const* const* CollisionMesh::getFaces() const
 	{
-
+		return faces;
 	}
 
-	void CollisionMesh::getBoundingVertices(vector<glm::vec3>& vertexList) const
+	glm::vec3 const* CollisionMesh::getBoundingVertices() const
 	{
-
+		return vertices;
 	}
 
 	void CollisionMesh::generateVertexPath(float deltaTime)
 	{
 		if (owner == nullptr)
 			return;
+		lastMove.accel = owner->getAcceleration();
+		lastMove.velStart = owner->getVelocity();
+		lastMove.velEnd = lastMove.velStart + (lastMove.accel * deltaTime) - (getWorld()->getGravity * deltaTime);
+		for (int a = 0; a < 8; a++)
+		{
+			lastMove.start[a] = vertices[a];
+			vertices[a] += lastMove.velEnd * (deltaTime);
+			lastMove.end[a] = vertices[a];
+			faces[a]->translateSurface(lastMove.velEnd * deltaTime);
+		}
 	}
 
 	void CollisionMesh::setOwner(IPhysicsObject const* owner)

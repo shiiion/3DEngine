@@ -114,6 +114,21 @@ namespace ginkgo
 		return entityID;
 	}
 
+	UINT32 PhysicsObject::getMovementState() const
+	{
+		return movementState;
+	}
+
+	UINT32 PhysicsObject::getCollisionType() const
+	{
+		return collisionType;
+	}
+
+	bool PhysicsObject::isMoving() const
+	{
+		return velocity.length() > 0.f || acceleration.length > 0.0f;
+	}
+
 	void PhysicsObject::setAcceleration(const glm::vec3& accel)
 	{
 		acceleration = accel;
@@ -164,24 +179,24 @@ namespace ginkgo
 		entityID = ID;
 	}
 
+	void PhysicsObject::setCollisionState(UINT32 state)
+	{
+		collisionState = state;
+	}
+
+	void PhysicsObject::setMovementState(UINT32 state)
+	{
+		movementState = state;
+	}
+
 	EntityType PhysicsObject::getEntityType() const
 	{
 		return physicsObject;
 	}
 
-	UINT32 PhysicsObject::getMovementState() const
-	{
-		return movementState;
-	}
-
-	UINT32 PhysicsObject::getCollisionType() const
-	{
-		return collisionType;
-	}
-
 	void PhysicsObject::tick(float elapsedTime)
 	{
-		collisionMesh->generateVertexPath(elapsedTime, this);
+		collisionMesh->generateVertexPath(elapsedTime);
 		velocity.y -= getWorld()->getGravity() * elapsedTime;
 		velocity += acceleration * elapsedTime;
 		position += velocity * elapsedTime;

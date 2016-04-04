@@ -69,5 +69,7 @@ namespace ginkgo
 		virtual ICollisionMesh* getCollisionMesh() const override;
 		virtual UINT32 getMovementState() const override;
 		virtual UINT32 getCollisionType() const override;
+
+		virtual bool isMoving() const override;
 	};
 }
