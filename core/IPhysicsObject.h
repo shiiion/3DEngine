@@ -15,8 +15,11 @@
 //typically for objects which will never move, such as floor, wall, etc
 #define CTYPE_WORLDSTATIC 1
 //object is always resolved (pushed out of the way)
-//typically for the player object or objects the player will use
+//typically for moving objects in the world
 #define CTYPE_WORLDDYNAMIC 2
+//object is always resolved (pushed out of the way)
+//typically for the player object, as it doesn't bounce off of surfaces
+#define CTYPE_WORLDDYNAMIC_NOREBOUND 3
 
 namespace ginkgo
 {

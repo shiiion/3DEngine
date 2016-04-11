@@ -22,6 +22,7 @@ namespace ginkgo
 		collisionState = CSTATE_NOCOLLISION;
 		this->collisionType = collisionType;
 		entityID = Core::generateID();
+		collision->setOwner(this);
 	}
 	const glm::vec3& PhysicsObject::getScale() const
 	{
@@ -53,25 +54,16 @@ namespace ginkgo
 		if (collisionType == CTYPE_WORLDSTATIC)
 			return;
 		ICollisionMesh* otherCollision = other->getCollisionMesh();
-		ISurface const* const* collisionSurfaces = otherCollision->getFaces();
 
-		MoveInfo const& thisMove = collisionMesh->getLastMove();
-		for (int a = 0; a < CMESH_NUM_SURFACES; a++)
+		if (!collisionMesh->testCollision(*otherCollision, deltaTime))
 		{
-			for (int b = 0; b < CMESH_NUM_VERTICES; b++)
-			{
-				Ray moveRay;
-				moveRay.point = thisMove.start[b];
-				moveRay.direction = glm::normalize(thisMove.end[b] - thisMove.start[b]);
-				float amount = (thisMove.end[b] - thisMove.start[b]).length();
-				if (collisionSurfaces[a]->intersectsWithSurface(moveRay, amount))
-				{
-					colliders.push_back(other);
-					collisionState = CSTATE_FIRSTCOLLIDE;
-				}
 
-			}
+			colliders.push_back(other);
+			collisionState = CSTATE_FIRSTCOLLIDE;
+			printf("collision detected!", position.x, position.y, position.z);
 		}
+
+		printf("%f, %f, %f\n", position.x, position.y, position.z);
 	}
 
 	void PhysicsObject::resolveCollisions(float deltaTime)
@@ -80,6 +72,12 @@ namespace ginkgo
 			return;
 		if (collisionState == CSTATE_NOCOLLISION)
 			return;
+		if (collisionState == CSTATE_FIRSTCOLLIDE)
+		{
+			
+		}
+		collisionMesh->finalizeMove();
+		colliders.clear();
 		//TODO: resolve this and other (if other is dynamic)
 		//TODO: walking: get parallel vector to surface, project velocity onto parallel vector
 	}
@@ -151,7 +149,7 @@ namespace ginkgo
 
 	bool PhysicsObject::isMoving() const
 	{
-		return velocity.length() > 0.f || acceleration.length > 0.0f;
+		return glm::length(velocity) > 0.f || glm::length(acceleration) > 0.0f;
 	}
 
 	void PhysicsObject::setAcceleration(const glm::vec3& accel)
@@ -222,9 +220,12 @@ namespace ginkgo
 	void PhysicsObject::tick(float elapsedTime)
 	{
 		collisionMesh->generateVertexPath(elapsedTime);
-		velocity.y -= getWorld()->getGravity() * elapsedTime;
-		velocity += acceleration * elapsedTime;
 		position += velocity * elapsedTime;
+		if (movementState != MSTATE_GROUND)
+		{
+			velocity.y -= getWorld()->getGravity() * elapsedTime;
+		}
+		velocity += acceleration * elapsedTime;
 	}
 
 	IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)

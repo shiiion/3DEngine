@@ -13,49 +13,58 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Interfaces">
+      <UniqueIdentifier>{e94b0bdc-7316-4da1-b0a4-6ee3b0999699}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Implementations">
+      <UniqueIdentifier>{1a5f8e8d-8aa4-4c83-9535-48f16b6a77e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\General">
+      <UniqueIdentifier>{34339552-aba1-4546-bcce-30e1eec7ea2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoreReource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IRenderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IPhysicsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IWorld.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="ICollisionMesh.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Surface.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="IPhysicsObject.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderable.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="ISurface.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IWorld.h">
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="CollisionMesh.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsObject.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreReource.h">
+      <Filter>Header Files\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

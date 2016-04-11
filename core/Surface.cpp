@@ -1,5 +1,6 @@
 
 #include "Surface.h"
+#include <glm/gtx/projection.hpp>
 
 namespace ginkgo
 {
@@ -10,13 +11,14 @@ namespace ginkgo
 
 	void Surface::makeTwoTriangles(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4)
 	{
+		
 		//TODO: check if points are in clockwise order
-		//possible solution: if normal direction (based on P2-P1 X P3-P2) is closer to origin, swap P2 and P3
+		//possible solution: if normal direction (based on P2-P1 X P3-P2) pl projected onto P2 is , swap P2 and P3
 		glm::vec3 diagonalPoint, nonDiag1, nonDiag2;
 
-		float l1 = (v2 - v1).length();
-		float l2 = (v3 - v1).length();
-		float l3 = (v4 - v1).length();
+		float l1 = glm::length(v2 - v1);
+		float l2 = glm::length(v3 - v1);
+		float l3 = glm::length(v4 - v1);
 
 		if (l1 > l2)
 		{
@@ -50,6 +52,22 @@ namespace ginkgo
 		}
 		t1.P1 = v1; t1.P2 = nonDiag1; t1.P3 = diagonalPoint;
 		t2.P1 = v1; t2.P2 = nonDiag2; t2.P3 = diagonalPoint;
+		glm::vec3 v, proj;
+		getNormal(t1, v);
+		proj = glm::proj(v, t1.P2);
+		if (glm::length(proj + t1.P2) < glm::length(t1.P2))
+		{
+			v = t1.P2;
+			t1.P2 = t1.P3;
+		}
+
+		getNormal(t2, v);
+		proj = glm::proj(v, t2.P2);
+		if (glm::length(proj + t2.P2) < glm::length(t2.P2))
+		{
+			v = t2.P2;
+			t2.P2 = t2.P3;
+		}
 	}
 	
 	void Surface::getNormal(const Triangle& t, glm::vec3& normOut) const

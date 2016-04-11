@@ -37,7 +37,7 @@ namespace ginkgo
 		running = false;
 		tickTime = (1.f / 61.f);
 		startTick = GetTickCount64();
-		world = new World(1.0f);
+		world = new World(0.0f);
 	}
 
 	float Core::getTickTime() const
@@ -94,7 +94,13 @@ namespace ginkgo
 
 			for (IPhysicsObject* p : physicsObjects)
 			{
-				p->checkCollisions(elapsedTime);
+				for (IPhysicsObject* collider : physicsObjects)
+				{
+					if (collider->getEntityID() != p->getEntityID())//TODO: check existing collision test (1 collision resolves 2 objects)
+					{
+						p->checkCollision(elapsedTime, collider);
+					}
+				}
 			}
 
 			for (IPhysicsObject* p : physicsObjects)
