@@ -2,8 +2,6 @@
 
 #include "CoreReource.h"
 
-#define CMESH_NUM_SURFACES 6
-#define CMESH_NUM_VERTICES 8
 
 namespace ginkgo
 {
@@ -21,17 +19,13 @@ namespace ginkgo
 
 		virtual bool testCollision(ICollisionMesh const& other, float deltaTime) = 0;
 
-		virtual float getCollisionTime(ICollisionMesh const& other, float deltaTime) const = 0;
+		virtual float getCollisionTime(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const = 0;
 
 		virtual void finalizeMove() = 0;
 
-		virtual glm::vec3 const& getWidthAxis() const = 0;
-		virtual glm::vec3 const& getHeightAxis() const = 0;
-		virtual glm::vec3 const& getLengthAxis() const = 0;
+		virtual glm::vec3 const& getAxis(int axis) const = 0;
 		virtual glm::vec3 const& getCenter() const = 0;
-		virtual float getLengthExtent() const = 0;
-		virtual float getWidthExtent() const = 0;
-		virtual float getHeightExtent() const = 0;
+		virtual float getExtent(int extent) const = 0;
 		virtual void generateCollisionInfo(ICollisionMesh const& other, float intersectTime) = 0;
 	};
 

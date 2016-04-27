@@ -29,20 +29,21 @@ namespace ginkgo
 	private:
 		glm::vec3 center;
 
-		float halfWidth;
-		float halfHeight;
-		float halfLength;
+		
 
-		glm::vec3 widthAxis;	//(1, 0, 0) without rotation
-		glm::vec3 heightAxis;	//(0, 1, 0) without rotation
-		glm::vec3 lengthAxis;	//(0, 0, 1) without rotation
+		//width, height, length
+		float extents[3];
+		glm::vec3 axes[3];
 
+		bool newSeparatingAxis;
+
+		glm::vec3 lastSeparatingAxis;
 
 		IPhysicsObject const* owner;
 
 		MoveInfo lastMove;
 
-//		void createFaces();
+		void getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime);
 	public:
 		CollisionMesh(float l, float w, float h);
 		virtual glm::vec3 const* getBoundingVertices() const override;
@@ -52,17 +53,13 @@ namespace ginkgo
 		virtual void setOwner(IPhysicsObject const* owner) override;
 
 		virtual bool testCollision(ICollisionMesh const& other, float deltaTime) override;
-		virtual float getCollisionTime(ICollisionMesh const& other, float deltaTime) const override;
+		virtual float getCollisionTime(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const override;
 		virtual void finalizeMove() override;
 
-		virtual glm::vec3 const& getWidthAxis() const override;
-		virtual glm::vec3 const& getHeightAxis() const override;
-		virtual glm::vec3 const& getLengthAxis() const override;
+		virtual glm::vec3 const& getAxis(int axis) const override;
 
 		virtual glm::vec3 const& getCenter() const override;
-		virtual float getLengthExtent() const override;
-		virtual float getWidthExtent() const override;
-		virtual float getHeightExtent() const override;
+		virtual float getExtent(int extent) const override;
 
 		virtual void generateCollisionInfo(ICollisionMesh const& other, float intersectTime) override;
 		//TRUE if not intersecting, FALSE if intersecting

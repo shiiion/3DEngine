@@ -21,6 +21,16 @@
 //typically for the player object, as it doesn't bounce off of surfaces
 #define CTYPE_WORLDDYNAMIC_NOREBOUND 3
 
+#define VERTEX_FACE_COLLISION 1
+#define FACE_VERTEX_COLLISION 2
+#define FACE_EDGE_COLLISION 3
+#define EDGE_FACE_COLLISION 4
+#define FACE_FACE_COLLISION 5
+#define EDGE_EDGE_COLLISION 6
+#define VERTEX_VERTEX_COLLISION 7
+#define EDGE_VERTEX_COLLISION 8
+#define VERTEX_EDGE_COLLISION 9
+
 namespace ginkgo
 {
 	class ICollisionMesh;

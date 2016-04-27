@@ -74,7 +74,9 @@ namespace ginkgo
 			return;
 		if (collisionState == CSTATE_FIRSTCOLLIDE)
 		{
-			
+			float cTime = collisionMesh->getCollisionTime(*colliders.at(0)->getCollisionMesh(), deltaTime);
+			position = position + velocity * cTime;
+
 		}
 		collisionMesh->finalizeMove();
 		colliders.clear();

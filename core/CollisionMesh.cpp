@@ -10,13 +10,14 @@ namespace ginkgo
 	CollisionMesh::CollisionMesh(float l, float w, float h)
 	{
 		owner = nullptr;
-		halfLength = l;
-		halfWidth = w;
-		halfHeight = h;
+		extents[0] = w;
+		extents[1] = h;
+		extents[2] = l;
 
-		widthAxis = glm::vec3(1, 0, 0);
-		heightAxis = glm::vec3(0, 1, 0);
-		lengthAxis = glm::vec3(0, 0, 1);
+		axes[0] = glm::vec3(1, 0, 0);
+		axes[1] = glm::vec3(0, 1, 0);
+		axes[2] = glm::vec3(0, 0, 1);
+		newSeparatingAxis = true;
 	}
 
 	glm::vec3 const* CollisionMesh::getBoundingVertices() const
@@ -57,37 +58,54 @@ namespace ginkgo
 	{
 		//15 tests
 
-		if (testAxis(widthAxis, other, deltaTime))
-			return true;
-		if (testAxis(heightAxis, other, deltaTime))
-			return true;
-		if (testAxis(lengthAxis, other, deltaTime))
-			return true;
-		if (testAxis(other.getWidthAxis(), other, deltaTime))
-			return true;
-		if (testAxis(other.getHeightAxis(), other, deltaTime))
-			return true;
-		if (testAxis(other.getLengthAxis(), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(widthAxis, other.getWidthAxis()), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(widthAxis, other.getLengthAxis()), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(widthAxis, other.getHeightAxis()), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(lengthAxis, other.getWidthAxis()), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(lengthAxis, other.getLengthAxis()), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(lengthAxis, other.getHeightAxis()), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(heightAxis, other.getWidthAxis()), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(heightAxis, other.getLengthAxis()), other, deltaTime))
-			return true;
-		if (testAxis(glm::cross(heightAxis, other.getHeightAxis()), other, deltaTime))
-			return true;
+		for (int a = 0; a < 3; a++)
+		{
+			if (testAxis(axes[a], other, deltaTime) || testAxis(other.getAxis(a), other, deltaTime))
+			{
+				return newSeparatingAxis = true;
+			}
+			for (int b = 0; b < 3; b++)
+			{
+				if(testAxis(glm::cross(axes[a], other.getAxis(b)), other, deltaTime))
+				{
+					return newSeparatingAxis = true;
+				}
+			}
+		}
+		if (newSeparatingAxis)
+		{
+			newSeparatingAxis = false;
+			getLastSeparatingAxis(other, deltaTime);
+		}
 		return false;
+	}
+
+	void CollisionMesh::getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime)
+	{
+		float longestTime = getCollisionTime(axes[0], other, deltaTime);
+		float ct;
+		lastSeparatingAxis = axes[0];
+		for (int a = 0; a < 3; a++)
+		{
+			if (longestTime < (ct = getCollisionTime(axes[a], other, deltaTime)))
+			{
+				longestTime = ct;
+				lastSeparatingAxis = axes[a];
+			}
+			if (longestTime < (ct = getCollisionTime(other.getAxis(a), other, deltaTime)))
+			{
+				longestTime = ct;
+				lastSeparatingAxis = axes[a];
+			}
+			for (int b = 0; b < 3; b++)
+			{
+				if (longestTime < (ct = testAxis(glm::cross(axes[a], other.getAxis(b)), other, deltaTime)))
+				{
+					longestTime = ct;
+					lastSeparatingAxis = glm::cross(axes[a], other.getAxis(b));
+				}
+			}
+		}
 	}
 
 //	implementation based off of http://www.geometrictools.com/Documentation/DynamicCollisionDetection.pdf
@@ -105,14 +123,14 @@ namespace ginkgo
 
 		float projThisBox;
 		float projOtherBox;
-		float otherW = other.getWidthExtent(), otherL = other.getLengthExtent(), otherH = other.getHeightExtent();
+		float otherW = other.getExtent(0), otherL = other.getExtent(2), otherH = other.getExtent(1);
 
-		projThisBox = (halfWidth * glm::sign(glm::dot(axisNorm, widthAxis)) * glm::dot(axisNorm, widthAxis)) +
-			(halfHeight * glm::sign(glm::dot(axisNorm, heightAxis)) * glm::dot(axisNorm, heightAxis)) +
-			(halfLength * glm::sign(glm::dot(axisNorm, lengthAxis)) * glm::dot(axisNorm, lengthAxis));
-		projOtherBox = (otherW * glm::sign(glm::dot(axisNorm, other.getWidthAxis())) * glm::dot(axisNorm, other.getWidthAxis())) +
-			(otherH * glm::sign(glm::dot(axisNorm, other.getHeightAxis())) * glm::dot(axisNorm, other.getHeightAxis())) +
-			(otherL * glm::sign(glm::dot(axisNorm, other.getLengthAxis())) * glm::dot(axisNorm, other.getLengthAxis()));
+		projThisBox = (extents[0] * glm::sign(glm::dot(axisNorm, axes[0])) * glm::dot(axisNorm, axes[0])) +
+			(extents[1] * glm::sign(glm::dot(axisNorm, axes[1])) * glm::dot(axisNorm, axes[1])) +
+			(extents[2] * glm::sign(glm::dot(axisNorm, axes[2])) * glm::dot(axisNorm, axes[2]));
+		projOtherBox = (otherW * glm::sign(glm::dot(axisNorm, other.getAxis(0))) * glm::dot(axisNorm, other.getAxis(0))) +
+			(otherH * glm::sign(glm::dot(axisNorm, other.getAxis(1))) * glm::dot(axisNorm, other.getAxis(1))) +
+			(otherL * glm::sign(glm::dot(axisNorm, other.getAxis(2))) * glm::dot(axisNorm, other.getAxis(2)));
 		float r = projThisBox + projOtherBox;
 
 		if (proj > r)
@@ -132,21 +150,24 @@ namespace ginkgo
 		return false;
 	}
 
-	float CollisionMesh::getCollisionTime(ICollisionMesh const& other, float deltaTime) const
+	float CollisionMesh::getCollisionTime(const glm::vec3& axisNorm, const ICollisionMesh& other, float deltaTime) const
 	{
 
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart);
 		glm::vec3 velDiff = (other.getLastMove().centerStart - lastMove.velStart);
-		glm::vec3 const& axisNorm = widthAxis;
-		float projThisBox, projOtherBox;
-		float otherW = other.getWidthExtent(), otherL = other.getLengthExtent(), otherH = other.getHeightExtent();
+		float proj = glm::dot(axisNorm, centerDiff);
+		float projTime = glm::dot(axisNorm, centerDiff + (velDiff * deltaTime));
 
-		projThisBox = (halfWidth * glm::sign(glm::dot(axisNorm, widthAxis)) * glm::dot(axisNorm, widthAxis)) +
-			(halfHeight * glm::sign(glm::dot(axisNorm, heightAxis)) * glm::dot(axisNorm, heightAxis)) +
-			(halfLength * glm::sign(glm::dot(axisNorm, lengthAxis)) * glm::dot(axisNorm, lengthAxis));
-		projOtherBox = (otherW * glm::sign(glm::dot(axisNorm, other.getWidthAxis())) * glm::dot(axisNorm, other.getWidthAxis())) +
-			(otherH * glm::sign(glm::dot(axisNorm, other.getHeightAxis())) * glm::dot(axisNorm, other.getHeightAxis())) +
-			(otherL * glm::sign(glm::dot(axisNorm, other.getLengthAxis())) * glm::dot(axisNorm, other.getLengthAxis()));
+		float projThisBox;
+		float projOtherBox;
+		float otherW = other.getExtent(0), otherL = other.getExtent(2), otherH = other.getExtent(1);
+
+		projThisBox = (extents[0] * glm::sign(glm::dot(axisNorm, axes[0])) * glm::dot(axisNorm, axes[0])) +
+			(extents[1] * glm::sign(glm::dot(axisNorm, axes[1])) * glm::dot(axisNorm, axes[1])) +
+			(extents[2] * glm::sign(glm::dot(axisNorm, axes[2])) * glm::dot(axisNorm, axes[2]));
+		projOtherBox = (otherW * glm::sign(glm::dot(axisNorm, other.getAxis(0))) * glm::dot(axisNorm, other.getAxis(0))) +
+			(otherH * glm::sign(glm::dot(axisNorm, other.getAxis(1))) * glm::dot(axisNorm, other.getAxis(1))) +
+			(otherL * glm::sign(glm::dot(axisNorm, other.getAxis(2))) * glm::dot(axisNorm, other.getAxis(2)));
 		float r = projThisBox + projOtherBox;
 
 		float negVal = (r + glm::dot(axisNorm, centerDiff)) / (-glm::dot(axisNorm, velDiff));
@@ -164,34 +185,14 @@ namespace ginkgo
 		return 0;
 	}
 
-	glm::vec3 const& CollisionMesh::getWidthAxis() const
+	glm::vec3 const& CollisionMesh::getAxis(int axis) const
 	{
-		return widthAxis;
+		return axes[axis];
 	}
 
-	glm::vec3 const& CollisionMesh::getHeightAxis() const
+	float CollisionMesh::getExtent(int extent) const
 	{
-		return heightAxis;
-	}
-
-	glm::vec3 const& CollisionMesh::getLengthAxis() const
-	{
-		return lengthAxis;
-	}
-
-	float CollisionMesh::getLengthExtent() const
-	{
-		return halfLength;
-	}
-
-	float CollisionMesh::getWidthExtent() const
-	{
-		return halfWidth;
-	}
-
-	float CollisionMesh::getHeightExtent() const
-	{
-		return halfHeight;
+		return extents[extent];
 	}
 
 	glm::vec3 const& CollisionMesh::getCenter() const
@@ -202,9 +203,7 @@ namespace ginkgo
 	void CollisionMesh::generateCollisionInfo(ICollisionMesh const& other, float intersectTime)
 	{
 		//TODO: generate surface of other which this collided with
-		//possible implementation: project 8 points of other and this onto velocity vector, 4 nearest projected points
-		//of other on the velocity vector are the 4 points which make up the collision face
-		//generate face out of 4 points?
+		
 	//	ISurface* surface = createSurface()
 	}
 
