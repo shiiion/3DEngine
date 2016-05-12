@@ -57,25 +57,23 @@ namespace ginkgo
 
 		if (!collisionMesh->testCollision(*otherCollision, deltaTime))
 		{
-
 			colliders.push_back(other);
 			collisionState = CSTATE_FIRSTCOLLIDE;
-			printf("collision detected!", position.x, position.y, position.z);
+			printf("collision detected!\n", position.x, position.y, position.z);
+			this->setPosition(glm::vec3(3.4f, 0, 0));
 		}
 
-		printf("%f, %f, %f\n", position.x, position.y, position.z);
+	//	printf("%f, %f, %f\n", position.x, position.y, position.z);
 	}
 
 	void PhysicsObject::resolveCollisions(float deltaTime)
 	{
 		if (collisionType == CTYPE_WORLDSTATIC)
 			return;
-		if (collisionState == CSTATE_NOCOLLISION)
-			return;
 		if (collisionState == CSTATE_FIRSTCOLLIDE)
 		{
-			float cTime = collisionMesh->getCollisionTime(*colliders.at(0)->getCollisionMesh(), deltaTime);
-			position = position + velocity * cTime;
+//			float cTime = collisionMesh->getCollisionTime(*colliders.at(0)->getCollisionMesh(), deltaTime);
+//			position = position + velocity * cTime;
 
 		}
 		collisionMesh->finalizeMove();

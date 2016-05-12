@@ -35,7 +35,7 @@ namespace ginkgo
 	Core::Core()
 	{
 		running = false;
-		tickTime = (1.f / 61.f);
+		tickTime = (1.f / 60.f);
 		startTick = GetTickCount64();
 		world = new World(0.0f);
 	}
@@ -108,7 +108,6 @@ namespace ginkgo
 				p->resolveCollisions(elapsedTime);
 			}
 
-			elapsedTime = getEngineTime() - tickEnd;
 			tickEnd = getEngineTime();
 		}
 	}

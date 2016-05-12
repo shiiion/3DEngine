@@ -4,6 +4,7 @@
 #include <IEntity.h>
 #include <IPhysicsObject.h>
 #include <ICollisionMesh.h>
+#include <glm/gtx/rotate_vector.hpp>
 
 using namespace ginkgo;
 
@@ -12,8 +13,11 @@ int main()
 	startCore();
 	ginkgo::setTickTime(1.f / 120.f);
 	lockPhysics();
-	IPhysicsObject* newEnt = physicsObjectFactory(createCollisionMesh(1, 1, 1), CTYPE_WORLDDYNAMIC, 5, Material(), nullptr, glm::vec3(-3, -3, 0), true, true, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0.5f, 0.5f, 0));
-	IPhysicsObject* newEnt2 = physicsObjectFactory(createCollisionMesh(1, 1, 1), CTYPE_WORLDSTATIC, 5, Material(), nullptr, glm::vec3(), true, true);
+	ICollisionMesh* still = createCollisionMesh(1, 1, 1, glm::vec3(0, 0, 1), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0));
+	ICollisionMesh* moving = createCollisionMesh(1, 1, 1, glm::rotateX(glm::vec3(0, 0, 1), PI / 4), glm::rotateX(glm::vec3(1, 0, 0), PI / 4), glm::rotateX(glm::vec3(0, 1, 0), PI / 4));
+	
+	IPhysicsObject* newEnt = physicsObjectFactory(moving, CTYPE_WORLDDYNAMIC, 5, Material(), nullptr, glm::vec3(3.4f, 0, 0), true, true, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(-1.f, 0, 0));
+	IPhysicsObject* newEnt2 = physicsObjectFactory(still, CTYPE_WORLDSTATIC, 5, Material(), nullptr, glm::vec3(), true, true);
 	getWorld()->addEntity(newEnt);
 	getWorld()->addEntity(newEnt2);
 	unlockPhysics();

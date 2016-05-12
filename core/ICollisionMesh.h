@@ -26,8 +26,8 @@ namespace ginkgo
 		virtual glm::vec3 const& getAxis(int axis) const = 0;
 		virtual glm::vec3 const& getCenter() const = 0;
 		virtual float getExtent(int extent) const = 0;
-		virtual void generateCollisionInfo(ICollisionMesh const& other, float intersectTime) = 0;
+		virtual CollisionInfo generateCollisionInfo(ICollisionMesh const& other, float intersectTime) = 0;
 	};
 
-	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float l, float w, float h);
+	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float l, float w, float h, glm::vec3 const& lAxis, glm::vec3 const& wAxis, glm::vec3 const& hAxis);
 }

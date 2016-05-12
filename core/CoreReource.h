@@ -63,6 +63,31 @@ namespace ginkgo
 		float deltaTime;
 	};
 
+	class ICollisionMesh;
+
+	struct CollisionInfo
+	{
+		CollisionInfo(ICollisionMesh const& t, ICollisionMesh const& o) : thisMesh(t), otherMesh(o) {}
+
+		ICollisionMesh const& otherMesh;
+		ICollisionMesh const& thisMesh;
+
+		float collisionTime;
+
+		glm::vec3 lastSeparatingAxis;
+
+		glm::vec3 intersectionPoint;
+
+		//how will we handle different collisions?
+		//if thismesh hits a face, get the normal of the other face
+		//if thismesh hits an edge or vertex, get the normal of this face
+		//if this face turns out to be an edge or vertex ?
+		int collisionType;
+
+		glm::vec3 collisionNormal;
+
+	};
+
 	typedef unsigned __int8 UBYTE;
 	typedef signed __int32 INT32;
 	typedef unsigned __int32 UINT32;

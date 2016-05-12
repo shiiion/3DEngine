@@ -12,7 +12,7 @@
 //MORE STUFF CAN BE ADDED
 
 //object is never resolved (pushes objects out of the way)
-//typically for objects which will never move, such as floor, wall, etc
+//typically for objects which will never move, such as 1or, wall, etc
 #define CTYPE_WORLDSTATIC 1
 //object is always resolved (pushed out of the way)
 //typically for moving objects in the world
@@ -21,15 +21,7 @@
 //typically for the player object, as it doesn't bounce off of surfaces
 #define CTYPE_WORLDDYNAMIC_NOREBOUND 3
 
-#define VERTEX_FACE_COLLISION 1
-#define FACE_VERTEX_COLLISION 2
-#define FACE_EDGE_COLLISION 3
-#define EDGE_FACE_COLLISION 4
-#define FACE_FACE_COLLISION 5
-#define EDGE_EDGE_COLLISION 6
-#define VERTEX_VERTEX_COLLISION 7
-#define EDGE_VERTEX_COLLISION 8
-#define VERTEX_EDGE_COLLISION 9
+#define AGAINST_FACE_COLLISION 1
 
 namespace ginkgo
 {
