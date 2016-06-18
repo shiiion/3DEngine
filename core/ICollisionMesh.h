@@ -29,5 +29,5 @@ namespace ginkgo
 		virtual CollisionInfo generateCollisionInfo(ICollisionMesh const& other, float intersectTime) = 0;
 	};
 
-	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float l, float w, float h, glm::vec3 const& lAxis, glm::vec3 const& wAxis, glm::vec3 const& hAxis);
+	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);
 }

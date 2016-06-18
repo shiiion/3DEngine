@@ -30,6 +30,9 @@ namespace ginkgo
 	{
 		float collisionTime;
 		float friction;
+		//fraction of velocity gained when bouncing
+		//0 = no bounce, 1 = 100% bounce
+		float reboundFraction;
 	};
 
 	enum EntityType
@@ -77,12 +80,6 @@ namespace ginkgo
 		glm::vec3 lastSeparatingAxis;
 
 		glm::vec3 intersectionPoint;
-
-		//how will we handle different collisions?
-		//if thismesh hits a face, get the normal of the other face
-		//if thismesh hits an edge or vertex, get the normal of this face
-		//if this face turns out to be an edge or vertex ?
-		int collisionType;
 
 		glm::vec3 collisionNormal;
 

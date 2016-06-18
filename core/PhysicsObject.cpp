@@ -59,7 +59,6 @@ namespace ginkgo
 		{
 			colliders.push_back(other);
 			collisionState = CSTATE_FIRSTCOLLIDE;
-			printf("collision detected!\n", position.x, position.y, position.z);
 			this->setPosition(glm::vec3(3.4f, 0, 0));
 		}
 

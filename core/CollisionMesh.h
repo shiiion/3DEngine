@@ -49,7 +49,7 @@ namespace ginkgo
 		int lastSeparatingAxisType;
 		int intersectSide;
 
-		//width, length, height
+		//width (x), height(y), length(z)
 		float extents[3];
 		glm::vec3 axes[3];
 
@@ -64,7 +64,7 @@ namespace ginkgo
 		void getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime);
 		void this_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime);
 	public:
-		CollisionMesh(float l, float w, float h, glm::vec3 const& lAxis, glm::vec3 const& wAxis, glm::vec3 const& hAxis);
+		CollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);
 		virtual glm::vec3 const* getBoundingVertices() const override;
 		virtual MoveInfo const& getLastMove() const override;
 		virtual void generateVertexPath(float deltaTime) override;
