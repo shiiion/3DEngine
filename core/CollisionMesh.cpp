@@ -8,6 +8,7 @@
 namespace ginkgo
 {
 	CollisionMesh::CollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis)
+		: lastCollision(nullptr, nullptr)
 	{
 		owner = nullptr;
 		extents[0] = w;
@@ -484,7 +485,7 @@ namespace ginkgo
 		//TODO: generate surface of other which this collided with
 		//if this axis is last sep., it is this face against 
 		//if other axis is last sep., it is other face against
-		CollisionInfo ret(*this, other);
+		CollisionInfo ret(const_cast<CollisionMesh*>(this), const_cast<ICollisionMesh*>(&other));
 		switch (lastSeparatingAxisType)
 		{
 		//FACE V ?
@@ -522,13 +523,14 @@ namespace ginkgo
 		return ret;
 	}
 
+	//TODO
+	void CollisionMesh::resolveCollision() 
+	{
+
+	}
+
 	ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis)
 	{
 		return new CollisionMesh(w, h, l, wAxis, hAxis, lAxis);
-	}
-	//TODO
-	void CollisionMesh::resolveCollision(CollisionInfo const& info) 
-	{
-
 	}
 }

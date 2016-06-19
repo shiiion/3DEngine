@@ -86,6 +86,6 @@ namespace ginkgo
 		//TRUE if not intersecting, FALSE if intersecting
 		bool testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime);
 
-		virtual void resolveCollision(CollisionInfo const& info) override;
+		virtual void resolveCollision() override;
 	};
 }
