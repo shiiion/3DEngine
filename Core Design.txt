@@ -12,11 +12,11 @@ COLLISION HANDLING DESIGN:
 			wake input thread - SYNC
 			wake event thread - SYNC
 			wake physics thread - ASYNC
-			sleep for (tickrate) milli
+			sleep for (tickrate) milli - SYNC
 	
 	INPUT THREAD-
 		while running,
-			wait to be woken
+			wait to awaken
 			process all user input, crunch into simple format (such as an array or struct)
 			get an array of characters, find whichever is being controlled by the user
 			run input callback for character, giving it input data
