@@ -60,6 +60,7 @@ namespace ginkgo
 		IPhysicsObject const* owner;
 
 		MoveInfo lastMove;
+		CollisionInfo lastCollision;
 
 		void getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime);
 		void this_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime);
@@ -83,5 +84,7 @@ namespace ginkgo
 		virtual CollisionInfo generateCollisionInfo(ICollisionMesh const& other, float intersectTime) override;
 		//TRUE if not intersecting, FALSE if intersecting
 		bool testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime);
+
+		virtual void resolveCollision(CollisionInfo const& info) override;
 	};
 }

@@ -70,10 +70,10 @@ namespace ginkgo
 
 	struct CollisionInfo
 	{
-		CollisionInfo(ICollisionMesh const& t, ICollisionMesh const& o) : thisMesh(t), otherMesh(o) {}
+		CollisionInfo(ICollisionMesh* t, ICollisionMesh* o) : thisMesh(t), otherMesh(o) {}
 
-		ICollisionMesh const& otherMesh;
-		ICollisionMesh const& thisMesh;
+		ICollisionMesh* otherMesh;
+		ICollisionMesh* thisMesh;
 
 		float collisionTime;
 

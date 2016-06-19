@@ -76,7 +76,7 @@ namespace ginkgo
 		{
 			newSeparatingAxis = false;
 			getLastSeparatingAxis(other, deltaTime);
-			generateCollisionInfo(other, getCollisionTime(lastSeparatingAxis, other, deltaTime));
+			lastCollision = generateCollisionInfo(other, getCollisionTime(lastSeparatingAxis, other, deltaTime));
 		}
 		return false;
 	}
@@ -407,5 +407,10 @@ namespace ginkgo
 	ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis)
 	{
 		return new CollisionMesh(w, h, l, wAxis, hAxis, lAxis);
+	}
+	//TODO
+	void CollisionMesh::resolveCollision(CollisionInfo const& info) 
+	{
+
 	}
 }
