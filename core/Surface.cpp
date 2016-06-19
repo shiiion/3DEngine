@@ -132,7 +132,7 @@ namespace ginkgo
 		Ray normRay = ray;
 		normRay.direction = glm::normalize(normRay.direction);
 		glm::vec3 normal, intersect;
-		float d, intersectionDistance;
+		float d;
 		getNormal(t1, normal);
 
 		d = -glm::dot(t1.P1, normal);

@@ -57,7 +57,7 @@ namespace ginkgo
 
 		glm::vec3 lastSeparatingAxis;
 
-		IPhysicsObject const* owner;
+		IPhysicsObject* owner;
 
 		MoveInfo lastMove;
 		CollisionInfo lastCollision;
@@ -71,7 +71,7 @@ namespace ginkgo
 		virtual MoveInfo const& getLastMove() const override;
 		virtual void generateVertexPath(float deltaTime) override;
 
-		virtual void setOwner(IPhysicsObject const* owner) override;
+		virtual void setOwner(IPhysicsObject* owner) override;
 
 		virtual bool testCollision(ICollisionMesh const& other, float deltaTime) override;
 		virtual float getCollisionTime(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const override;
@@ -87,5 +87,6 @@ namespace ginkgo
 		bool testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime);
 
 		virtual void resolveCollision() override;
+		virtual IPhysicsObject* getOwner() const override;
 	};
 }

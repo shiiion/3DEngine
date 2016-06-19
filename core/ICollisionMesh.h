@@ -15,7 +15,7 @@ namespace ginkgo
 		virtual MoveInfo const& getLastMove() const = 0;
 		virtual void generateVertexPath(float deltaTime) = 0;
 
-		virtual void setOwner(IPhysicsObject const* owner) = 0;
+		virtual void setOwner(IPhysicsObject* owner) = 0;
 
 		virtual bool testCollision(ICollisionMesh const& other, float deltaTime) = 0;
 
@@ -28,6 +28,8 @@ namespace ginkgo
 		virtual float getExtent(int extent) const = 0;
 		virtual CollisionInfo generateCollisionInfo(ICollisionMesh const& other, float intersectTime) = 0;
 		virtual void resolveCollision() = 0;
+		
+		virtual IPhysicsObject* getOwner() const = 0;
 	};
 
 	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);

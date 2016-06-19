@@ -70,7 +70,7 @@ namespace ginkgo
 			return;
 		if (collisionState == CSTATE_FIRSTCOLLIDE)
 		{
-			collisionMesh->resolveCollision(collisionMesh->generateCollisionInfo);
+			collisionMesh->resolveCollision();
 
 		}
 		collisionMesh->finalizeMove();

@@ -49,7 +49,7 @@ namespace ginkgo
 		lastMove.accel = owner->getAcceleration();
 	}
 
-	void CollisionMesh::setOwner(IPhysicsObject const* owner)
+	void CollisionMesh::setOwner(IPhysicsObject* owner)
 	{
 		this->owner = owner;
 		center = owner->getPosition();
@@ -134,16 +134,19 @@ namespace ginkgo
 			{
 				if (longestTime < (ct = getCollisionTime(glm::normalize(glm::cross(axes[a], other.getAxis(b))), other, deltaTime)))
 				{
-					longestTime = ct;
-					lastSeparatingAxis = glm::normalize(glm::cross(axes[a], other.getAxis(b)));
-					lastSeparatingAxisType = AXIS_CROSS(a, b);
-					if (glm::dot(lastSeparatingAxis, other.getLastMove().centerStart - lastMove.centerStart) < 0)
+					if (glm::abs(longestTime - ct) > MIN_THRESHOLD)
 					{
-						intersectSide = -1;
-					}
-					else
-					{
-						intersectSide = 1;
+						longestTime = ct;
+						lastSeparatingAxis = glm::normalize(glm::cross(axes[a], other.getAxis(b)));
+						lastSeparatingAxisType = AXIS_CROSS(a, b);
+						if (glm::dot(lastSeparatingAxis, other.getLastMove().centerStart - lastMove.centerStart) < 0)
+						{
+							intersectSide = -1;
+						}
+						else
+						{
+							intersectSide = 1;
+						}
 					}
 				}
 			}
@@ -247,7 +250,6 @@ namespace ginkgo
 #define CIJ(i, j) (glm::dot(axes[i], other.getAxis(j)))
 		collisionOut.collisionTime = intersectTime;
 		int index = 0;
-		bool dotProductZero = false;
 		switch (lastSeparatingAxisType)
 		{
 		case AXIS_THIS_1:
@@ -265,105 +267,69 @@ namespace ginkgo
 		collisionOut.collisionNormal = axes[index] * (float)-intersectSide;
 		collisionOut.lastSeparatingAxis = axes[index];
 
-		for (int a = 0; (a < 3) && !dotProductZero; a++)
+		MoveInfo const& otherMove = other.getLastMove();
+		glm::vec3 CAI = otherMove.centerStart + (otherMove.velStart * intersectTime);
+		float sumx = 0, sumy = 0, sumz = 0, minyx, minyy, minyz, maxyx, maxyy, maxyz;
+		for (int a = 0; a < 3; a++)
 		{
-			for (int b = 0; b < 3; b++)
-			{
-				if (CIJ(a, b) == 0.f)
-				{
-					dotProductZero = true;
-					break;
-				}
-			}
+			sumx += glm::abs(CIJ(a, 0)) * extents[a];
+			sumy += glm::abs(CIJ(a, 1)) * extents[a];
+			sumz += glm::abs(CIJ(a, 2)) * extents[a];
 		}
-		//vertex-face
-		if (!dotProductZero)
+
+		minyx = glm::dot(-other.getAxis(0), centerDiff) - sumx;
+		minyy = glm::dot(-other.getAxis(1), centerDiff) - sumy;
+		minyz = glm::dot(-other.getAxis(2), centerDiff) - sumz;
+		maxyx = glm::dot(-other.getAxis(0), centerDiff) + sumx;
+		maxyy = glm::dot(-other.getAxis(1), centerDiff) + sumy;
+		maxyz = glm::dot(-other.getAxis(2), centerDiff) + sumz;
+
+		float x, y, z;
+		if (other.getExtent(0) <= maxyx)
 		{
-#define YSUBJ(i, j) (-intersectSide * glm::sign(CIJ(i, j)) * other.getExtent(j))
-			glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * intersectTime));
-			float x, y, z, yxt = 0, yyt = 0, yzt = 0, extentSumX = 0, extentSumY = 0, extentSumZ = 0;
-			for (int a = 0; a < 3; a++)
-			{
-				yxt += CIJ(0, a) * YSUBJ(0, a);
-				yyt += CIJ(1, a) * YSUBJ(1, a);
-				yzt += CIJ(2, a) * YSUBJ(2, a);
-
-			}
-			x = glm::dot(axes[0], centerDiff) + yxt;
-			y = glm::dot(axes[1], centerDiff) + yyt;
-			z = glm::dot(axes[2], centerDiff) + yzt;
-
-			collisionOut.intersectionPoint = ((x * axes[0]) + (y * axes[1]) + (z * axes[2])) + CAI;
-			return;
-#undef YSUBJ
+			x = other.getExtent(0);
 		}
-		//edge-face or face-face
+		else if (-other.getExtent(0) >= minyx)
+		{
+			x = -other.getExtent(0);
+		}
 		else
 		{
-			MoveInfo const& otherMove = other.getLastMove();
-			glm::vec3 CAI = otherMove.centerStart + (otherMove.velStart * intersectTime);
-			float sumx = 0, sumy = 0, sumz = 0, minyx, minyy, minyz, maxyx, maxyy, maxyz;
-			for (int a = 0; a < 3; a++)
-			{
-				sumx += glm::abs(glm::dot(axes[a], other.getAxis(0))) * extents[a];
-				sumy += glm::abs(glm::dot(axes[a], other.getAxis(1))) * extents[a];
-				sumz += glm::abs(glm::dot(axes[a], other.getAxis(2))) * extents[a];
-			}
-
-			minyx = glm::dot(-other.getAxis(0), centerDiff) - sumx;
-			minyy = glm::dot(-other.getAxis(1), centerDiff) - sumy;
-			minyz = glm::dot(-other.getAxis(2), centerDiff) - sumz;
-			maxyx = glm::dot(-other.getAxis(0), centerDiff) + sumx;
-			maxyy = glm::dot(-other.getAxis(1), centerDiff) + sumy;
-			maxyz = glm::dot(-other.getAxis(2), centerDiff) + sumz;
-
-			float x, y, z;
-			if (other.getExtent(0) <= maxyx)
-			{
-				x = other.getExtent(0);
-			}
-			else if (-other.getExtent(0) >= minyx)
-			{
-				x = -other.getExtent(0);
-			}
-			else
-			{
-				x = minyx;
-			}
-			
-			if (other.getExtent(1) <= maxyy)
-			{
-				y = other.getExtent(1);
-			}
-			else if (-other.getExtent(1) >= minyy)
-			{
-				y = -other.getExtent(1);
-			}
-			else
-			{
-				y = minyy;
-			}
-			
-			if (other.getExtent(2) <= maxyz)
-			{
-				z = other.getExtent(2);
-			}
-			else if (-other.getExtent(2) >= minyz)
-			{
-				z = -other.getExtent(2);
-			}
-			else
-			{
-				z = minyz;
-			}
-			collisionOut.intersectionPoint = ((x * other.getAxis(0)) + (y * other.getAxis(1)) + (z * other.getAxis(2))) + CAI;
+			x = minyx;
 		}
+			
+		if (other.getExtent(1) <= maxyy)
+		{
+			y = other.getExtent(1);
+		}
+		else if (-other.getExtent(1) >= minyy)
+		{
+			y = -other.getExtent(1);
+		}
+		else
+		{
+			y = minyy;
+		}
+		
+		if (other.getExtent(2) <= maxyz)
+		{
+			z = other.getExtent(2);
+		}
+		else if (-other.getExtent(2) >= minyz)
+		{
+			z = -other.getExtent(2);
+		}
+		else
+		{
+			z = minyz;
+		}
+		collisionOut.intersectionPoint = ((x * other.getAxis(0)) + (y * other.getAxis(1)) + (z * other.getAxis(2))) + CAI;
 #undef CIJ
 	}
 
 	void CollisionMesh::other_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut)
 	{
-#define CIJ(i, j) (glm::dot(axes[i], other.getAxis(j)))
+#define CJI(j, i) (glm::dot(axes[j], other.getAxis(i)))
 		collisionOut.collisionTime = intersectTime;
 		int index = 0;
 		bool dotProductZero = false;
@@ -384,107 +350,69 @@ namespace ginkgo
 		collisionOut.collisionNormal = other.getAxis(index) * (float)-intersectSide;
 		collisionOut.lastSeparatingAxis = other.getAxis(index);
 
-		for (int a = 0; (a < 3) && !dotProductZero; a++)
+		
+	
+		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * intersectTime));
+		float sumx = 0, sumy = 0, sumz = 0, minxx, minxy, minxz, maxxx, maxxy, maxxz;
+		for (int a = 0; a < 3; a++)
 		{
-			for (int b = 0; b < 3; b++)
-			{
-				if (CIJ(a, b) == 0.f)
-				{
-					dotProductZero = true;
-					break;
-				}
-			}
+			sumx += glm::abs(CJI(0, a)) * other.getExtent(a);
+			sumy += glm::abs(CJI(1, a)) * other.getExtent(a);
+			sumz += glm::abs(CJI(2, a)) * other.getExtent(a);
 		}
-		//vertex-face
-		if (!dotProductZero)
+
+		minxx = glm::dot(axes[0], centerDiff) - sumx;
+		minxy = glm::dot(axes[1], centerDiff) - sumy;
+		minxz = glm::dot(axes[2], centerDiff) - sumz;
+		maxxx = glm::dot(axes[0], centerDiff) + sumx;
+		maxxy = glm::dot(axes[1], centerDiff) + sumy;
+		maxxz = glm::dot(axes[2], centerDiff) + sumz;
+
+		float x, y, z;
+		if (other.getExtent(0) <= maxxx)
 		{
-#define YSUBJ(i, j) (-intersectSide * glm::sign(CIJ(i, j)) * other.getExtent(j))
-			glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * intersectTime));
-			float x, y, z, yxt = 0, yyt = 0, yzt = 0, extentSumX = 0, extentSumY = 0, extentSumZ = 0;
-			for (int a = 0; a < 3; a++)
-			{
-				yxt += CIJ(0, a) * YSUBJ(0, a);
-				yyt += CIJ(1, a) * YSUBJ(1, a);
-				yzt += CIJ(2, a) * YSUBJ(2, a);
-
-			}
-			x = glm::dot(axes[0], centerDiff) + yxt;
-			y = glm::dot(axes[1], centerDiff) + yyt;
-			z = glm::dot(axes[2], centerDiff) + yzt;
-
-			collisionOut.intersectionPoint = ((x * axes[0]) + (y * axes[1]) + (z * axes[2])) + CAI;
-			return;
-#undef YSUBJ
+			x = other.getExtent(0);
 		}
-		//edge-face or face-face
+		else if (-other.getExtent(0) >= minxx)
+		{
+			x = -other.getExtent(0);
+		}
 		else
 		{
-			MoveInfo const& otherMove = other.getLastMove();
-			glm::vec3 CAI = otherMove.centerStart + (otherMove.velStart * intersectTime);
-			float sumx = 0, sumy = 0, sumz = 0, minyx, minyy, minyz, maxyx, maxyy, maxyz;
-			for (int a = 0; a < 3; a++)
-			{
-				sumx += glm::abs(glm::dot(axes[a], other.getAxis(0))) * extents[a];
-				sumy += glm::abs(glm::dot(axes[a], other.getAxis(1))) * extents[a];
-				sumz += glm::abs(glm::dot(axes[a], other.getAxis(2))) * extents[a];
-			}
-
-			minyx = glm::dot(-other.getAxis(0), centerDiff) - sumx;
-			minyy = glm::dot(-other.getAxis(1), centerDiff) - sumy;
-			minyz = glm::dot(-other.getAxis(2), centerDiff) - sumz;
-			maxyx = glm::dot(-other.getAxis(0), centerDiff) + sumx;
-			maxyy = glm::dot(-other.getAxis(1), centerDiff) + sumy;
-			maxyz = glm::dot(-other.getAxis(2), centerDiff) + sumz;
-
-			float x, y, z;
-			if (other.getExtent(0) <= maxyx)
-			{
-				x = other.getExtent(0);
-			}
-			else if (-other.getExtent(0) >= minyx)
-			{
-				x = -other.getExtent(0);
-			}
-			else
-			{
-				x = minyx;
-			}
-
-			if (other.getExtent(1) <= maxyy)
-			{
-				y = other.getExtent(1);
-			}
-			else if (-other.getExtent(1) >= minyy)
-			{
-				y = -other.getExtent(1);
-			}
-			else
-			{
-				y = minyy;
-			}
-
-			if (other.getExtent(2) <= maxyz)
-			{
-				z = other.getExtent(2);
-			}
-			else if (-other.getExtent(2) >= minyz)
-			{
-				z = -other.getExtent(2);
-			}
-			else
-			{
-				z = minyz;
-			}
-			collisionOut.intersectionPoint = ((x * other.getAxis(0)) + (y * other.getAxis(1)) + (z * other.getAxis(2))) + CAI;
+			x = minxx;
 		}
+
+		if (other.getExtent(1) <= maxxy)
+		{
+			y = other.getExtent(1);
+		}
+		else if (-other.getExtent(1) >= minxy)
+		{
+			y = -other.getExtent(1);
+		}
+		else
+		{
+			y = minxy;
+		}
+
+		if (other.getExtent(2) <= maxxz)
+		{
+			z = other.getExtent(2);
+		}
+		else if (-other.getExtent(2) >= minxz)
+		{
+			z = -other.getExtent(2);
+		}
+		else
+		{
+			z = minxz;
+		}
+		collisionOut.intersectionPoint = ((x * axes[0]) + (y * axes[1]) + (z * axes[2])) + CAI;
 #undef CIJ
 	}
 
 	CollisionInfo CollisionMesh::generateCollisionInfo(ICollisionMesh const& other, float intersectTime)
 	{
-		//TODO: generate surface of other which this collided with
-		//if this axis is last sep., it is this face against 
-		//if other axis is last sep., it is other face against
 		CollisionInfo ret(const_cast<CollisionMesh*>(this), const_cast<ICollisionMesh*>(&other));
 		switch (lastSeparatingAxisType)
 		{
@@ -523,10 +451,15 @@ namespace ginkgo
 		return ret;
 	}
 
+	IPhysicsObject* CollisionMesh::getOwner() const
+	{
+		return owner;
+	}
+
 	//TODO
 	void CollisionMesh::resolveCollision() 
 	{
-
+		
 	}
 
 	ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis)
