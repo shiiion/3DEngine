@@ -63,7 +63,8 @@ namespace ginkgo
 		CollisionInfo lastCollision;
 
 		void getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime);
-		void this_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime);
+		void this_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void other_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
 	public:
 		CollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);
 		virtual glm::vec3 const* getBoundingVertices() const override;

@@ -59,7 +59,6 @@ namespace ginkgo
 		{
 			colliders.push_back(other);
 			collisionState = CSTATE_FIRSTCOLLIDE;
-			this->setPosition(glm::vec3(3.4f, 0, 0));
 		}
 
 	//	printf("%f, %f, %f\n", position.x, position.y, position.z);
