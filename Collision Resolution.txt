@@ -1,13 +1,39 @@
+COLLISION HANDLING DESIGN:
+	to get a big picture on how the game will execute, i am setting up a frame-order design
+	this will be referred to when checking what will be called when, what it does, where it occurs, whether it should be ran async or sync
+	sync implies the task will be waited on, async imples the task will not be waited on
 
+	-NEW ADDITIONS: ICharacter and Character (will be added)
+		inherits from PhysicsObject
+		(design me here)
 
-object hitting ground:
-a(tf-ti) = v1
+	CORE THREAD-
+		while running,
+			wake input thread - SYNC
+			wake event thread - SYNC
+			wake physics thread - ASYNC
+			sleep for (tickrate) milli
+	
+	INPUT THREAD-
+		while running,
+			wait to be woken
+			process all user input, crunch into simple format (such as an array or struct)
+			get an array of characters, find whichever is being controlled by the user
+			run input callback for character, giving it input data
 
-IPhysicsObject* obj = colliders.at(0);
+	frame order for physics:
+		-move all objects (calling tick)
+			tick moves object as it would normally
+			IF NONSTATIC : calls movementMode tick function (if custom, calls custom movement callback)
+		-test collisions between all objects in an area (using octtrees), generates collision results (whether or not A collided with B between each object)
+		-call resolvecollisions for all objects
+			resolves collision as it would normally
+				resolves collider and collidee in one go (if collidee need be resolved)
+			IF NONSTATIC : checks movementMode, calls corresponding movement correction (if custom, calls custom movement correction callback)
+		-finalizes move (updates movementMode depending on state of the player)
 
-this->setVelocity(x,y,z) = this->getAcceleration()*(this->getMaterial().collisionTime + obj->getMaterial().collisionTime)/2;
-
-hyperplane: The plane that was crossed is an infinitely expanding plane in 3D space
-
-split each collision mesh into faces, split each face into triangles, test collision between triangle and each point of object
-point whose collision occurs earliest gets the entire physics object resolved as such
+	movementMode/customMovementMode design:
+		ignored if the object is static
+		each movementMode has a corresponding movementMode tick callback and movement correction callback
+			custom movement modes can be registered using instance of IWorld class. once registered, any nonstatic object can use that movement mode
+		

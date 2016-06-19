@@ -52,7 +52,9 @@ namespace ginkgo
 	void PhysicsObject::checkCollision(float deltaTime, IPhysicsObject* other)
 	{
 		if (collisionType == CTYPE_WORLDSTATIC)
+		{
 			return;
+		}
 		ICollisionMesh* otherCollision = other->getCollisionMesh();
 
 		if (!collisionMesh->testCollision(*otherCollision, deltaTime))
@@ -60,18 +62,17 @@ namespace ginkgo
 			colliders.push_back(other);
 			collisionState = CSTATE_FIRSTCOLLIDE;
 		}
-
-	//	printf("%f, %f, %f\n", position.x, position.y, position.z);
 	}
 
 	void PhysicsObject::resolveCollisions(float deltaTime)
 	{
 		if (collisionType == CTYPE_WORLDSTATIC)
+		{
 			return;
+		}
 		if (collisionState == CSTATE_FIRSTCOLLIDE)
 		{
 			collisionMesh->resolveCollision();
-
 		}
 		collisionMesh->finalizeMove();
 		colliders.clear();
