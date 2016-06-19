@@ -65,6 +65,16 @@ namespace ginkgo
 		void getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime);
 		void this_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
 		void other_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A0xB0_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A0xB1_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A0xB2_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A1xB0_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A1xB1_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A1xB2_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A2xB0_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A2xB1_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void A2xB2_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+
 	public:
 		CollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);
 		virtual glm::vec3 const* getBoundingVertices() const override;
