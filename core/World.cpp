@@ -154,12 +154,9 @@ namespace ginkgo
 		}
 		if (entityList[a]->getEntityType() == physicsObject)
 		{
-			worldTree.insert((IPhysicsObject*)entityList[a]);
+			worldTree.remove((IPhysicsObject*)entityList[a]);
 		}
 		delete entityList.at(a);
-		entityList.erase(entityList.begin() + a);
-
-		
 	}
 
 
