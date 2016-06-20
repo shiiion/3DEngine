@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Core Design.txt = Core Design.txt
 		game design.txt = game design.txt
 		IMPORTANT.txt = IMPORTANT.txt
+		Input Design.txt = Input Design.txt
 		Physics Design.txt = Physics Design.txt
 		RenderDesign.txt = RenderDesign.txt
 		TODOs.txt = TODOs.txt

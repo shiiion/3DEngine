@@ -78,6 +78,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="ICollisionMesh.h" />
     <ClInclude Include="IEntity.h" />
@@ -87,15 +88,18 @@
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="IWorld.h" />
+    <ClInclude Include="SurfaceCollisionMesh.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionMesh.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="SurfaceCollisionMesh.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -27,6 +27,10 @@ namespace ginkgo
 	using std::mutex;
 	using std::condition_variable;
 
+	class IPhysicsObject;
+
+	typedef bool(__cdecl RaytraceFunc)(IPhysicsObject* hitObject);
+
 	struct Material
 	{
 		float collisionTime;
@@ -52,6 +56,12 @@ namespace ginkgo
 	{
 		glm::vec3 point;
 		glm::vec3 direction;
+	};
+
+	struct Segment
+	{
+		glm::vec3 start;
+		glm::vec3 end;
 	};
 
 	struct MoveInfo
@@ -84,6 +94,39 @@ namespace ginkgo
 
 		glm::vec3 collisionNormal;
 
+	};
+
+	struct RaytraceResult
+	{
+		bool didHit;
+
+		IPhysicsObject* firstCollision;
+		float collisionTime;
+
+		Ray ray;
+		float rayDist;
+	};
+
+	struct RaytraceParams
+	{
+		vector<IPhysicsObject*> ignoreList;
+		RaytraceFunc func;
+	};
+
+	struct Prism
+	{
+		Prism(float x = 0, float y = 0, float z = 0, float w = 0, float h = 0, float l = 0)
+		{
+			this->x = x;
+			this->y = y;
+			this->z = z;
+			this->l = l;
+			this->w = w;
+			this->h = h;
+		}
+
+		float x, y, z;
+		float l, w, h;
 	};
 
 	typedef unsigned __int8 UBYTE;

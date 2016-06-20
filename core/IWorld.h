@@ -23,5 +23,7 @@ namespace ginkgo
 		virtual void addEntity(IEntity* entity) = 0;
 		virtual void removeEntity(long ID) = 0;
 
+		virtual void traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut) = 0;
+
 	};
 }

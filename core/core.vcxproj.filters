@@ -66,6 +66,12 @@
     <ClInclude Include="CoreReource.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
+    <ClInclude Include="SurfaceCollisionMesh.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
@@ -87,6 +93,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CollisionMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SurfaceCollisionMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

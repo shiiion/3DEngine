@@ -1,0 +1,40 @@
+INPUT SYSTEM DESIGN:
+	FILES: (released states usage by outside sources)
+		InputResource.h - RELEASED
+			-contains code for all input requirements (windows.h, key/button enums, etc)
+		IAbstractInputSystem.h - RELEASED
+		UserInputSystem.h/cpp
+		IInputMapping.h - RELEASED
+		UserInputMapping.h/cpp
+		Core.cpp
+			-contains input thread, which sends input data to any character
+
+	GLOBAL FUNCTIONS:
+		CreateUserInputSystem() (IAbstractInputSystem.h)
+		CreateUserInputMapping() (IInputMapping.h)
+
+	STRUCTS:
+		Control
+			-intermediary between input data and resultant output
+			MEMBERS:
+				int inputCode;
+				int outputCode;
+		InputState
+			-output code, whether it is set or not
+			MEMBERS:
+				int outputCode;
+				bool isSet;
+
+	CLASSES:
+		IInputMapping
+			-interface for mapping arbitrary input values to some output value
+			-
+		IAbstractInputSystem
+			-interface for any input system (user, AI, tutorial?)
+			-used as an abstraction between what is given (input) and how input will be interpreted (output)
+			-uses Controls to interpret input into corresponding output codes
+			FUNCTIONS:
+				setInputMapping(IInputMapping map)
+					-removes existing input mapping (if it exists), and destroys it
+					-sets input map member to map
+					-gets all input mappings and adds them

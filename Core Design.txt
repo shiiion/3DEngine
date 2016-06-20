@@ -17,9 +17,9 @@ COLLISION HANDLING DESIGN:
 	INPUT THREAD-
 		while running,
 			wait to awaken
-			process all user input, crunch into simple format (such as an array or struct)
-			get an array of characters, find whichever is being controlled by the user
-			run input callback for character, giving it input data
+			-process all user input, crunch into simple format (such as an array or struct)
+			-get an array of characters, find whichever is being controlled by the user
+			-run input callback for character, giving it input data
 
 	frame order for physics:
 		-move all objects (calling tick)
@@ -37,3 +37,13 @@ COLLISION HANDLING DESIGN:
 		each movementMode has a corresponding movementMode tick callback and movement correction callback
 			custom movement modes can be registered using instance of IWorld class. once registered, any nonstatic object can use that movement mode
 		
+
+	raytracing design:
+		-raytracing is a necessary part of the game, it allows testing collisions through a line segment
+		STRUCTS:	
+			RaytraceResult
+				IPhysicsObject* firstCollision - first object the line hit
+				float collisionTime - value from 0-1 along the ray which it hit
+				Segment ray - 
+
+

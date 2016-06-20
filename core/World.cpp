@@ -2,11 +2,13 @@
 #include "IEntity.h"
 #include "IRenderable.h"
 #include "IPhysicsObject.h"
+#include "SurfaceCollisionMesh.h"
 
 namespace ginkgo
 {
 
 	World::World(float gravity)
+		: worldTree(0, Prism(WORLD_DIMENSIONS), nullptr)
 	{
 		this->gravity = gravity;
 	}
@@ -57,6 +59,7 @@ namespace ginkgo
 			delete entityList.at(a);
 		}
 		entityList.clear();
+		worldTree.resetTree(0, Prism(WORLD_DIMENSIONS));
 	}
 
 	void World::setGravity(float gravity)
@@ -66,6 +69,7 @@ namespace ginkgo
 
 	void World::setEntity(long ID, IEntity* entity)
 	{
+		//TODO: tree stuff here
 		IEntity* oldEntity = World::getEntity(ID);
 		if (oldEntity == nullptr)
 			return;
@@ -130,6 +134,10 @@ namespace ginkgo
 	void World::addEntity(IEntity* entity)
 	{
 		entityList.push_back(entity);
+		if (entity->getEntityType() == physicsObject)
+		{
+			worldTree.insert((IPhysicsObject*)entity);
+		}
 	}
 
 	void World::removeEntity(long ID)
@@ -141,8 +149,58 @@ namespace ginkgo
 				break;
 		}
 		if (a == entityList.size())
+		{
 			return;
+		}
+		if (entityList[a]->getEntityType() == physicsObject)
+		{
+			worldTree.insert((IPhysicsObject*)entityList[a]);
+		}
 		delete entityList.at(a);
 		entityList.erase(entityList.begin() + a);
+
+		
+	}
+
+
+	void World::traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut)
+	{
+		resultOut.ray = ray;
+		resultOut.rayDist = dist;
+
+		vector<IPhysicsObject*> possibleCollisions;
+		worldTree.retrieveCollisions(possibleCollisions, ray, dist);
+
+		for (IPhysicsObject* collider : possibleCollisions)
+		{
+			SurfaceCollisionMesh surfaceMesh(collider->getCollisionMesh());
+			for (int a = 0; a < 6; a++)
+			{
+				if (surfaceMesh.faces[a].intersectsWithSurface(ray, dist))
+				{
+					if (params.func != nullptr)
+					{
+						if (params.func(collider))
+						{
+							resultOut.didHit = true;
+							resultOut.firstCollision = collider;
+							resultOut.collisionTime = (dist / surfaceMesh.faces[a].getIntersectionValue(ray));
+							return;
+						}
+					}
+					else
+					{
+						resultOut.didHit = true;
+						resultOut.firstCollision = collider;
+						resultOut.collisionTime = (dist / surfaceMesh.faces[a].getIntersectionValue(ray));
+						return;
+					}
+				}
+			}
+		}
+		resultOut.firstCollision = nullptr;
+		resultOut.didHit = false;
+		resultOut.collisionTime = -1;
+		return;
 	}
 }
