@@ -74,6 +74,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="IAbstractInputSystem.h" />
+    <ClInclude Include="ICharacter.h" />
     <ClInclude Include="CollisionMesh.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreReource.h" />

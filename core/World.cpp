@@ -181,7 +181,7 @@ namespace ginkgo
 						{
 							resultOut.didHit = true;
 							resultOut.firstCollision = collider;
-							resultOut.collisionTime = (dist / surfaceMesh.faces[a].getIntersectionValue(ray));
+							resultOut.collisionDist = surfaceMesh.faces[a].getIntersectionValue(ray);
 							return;
 						}
 					}
@@ -189,7 +189,7 @@ namespace ginkgo
 					{
 						resultOut.didHit = true;
 						resultOut.firstCollision = collider;
-						resultOut.collisionTime = (dist / surfaceMesh.faces[a].getIntersectionValue(ray));
+						resultOut.collisionDist = surfaceMesh.faces[a].getIntersectionValue(ray);
 						return;
 					}
 				}
@@ -197,7 +197,27 @@ namespace ginkgo
 		}
 		resultOut.firstCollision = nullptr;
 		resultOut.didHit = false;
-		resultOut.collisionTime = -1;
+		resultOut.collisionDist = -1;
 		return;
 	}
+
+
+	void World::registerCustomMovement(CustomMovement const& newMove)
+	{
+		customMovements.push_back(newMove);
+	}
+
+
+	CustomMovement* World::getCustomMovement(int movementValue) const
+	{
+		for (int a = 0; a < customMovements.size(); a++)
+		{
+			if (customMovements[a].movementValue == movementValue)
+			{
+				return &customMovements[a];
+			}
+		}
+		return nullptr;
+	}
 }
+

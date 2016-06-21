@@ -7,6 +7,7 @@
 namespace ginkgo
 {
 	class IEntity;
+	class Octree;
 
 	class World : public IWorld
 	{
@@ -14,6 +15,7 @@ namespace ginkgo
 		float gravity;
 		vector<IEntity*> entityList;
 		Octree worldTree;
+		mutable vector<CustomMovement> customMovements;
 
 	public:
 		World(float gravity);
@@ -33,5 +35,12 @@ namespace ginkgo
 
 		virtual void traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut) override;
 
+		virtual void registerCustomMovement(CustomMovement const& newMove) override;
+		virtual CustomMovement* getCustomMovement(int movementValue) const override;
+
+		virtual Octree const& getEntityTree() const override
+		{
+			return worldTree;
+		}
 	};
 }

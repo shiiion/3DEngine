@@ -36,14 +36,21 @@ COLLISION HANDLING DESIGN:
 		ignored if the object is static
 		each movementMode has a corresponding movementMode tick callback and movement correction callback
 			custom movement modes can be registered using instance of IWorld class. once registered, any nonstatic object can use that movement mode
-		
+		walking:
+			check if walking state should be placed on object each tick by tracing a ray from the lowest outer points of the mesh
+
 
 	raytracing design:
 		-raytracing is a necessary part of the game, it allows testing collisions through a line segment
 		STRUCTS:	
 			RaytraceResult
 				IPhysicsObject* firstCollision - first object the line hit
-				float collisionTime - value from 0-1 along the ray which it hit
-				Segment ray - 
+				float collisionDist - distance from start which the ray hit the object
+				Ray ray - a ray representing point and direction of the trace
+				float rayDist - the total distance the ray would have traced
+				bool didHit - whether or not the ray hit an object over rayDist
 
+			RaytraceParams
+				vector ignoreList - list of objects to be ignored by this raytrace
+				RaytraceFunc func - callback to check if hitobject should be ignored
 

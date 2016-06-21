@@ -27,6 +27,14 @@ namespace ginkgo
 		UINT32 movementState;
 		UINT32 collisionType;
 
+		//FOR WALKING
+		IPhysicsObject* walkSurface;
+		glm::vec3 surfaceNormal;
+		//minimum angle between normal and vertical (0, -1, 0) at which falling turns to walking
+		static const float minFallAngle;
+
+		bool isWalkableNormal(glm::vec3 const& normal);
+
 	public:
 		PhysicsObject(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 		virtual const glm::vec3& getScale() const override;

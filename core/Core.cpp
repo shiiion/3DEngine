@@ -91,9 +91,14 @@ namespace ginkgo
 			}
 
 			const vector<IPhysicsObject*>& physicsObjects = (const vector<IPhysicsObject*>&)world->getEntitiesByType(physicsObject);
-
+			vector<IPhysicsObject*> colliders;
 			for (IPhysicsObject* p : physicsObjects)
 			{
+				if (p->getCollisionType() == CTYPE_WORLDSTATIC)
+				{
+					continue;
+				}
+				world->getEntityTree().retrieveCollisions(colliders, p);
 				for (IPhysicsObject* collider : physicsObjects)
 				{
 					if (collider->getEntityID() != p->getEntityID())//TODO: check existing collision test (1 collision resolves 2 objects)

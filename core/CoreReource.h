@@ -28,8 +28,11 @@ namespace ginkgo
 	using std::condition_variable;
 
 	class IPhysicsObject;
+	class ICollisionMesh;
 
 	typedef bool(__cdecl RaytraceFunc)(IPhysicsObject* hitObject);
+	typedef void(__cdecl CustomMoveTick)(IPhysicsObject& object, float deltaTime);
+	typedef void(__cdecl CustomMoveResolve)(ICollisionMesh& mesh);
 
 	struct Material
 	{
@@ -101,7 +104,7 @@ namespace ginkgo
 		bool didHit;
 
 		IPhysicsObject* firstCollision;
-		float collisionTime;
+		float collisionDist;
 
 		Ray ray;
 		float rayDist;
@@ -111,6 +114,13 @@ namespace ginkgo
 	{
 		vector<IPhysicsObject*> ignoreList;
 		RaytraceFunc func;
+	};
+
+	struct CustomMovement
+	{
+		int movementValue;
+		CustomMoveTick tickFunc;
+		CustomMoveResolve resolveFunc;
 	};
 
 	struct Prism

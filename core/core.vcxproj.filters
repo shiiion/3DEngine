@@ -72,6 +72,12 @@
     <ClInclude Include="Octree.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
+    <ClInclude Include="ICharacter.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IAbstractInputSystem.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">

@@ -80,6 +80,23 @@ namespace ginkgo
 		//TODO: walking: get parallel vector to surface, project velocity onto parallel vector
 	}
 
+	bool PhysicsObject::isWalkableNormal(glm::vec3 const& normal)
+	{
+		if (normal.y <= 0)
+		{
+			return false;
+		}
+		glm::vec3 normalized = glm::normalize(normal);
+		glm::vec3 vertical(0, -1, 0);
+
+		float angBetween = glm::acos(glm::dot(-normalized, vertical));
+		if (angBetween >= minFallAngle)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	const glm::vec3& PhysicsObject::getAcceleration() const
 	{
 		return acceleration;

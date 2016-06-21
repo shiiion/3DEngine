@@ -5,6 +5,7 @@
 namespace ginkgo
 {
 	class IEntity;
+	class Octree;
 
 	class IWorld
 	{
@@ -25,5 +26,10 @@ namespace ginkgo
 
 		virtual void traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut) = 0;
 
+		virtual Octree const& getEntityTree() const = 0;
+
+		virtual CustomMovement* getCustomMovement(int movementValue) const = 0;
+
+		virtual void registerCustomMovement(CustomMovement const& newMove) = 0;
 	};
 }
