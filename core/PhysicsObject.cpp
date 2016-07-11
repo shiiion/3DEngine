@@ -82,7 +82,14 @@ namespace ginkgo
 			CollisionInfo const& generatedInfo = collisionMesh->resolveCollision();
 			glm::vec3 A = generatedInfo.collisionNormal, B = collisionMesh->getLastMove().velStart;
 			glm::vec3 perp = (glm::dot(A, A) / glm::dot(B, A)) * B - A;
-			velocity = (glm::dot(perp, velocity) / (velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z)) * velocity;
+			if (glm::length(perp) == 0)
+			{
+				velocity = glm::vec3(0, 0, 0);
+			}
+			else
+			{
+				velocity = (glm::dot(perp, velocity) / (perp.x * perp.x + perp.y * perp.y + perp.z * perp.z)) * perp;
+			}
 		}
 		position = collisionMesh->getCenter();
 

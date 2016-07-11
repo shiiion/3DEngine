@@ -75,21 +75,11 @@ namespace ginkgo
 				}
 			}
 		}
-
-		if (newSeparatingAxis)
+		//if (newSeparatingAxis)
 		{
 			newSeparatingAxis = false;
 			getLastSeparatingAxis(other, deltaTime);
 			lastCollision = generateCollisionInfo(other, getCollisionTime(lastSeparatingAxis, other, deltaTime));
-		}
-		else
-		{
-			//THIS ASSUMES THAT THEY ARE AGAINST EACHOTHER I AM HOPING CHANGE THIS IF IT BREAKS LATER
-			float intersectTime = getCollisionTime(lastSeparatingAxis, other, deltaTime);
-			if (intersectTime == 0 || (intersectTime != intersectTime))
-			{
-				return true;
-			}
 		}
 		return false;
 	}
@@ -190,16 +180,16 @@ namespace ginkgo
 			(otherL * glm::sign(glm::dot(axisNorm, other.getAxis(2))) * glm::dot(axisNorm, other.getAxis(2)));
 		float r = projThisBox + projOtherBox;
 
-		if (proj > r)
+		if (proj >= r)
 		{
-			if (projTime > r)
+			if (projTime >= r)
 			{
 				return true;
 			}
 		}
-		if (proj < -r)
+		if (proj <= -r)
 		{
-			if (projTime < -r)
+			if (projTime <= -r)
 			{
 				return true;
 			}
