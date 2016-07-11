@@ -6,8 +6,6 @@
 #define DECLSPEC_CORE __declspec(dllimport)
 #endif
 #include <vector>
-#include <thread>
-#include <mutex>
 #include <condition_variable>
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
@@ -23,9 +21,6 @@
 namespace ginkgo
 {
 	using std::vector;
-	using std::thread;
-	using std::mutex;
-	using std::condition_variable;
 
 	class IPhysicsObject;
 	class ICollisionMesh;

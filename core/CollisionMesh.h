@@ -94,9 +94,9 @@ namespace ginkgo
 
 		virtual CollisionInfo generateCollisionInfo(ICollisionMesh const& other, float intersectTime) override;
 		//TRUE if not intersecting, FALSE if intersecting
-		bool testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime);
+		bool testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const;
 
-		virtual void resolveCollision() override;
+		virtual CollisionInfo const& resolveCollision() override;
 		virtual IPhysicsObject* getOwner() const override;
 	};
 }

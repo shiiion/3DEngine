@@ -48,6 +48,8 @@ namespace ginkgo
 		virtual UINT32 getMovementState() const = 0;
 		virtual UINT32 getCollisionType() const = 0;
 
+		virtual bool CollisionAlreadyExists(IPhysicsObject* other) const = 0;
+
 		virtual bool isMoving() const = 0;
 	};
 

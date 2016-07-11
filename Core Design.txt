@@ -1,25 +1,25 @@
 COLLISION HANDLING DESIGN:
 	to get a big picture on how the game will execute, i am setting up a frame-order design
-	this will be referred to when checking what will be called when, what it does, where it occurs, whether it should be ran async or sync
+	this will be referred to when checking what will be called when, what it does, where it occurs
 	sync implies the task will be waited on, async imples the task will not be waited on
 
 	-NEW ADDITIONS: ICharacter and Character (will be added)
 		inherits from PhysicsObject
 		(design me here)
 
-	CORE THREAD-
-		while running,
-			wake input thread - SYNC
-			wake event thread - SYNC
-			wake physics thread - ASYNC
-			sleep for (tickrate) milli - SYNC
+	CORE (main thread)-
+		if running,
+			process input 
+			tick physics
+			process events
+			render all objects to screen
+			render UI
+			refresh screen
 	
-	INPUT THREAD-
-		while running,
-			wait to awaken
-			-process all user input, crunch into simple format (such as an array or struct)
-			-get an array of characters, find whichever is being controlled by the user
-			-run input callback for character, giving it input data
+	Input function-
+		-process all user input, crunch into simple format (such as an array or struct)
+		-get an array of characters, find whichever is being controlled by the user
+		-run input callback for character, giving it input data
 
 	frame order for physics:
 		-move all objects (calling tick)

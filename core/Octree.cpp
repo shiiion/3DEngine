@@ -270,6 +270,20 @@ namespace ginkgo
 		}
 	}
 
+	void Octree::retrieveCollisions(vector<IPhysicsObject*>& outList, Ray const& ray, float dist) const
+	{
+		int index = getIndex(ray, dist);
+		if (index != -1 && leaves[0] != nullptr)
+		{
+			leaves[index]->retrieveCollisions(outList, ray, dist);
+		}
+
+		for (UINT32 a = 0; a < objects.size(); a++)
+		{
+			outList.push_back(objects[a]);
+		}
+	}
+
 	void Octree::resetTree(int level, Prism const& bounds)
 	{
 		if (parent != nullptr)

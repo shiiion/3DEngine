@@ -13,37 +13,27 @@ namespace ginkgo
 	class Core
 	{
 	private:
-		static volatile long entityIDBase;
-
-		thread* coreThread;
-		thread* physicsThread;
+		static long entityIDBase;
 
 		unsigned long long startTick;
 
-		volatile bool running;
-		volatile float tickTime;
+		bool running;
+		float tickTime;
 		IWorld* world;
-		
-		condition_variable eventConditionVar;
-		condition_variable physicsConditionVar;
+
+		float lastTickTime;
 
 		vector<IAbstractInputSystem*> inputSystemList;
-
-		std::mutex physicsLock;
-		std::mutex eventLock;
-		std::mutex inputLock;
 
 	public:
 		static Core core;
 		Core();
 
-		void coreFunc();
-		void physicsFunc();
-
-		void lockPhysics();
-		void unlockPhysics();
+		void coreTick();
+		void physicsTick(float elapsedTime);
 
 		void processInput();
+		void sleep();
 
 		void setTickTime(float time);
 		float getTickTime() const;
@@ -66,8 +56,9 @@ namespace ginkgo
 	DECLSPEC_CORE void stopCore();
 	DECLSPEC_CORE IWorld* getWorld();
 
-	DECLSPEC_CORE void lockPhysics();
-	DECLSPEC_CORE void unlockPhysics();
+	DECLSPEC_CORE void tickCore();
+
+	DECLSPEC_CORE void sleepTickTime();
 
 	DECLSPEC_CORE void registerInputSystem(IAbstractInputSystem* input, ICharacter* controller);
 }

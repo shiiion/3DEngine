@@ -27,7 +27,7 @@ namespace ginkgo
 		virtual glm::vec3 const& getCenter() const = 0;
 		virtual float getExtent(int extent) const = 0;
 		virtual CollisionInfo generateCollisionInfo(ICollisionMesh const& other, float intersectTime) = 0;
-		virtual void resolveCollision() = 0;
+		virtual CollisionInfo const& resolveCollision() = 0;
 		
 		virtual IPhysicsObject* getOwner() const = 0;
 	};

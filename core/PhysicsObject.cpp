@@ -3,9 +3,12 @@
 #include "IWorld.h"
 #include "ICollisionMesh.h"
 #include "ISurface.h"
+#include <glm/gtx/projection.hpp>
 
 namespace ginkgo
 {
+	const float PhysicsObject::minFallAngle = 35;
+
 	PhysicsObject::PhysicsObject(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity, bool canCollide, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
 	{
 		this->mass = mass;
@@ -62,6 +65,10 @@ namespace ginkgo
 			colliders.push_back(other);
 			collisionState = CSTATE_FIRSTCOLLIDE;
 		}
+		else
+		{
+			collisionState = CSTATE_NOCOLLISION;
+		}
 	}
 
 	void PhysicsObject::resolveCollisions(float deltaTime)
@@ -72,9 +79,14 @@ namespace ginkgo
 		}
 		if (collisionState == CSTATE_FIRSTCOLLIDE)
 		{
-			collisionMesh->resolveCollision();
+			CollisionInfo const& generatedInfo = collisionMesh->resolveCollision();
+			glm::vec3 A = generatedInfo.collisionNormal, B = collisionMesh->getLastMove().velStart;
+			glm::vec3 perp = (glm::dot(A, A) / glm::dot(B, A)) * B - A;
+			velocity = (glm::dot(perp, velocity) / (velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z)) * velocity;
 		}
-		collisionMesh->finalizeMove();
+		position = collisionMesh->getCenter();
+
+
 		colliders.clear();
 		//TODO: resolve this and other (if other is dynamic)
 		//TODO: walking: get parallel vector to surface, project velocity onto parallel vector
@@ -230,6 +242,16 @@ namespace ginkgo
 	EntityType PhysicsObject::getEntityType() const
 	{
 		return physicsObject;
+	}
+
+	bool PhysicsObject::CollisionAlreadyExists(IPhysicsObject* other) const
+	{
+		bool found = false;
+		for (IPhysicsObject* collider : colliders)
+		{
+			found |= other == collider;
+		}
+		return found;
 	}
 
 	void PhysicsObject::tick(float elapsedTime)

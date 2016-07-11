@@ -31,7 +31,7 @@ namespace ginkgo
 	{
 		int outCode;
 		bool codeFound = false;
-		for (int a = 0; a < controlList.size(); a++)
+		for (UINT32 a = 0; a < controlList.size(); a++)
 		{
 			if (controlList[a].inputCode == inputCode)
 			{
@@ -46,7 +46,7 @@ namespace ginkgo
 			return;
 		}
 
-		for (int a = 0; a < controlStates.size(); a++)
+		for (UINT32 a = 0; a < controlStates.size(); a++)
 		{
 			if (controlStates[a].outputCode == outCode)
 			{
@@ -84,7 +84,7 @@ namespace ginkgo
 	{
 		vector<int> setCodes;
 		vector<int> resetCodes;
-		for (int a = 0; a < controlList.size(); a++)
+		for (UINT32 a = 0; a < controlList.size(); a++)
 		{
 			if (GetAsyncKeyState(controlList[a].inputCode))
 			{
@@ -95,9 +95,9 @@ namespace ginkgo
 				resetCodes.emplace_back(controlList[a].outputCode);
 			}
 		}
-		for (int a = 0; a < setCodes.size(); a++)
+		for (UINT32 a = 0; a < setCodes.size(); a++)
 		{
-			for (int b = 0; b < controlStates.size(); b++)
+			for (UINT32 b = 0; b < controlStates.size(); b++)
 			{
 				if (setCodes[a] == controlStates[b].outputCode)
 				{
@@ -107,9 +107,9 @@ namespace ginkgo
 				}
 			}
 		}
-		for (int a = 0; a < resetCodes.size(); a++)
+		for (UINT32 a = 0; a < resetCodes.size(); a++)
 		{
-			for (int b = 0; b < controlStates.size(); b++)
+			for (UINT32 b = 0; b < controlStates.size(); b++)
 			{
 				if (resetCodes[a] == controlStates[b].outputCode)
 				{

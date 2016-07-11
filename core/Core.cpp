@@ -8,9 +8,8 @@
 
 namespace ginkgo
 {
-	volatile long Core::entityIDBase = 1;
+	long Core::entityIDBase = 1;
 	Core Core::core;
-	volatile bool doWakePhysics = false;
 
 	long Core::generateID()
 	{
@@ -20,16 +19,12 @@ namespace ginkgo
 	void Core::startCore()
 	{
 		core.running = true;
-		core.coreThread = new thread(&Core::coreFunc, &core);
-		core.physicsThread = new thread(&Core::physicsFunc, &core);
 		//TODO: add event threa
 	}
 
 	void Core::stopCore()
 	{
 		core.running = false;
-		core.coreThread->join();
-		core.physicsThread->join();
 	}
 
 	Core::Core()
@@ -38,6 +33,7 @@ namespace ginkgo
 		tickTime = (1.f / 60.f);
 		startTick = GetTickCount64();
 		world = new World(0.0f);
+		lastTickTime = getEngineTime();
 	}
 
 	float Core::getTickTime() const
@@ -55,26 +51,20 @@ namespace ginkgo
 		return (float)(GetTickCount64() - startTick) / 1000.f;
 	}
 
-	void Core::coreFunc()
+	void Core::coreTick()
 	{
-		running = true;
-		while (running)
+		if (running)
 		{
-			{
-				std::lock_guard<std::mutex> lck(physicsLock);
-				doWakePhysics = true;
-			}
-			physicsConditionVar.notify_one();
-			{
-				std::lock_guard<std::mutex> lck(physicsLock);
-			}
-			std::this_thread::sleep_for(std::chrono::milliseconds((int)(tickTime * 1000.f)));
+			float elapsedTime = 0.016;//getEngineTime() - lastTickTime;
+			lastTickTime = elapsedTime + lastTickTime;
+
+			processInput();
+			physicsTick(elapsedTime);
 		}
 	}
 
 	void Core::processInput()
 	{
-		std::lock_guard<std::mutex> lck(inputLock);
 		for (IAbstractInputSystem* input : inputSystemList)
 		{
 			input->checkInput();
@@ -86,48 +76,37 @@ namespace ginkgo
 		}
 	}
 
-	void Core::physicsFunc()
+	void Core::physicsTick(float elapsedTime)
 	{
-		float tickEnd = getEngineTime(), elapsedTime;
-		std::unique_lock<std::mutex> lck(physicsLock);
-		while (running)
+
+		const vector<IEntity*>& entityList = world->getEntityList();
+
+		for (IEntity* e : entityList)
 		{
-			physicsConditionVar.wait(lck, [] { return doWakePhysics; });
-			doWakePhysics = false;
+			e->tick(elapsedTime);
+		}
 
-			const vector<IEntity*>& entityList = world->getEntityList();
-			doWakePhysics = false;
-			elapsedTime = getEngineTime() - tickEnd;
-
-			for (IEntity* e : entityList)
+		const vector<IPhysicsObject*>& physicsObjects = (const vector<IPhysicsObject*>&)world->getEntitiesByType(physicsObject);
+		vector<IPhysicsObject*> colliders;
+		for (IPhysicsObject* p : physicsObjects)
+		{
+			if (p->getCollisionType() == CTYPE_WORLDSTATIC)
 			{
-				e->tick(elapsedTime);
+				continue;
 			}
-
-			const vector<IPhysicsObject*>& physicsObjects = (const vector<IPhysicsObject*>&)world->getEntitiesByType(physicsObject);
-			vector<IPhysicsObject*> colliders;
-			for (IPhysicsObject* p : physicsObjects)
+			world->getEntityTree().retrieveCollisions(colliders, p);
+			for (IPhysicsObject* collider : physicsObjects)
 			{
-				if (p->getCollisionType() == CTYPE_WORLDSTATIC)
+				if (collider->getEntityID() != p->getEntityID() && !p->CollisionAlreadyExists(collider))
 				{
-					continue;
-				}
-				world->getEntityTree().retrieveCollisions(colliders, p);
-				for (IPhysicsObject* collider : physicsObjects)
-				{
-					if (collider->getEntityID() != p->getEntityID())//TODO: check existing collision test (1 collision resolves 2 objects)
-					{
-						p->checkCollision(elapsedTime, collider);
-					}
+					p->checkCollision(elapsedTime, collider);
 				}
 			}
+		}
 
-			for (IPhysicsObject* p : physicsObjects)
-			{
-				p->resolveCollisions(elapsedTime);
-			}
-
-			tickEnd = getEngineTime();
+		for (IPhysicsObject* p : physicsObjects)
+		{
+			p->resolveCollisions(elapsedTime);
 		}
 	}
 
@@ -136,24 +115,18 @@ namespace ginkgo
 		return world;
 	}
 
-	void Core::lockPhysics()
+	void Core::sleep()
 	{
-		physicsLock.lock();
-	}
-
-	void Core::unlockPhysics()
-	{
-		physicsLock.unlock();
+		std::this_thread::sleep_for(std::chrono::milliseconds((long long)(tickTime * 1000.f)));
 	}
 
 	void Core::registerInputSystem(IAbstractInputSystem* input, ICharacter* controller)
 	{
-		std::lock_guard<mutex> lck(core.inputLock);
 		input->setOwner(controller);
 		core.inputSystemList.emplace_back(input);
 	}
 
-//~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~
 
 	float getEngineTime()
 	{
@@ -185,14 +158,14 @@ namespace ginkgo
 		return Core::core.getWorld();
 	}
 
-	void lockPhysics()
+	void tickCore()
 	{
-		Core::core.lockPhysics();
+		Core::core.coreTick();
 	}
 
-	void unlockPhysics()
+	void sleepTickTime()
 	{
-		Core::core.unlockPhysics();
+		Core::core.sleep();
 	}
 
 	void registerInputSystem(IAbstractInputSystem* input, ICharacter* controller)

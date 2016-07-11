@@ -210,7 +210,7 @@ namespace ginkgo
 
 	CustomMovement* World::getCustomMovement(int movementValue) const
 	{
-		for (int a = 0; a < customMovements.size(); a++)
+		for (UINT32 a = 0; a < customMovements.size(); a++)
 		{
 			if (customMovements[a].movementValue == movementValue)
 			{

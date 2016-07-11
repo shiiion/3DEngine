@@ -47,6 +47,8 @@ namespace ginkgo
 		lastMove.velStart = owner->getVelocity();
 		lastMove.velEnd = lastMove.velStart + (lastMove.accel * deltaTime) - (getWorld()->getGravity() * deltaTime);
 		lastMove.accel = owner->getAcceleration();
+
+		center = lastMove.centerEnd;
 	}
 
 	void CollisionMesh::setOwner(IPhysicsObject* owner)
@@ -73,11 +75,21 @@ namespace ginkgo
 				}
 			}
 		}
+
 		if (newSeparatingAxis)
 		{
 			newSeparatingAxis = false;
 			getLastSeparatingAxis(other, deltaTime);
 			lastCollision = generateCollisionInfo(other, getCollisionTime(lastSeparatingAxis, other, deltaTime));
+		}
+		else
+		{
+			//THIS ASSUMES THAT THEY ARE AGAINST EACHOTHER I AM HOPING CHANGE THIS IF IT BREAKS LATER
+			float intersectTime = getCollisionTime(lastSeparatingAxis, other, deltaTime);
+			if (intersectTime == 0 || (intersectTime != intersectTime))
+			{
+				return true;
+			}
 		}
 		return false;
 	}
@@ -159,7 +171,7 @@ namespace ginkgo
 //	Ai = axes of this
 //	Bi = axes of other
 
-	bool CollisionMesh::testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime)
+	bool CollisionMesh::testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const
 	{
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart);
 		glm::vec3 velDiff = (other.getLastMove().centerStart - lastMove.velStart);
@@ -220,11 +232,27 @@ namespace ginkgo
 
 		if (sigma < 0)
 		{
-			return (r + glm::dot(axisNorm, centerDiff)) / (-glm::dot(axisNorm, velDiff));;
+			float ret = (r + glm::dot(axisNorm, centerDiff)) / (-glm::dot(axisNorm, velDiff));
+			if (ret > deltaTime)
+			{
+				return 0;
+			}
+			else
+			{
+				return ret;
+			}
 		}
 		if (sigma > 0)
 		{
-			return (r - glm::dot(axisNorm, centerDiff)) / (glm::dot(axisNorm, velDiff));;
+			float ret = (r - glm::dot(axisNorm, centerDiff)) / (glm::dot(axisNorm, velDiff));
+			if (ret > deltaTime)
+			{
+				return 0;
+			}
+			else
+			{
+				return ret;
+			}
 		}
 		//uh oh
 		return 0;
@@ -641,9 +669,10 @@ namespace ginkgo
 	}
 
 	//TODO
-	void CollisionMesh::resolveCollision() 
+	CollisionInfo const& CollisionMesh::resolveCollision() 
 	{
-		
+		center = lastMove.centerStart + (lastMove.velStart * lastCollision.collisionTime);
+		return lastCollision;
 	}
 
 	ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis)

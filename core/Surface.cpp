@@ -9,6 +9,11 @@ namespace ginkgo
 		makeTwoTriangles(v1, v2, v3, v4);
 	}
 
+	Surface::Surface()
+	{
+
+	}
+
 	void Surface::makeTwoTriangles(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4)
 	{
 		
