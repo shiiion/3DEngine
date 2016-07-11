@@ -22,7 +22,7 @@ namespace ginkgo
 		core.running = true;
 		core.coreThread = new thread(&Core::coreFunc, &core);
 		core.physicsThread = new thread(&Core::physicsFunc, &core);
-		//TODO: add event thread
+		//TODO: add event threa
 	}
 
 	void Core::stopCore()
