@@ -91,6 +91,7 @@
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="IWorld.h" />
     <ClInclude Include="SurfaceCollisionMesh.h" />
+    <ClInclude Include="UserInputSystem.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,7 @@
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="SurfaceCollisionMesh.cpp" />
+    <ClCompile Include="UserInputSystem.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

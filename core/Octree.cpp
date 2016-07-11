@@ -8,6 +8,14 @@
 
 namespace ginkgo
 {
+	float getTop(ICollisionMesh const& mesh);
+	float getBot(ICollisionMesh const& mesh);
+	float getLeft(ICollisionMesh const& mesh);
+	float getRight(ICollisionMesh const& mesh);
+	float getFront(ICollisionMesh const& mesh);
+	float getBack(ICollisionMesh const& mesh);
+
+
 	Octree::Octree(int level, Prism const& bounds, Octree* parent)
 	{
 		this->level = level;
@@ -231,7 +239,7 @@ namespace ginkgo
 				split();
 			}
 
-			int a = 0;
+			UINT32 a = 0;
 			while (a < objects.size())
 			{
 				int index = getIndex(objects[a]);
@@ -256,7 +264,7 @@ namespace ginkgo
 			leaves[index]->retrieveCollisions(outObjects, collider);
 		}
 
-		for (int a = 0; a < objects.size(); a++)
+		for (UINT32 a = 0; a < objects.size(); a++)
 		{
 			outObjects.push_back(objects[a]);
 		}
@@ -288,7 +296,7 @@ namespace ginkgo
 	int Octree::remove(IPhysicsObject const* object)
 	{
 		bool thisTree = false;
-		int index;
+		UINT32 index;
 		for (index = 0; index < objects.size(); index++)
 		{
 			if (objects[index]->getEntityID() == object->getEntityID())
@@ -339,7 +347,7 @@ namespace ginkgo
 								vector<IPhysicsObject*> leafEnts;
 								leaves[a]->getChildLeaves(leafEnts);
 								leaves[a]->clear();
-								for (int b = 0; b < leafEnts.size(); b++)
+								for (UINT32 b = 0; b < leafEnts.size(); b++)
 								{
 									leaves[a]->insert(leafEnts[b]);
 								}
@@ -370,7 +378,7 @@ namespace ginkgo
 			}
 		}
 
-		for (int a = 0; a < objects.size(); a++)
+		for (UINT32 a = 0; a < objects.size(); a++)
 		{
 			outList.push_back(objects[a]);
 		}

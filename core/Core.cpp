@@ -4,6 +4,7 @@
 #include "World.h"
 #include <Windows.h>
 #include "IPhysicsObject.h"
+#include "IAbstractInputSystem.h"
 
 namespace ginkgo
 {
@@ -29,7 +30,6 @@ namespace ginkgo
 		core.running = false;
 		core.coreThread->join();
 		core.physicsThread->join();
-		core.eventThread->join();
 	}
 
 	Core::Core()
@@ -69,6 +69,20 @@ namespace ginkgo
 				std::lock_guard<std::mutex> lck(physicsLock);
 			}
 			std::this_thread::sleep_for(std::chrono::milliseconds((int)(tickTime * 1000.f)));
+		}
+	}
+
+	void Core::processInput()
+	{
+		std::lock_guard<std::mutex> lck(inputLock);
+		for (IAbstractInputSystem* input : inputSystemList)
+		{
+			input->checkInput();
+		}
+
+		for (IAbstractInputSystem* input : inputSystemList)
+		{
+			input->runInput();
 		}
 	}
 
@@ -132,6 +146,13 @@ namespace ginkgo
 		physicsLock.unlock();
 	}
 
+	void Core::registerInputSystem(IAbstractInputSystem* input, ICharacter* controller)
+	{
+		std::lock_guard<mutex> lck(core.inputLock);
+		input->setOwner(controller);
+		core.inputSystemList.emplace_back(input);
+	}
+
 //~~~~~~~~~~~~~~~~~~~~~~~
 
 	float getEngineTime()
@@ -172,5 +193,10 @@ namespace ginkgo
 	void unlockPhysics()
 	{
 		Core::core.unlockPhysics();
+	}
+
+	void registerInputSystem(IAbstractInputSystem* input, ICharacter* controller)
+	{
+		Core::registerInputSystem(input, controller);
 	}
 }

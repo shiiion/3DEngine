@@ -29,10 +29,12 @@ namespace ginkgo
 
 	class IPhysicsObject;
 	class ICollisionMesh;
+	class IAbstractInputSystem;
 
-	typedef bool(__cdecl RaytraceFunc)(IPhysicsObject* hitObject);
-	typedef void(__cdecl CustomMoveTick)(IPhysicsObject& object, float deltaTime);
-	typedef void(__cdecl CustomMoveResolve)(ICollisionMesh& mesh);
+	typedef bool(__cdecl* RaytraceFunc)(IPhysicsObject* hitObject);
+	typedef void(__cdecl* CustomMoveTick)(IPhysicsObject& object, float deltaTime);
+	typedef void(__cdecl* CustomMoveResolve)(ICollisionMesh& mesh);
+	typedef void(__cdecl* OnInputFunc)(IAbstractInputSystem* inputSystem, int outputCode);
 
 	struct Material
 	{
@@ -137,6 +139,35 @@ namespace ginkgo
 
 		float x, y, z;
 		float l, w, h;
+	};
+
+	struct Control
+	{
+		Control(int in, int out)
+		{
+			inputCode = in;
+			outputCode = out;
+		}
+
+		int inputCode;
+		int outputCode;
+
+	};
+
+	struct InputState
+	{
+		InputState(int out, OnInputFunc func)
+		{
+			outputCode = out;
+			isSet = false;
+			prevSet = false;
+			inputFunc = func;
+		}
+
+		int outputCode;
+		bool isSet;
+		bool prevSet;
+		OnInputFunc inputFunc;
 	};
 
 	typedef unsigned __int8 UBYTE;
