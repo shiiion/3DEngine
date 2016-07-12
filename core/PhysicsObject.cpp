@@ -60,15 +60,69 @@ namespace ginkgo
 		}
 		ICollisionMesh* otherCollision = other->getCollisionMesh();
 
-		if (!collisionMesh->testCollision(*otherCollision, deltaTime))
+		CollisionInfo manifold(collisionMesh, other->getCollisionMesh());
+
+		if (!collisionMesh->testCollision(*otherCollision, deltaTime, manifold))
 		{
-			colliders.push_back(other);
-			collisionState = CSTATE_FIRSTCOLLIDE;
+			collisions.emplace_back(manifold);
+			collisionState = CSTATE_RESOLVE;
 		}
 		else
 		{
 			collisionState = CSTATE_NOCOLLISION;
 		}
+	}
+
+	void PhysicsObject::resolveCollision(CollisionInfo& manifold)
+	{
+		IPhysicsObject* otherParent = manifold.otherMesh->getOwner();
+
+		//INITIAL COLLISION RESOLUTION: move each mesh back in time
+		manifold.thisMesh->resolveCollision(manifold);
+		manifold.otherMesh->resolveCollision(manifold);
+
+		//Contact velocity
+		float contactVel = glm::dot(otherParent->getVelocity() - velocity, manifold.collisionNormal);
+
+		if (contactVel < 0)
+		{
+			return;
+		}
+
+		//select minimum restitution
+		float restitution = glm::min(otherParent->getMaterial().reboundFraction, material.reboundFraction);
+
+		//impulse scalar
+		//if type is worldstatic, mass is infinite (1/mass = 0)
+		float IS = -(1.f + restitution) * contactVel;
+		float invMassThis, invMassOther;
+		if (collisionType == CTYPE_WORLDSTATIC)
+		{
+			invMassThis = 0;
+		}
+		else
+		{
+			invMassThis = 1 / mass;
+		}
+		if (otherParent->getCollisionType() == CTYPE_WORLDSTATIC)
+		{
+			invMassOther = 0;
+		}
+		else
+		{
+			invMassOther = 1 / otherParent->getMass();
+		}
+
+		IS /= (invMassThis + invMassOther);
+
+		if (glm::abs(IS) < /*MINREBOUND*/0.1)
+		{
+			IS = (-contactVel) / (invMassThis + invMassOther);
+		}
+
+		glm::vec3 impulse = manifold.collisionNormal * IS;
+		velocity -= invMassThis * impulse;
+		otherParent->setVelocity(otherParent->getVelocity() + (invMassOther * impulse));
 	}
 
 	void PhysicsObject::resolveCollisions(float deltaTime)
@@ -77,26 +131,44 @@ namespace ginkgo
 		{
 			return;
 		}
-		if (collisionState == CSTATE_FIRSTCOLLIDE)
+		if (collisionState == CSTATE_RESOLVE)
 		{
-			CollisionInfo const& generatedInfo = collisionMesh->resolveCollision();
-			glm::vec3 A = generatedInfo.collisionNormal, B = collisionMesh->getLastMove().velStart;
-			glm::vec3 perp = (glm::dot(A, A) / glm::dot(B, A)) * B - A;
-			if (glm::length(perp) == 0)
+			for (CollisionInfo& manifold : collisions)
 			{
-				velocity = glm::vec3(0, 0, 0);
+				resolveCollision(manifold);
 			}
-			else
-			{
-				velocity = (glm::dot(perp, velocity) / (perp.x * perp.x + perp.y * perp.y + perp.z * perp.z)) * perp;
-			}
+			finalizeMove(deltaTime, true);
 		}
-		position = collisionMesh->getCenter();
+		else
+		{
+			finalizeMove(0, false);
+		}
 
-
-		colliders.clear();
+		collisions.clear();
 		//TODO: resolve this and other (if other is dynamic)
 		//TODO: walking: get parallel vector to surface, project velocity onto parallel vector
+	}
+
+	void PhysicsObject::finalizeMove(float deltaTime, bool resolver)
+	{
+		position = collisionMesh->getCenter();
+		if (resolver)
+		{
+			float longestResim = 0;
+			for (CollisionInfo& manifold : collisions)
+			{
+				if (deltaTime - manifold.collisionTime > longestResim)
+				{
+					longestResim = deltaTime - manifold.collisionTime;
+				}
+				manifold.otherMesh->getOwner()->finalizeMove((deltaTime - manifold.collisionTime), false);
+			}
+			tick(longestResim);
+		}
+		else
+		{
+			tick(deltaTime);
+		}
 	}
 
 	bool PhysicsObject::isWalkableNormal(glm::vec3 const& normal)
@@ -254,15 +326,19 @@ namespace ginkgo
 	bool PhysicsObject::CollisionAlreadyExists(IPhysicsObject* other) const
 	{
 		bool found = false;
-		for (IPhysicsObject* collider : colliders)
+		for (CollisionInfo const& manifold : collisions)
 		{
-			found |= other == collider;
+			found |= other == manifold.otherMesh->getOwner();
 		}
 		return found;
 	}
 
 	void PhysicsObject::tick(float elapsedTime)
 	{
+		if (collisionType == CTYPE_WORLDSTATIC)
+		{
+			return;
+		}
 		collisionMesh->generateVertexPath(elapsedTime);
 		position += velocity * elapsedTime;
 		if (movementState != MSTATE_GROUND)

@@ -2,9 +2,7 @@
 
 #include "IRenderable.h"
 
-#define CSTATE_REBOUND 1
-#define CSTATE_COLLIDING 2
-#define CSTATE_FIRSTCOLLIDE 3
+#define CSTATE_RESOLVE 1
 #define CSTATE_NOCOLLISION 0
 
 #define MSTATE_AIR 1
@@ -51,6 +49,8 @@ namespace ginkgo
 		virtual bool CollisionAlreadyExists(IPhysicsObject* other) const = 0;
 
 		virtual bool isMoving() const = 0;
+
+		virtual void finalizeMove(float deltaTime, bool collider) = 0;
 	};
 
 	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());

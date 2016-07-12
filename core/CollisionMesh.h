@@ -46,34 +46,26 @@ namespace ginkgo
 	private:
 		glm::vec3 center;
 
-		int lastSeparatingAxisType;
-		int intersectSide;
-
 		//width (x), height(y), length(z)
 		float extents[3];
 		glm::vec3 axes[3];
 
-		bool newSeparatingAxis;
-
-		glm::vec3 lastSeparatingAxis;
-
 		IPhysicsObject* owner;
 
 		MoveInfo lastMove;
-		CollisionInfo lastCollision;
 
-		void getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime);
-		void this_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void other_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A0xB0_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A0xB1_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A0xB2_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A1xB0_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A1xB1_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A1xB2_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A2xB0_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A2xB1_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
-		void A2xB2_lastSeparatingAxis(ICollisionMesh const& other, float intersectTime, CollisionInfo& collisionOut);
+		void getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut);
+		void this_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void other_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A0xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A0xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A0xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A1xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A1xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A1xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A2xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A2xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void A2xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
 
 	public:
 		CollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);
@@ -83,20 +75,19 @@ namespace ginkgo
 
 		virtual void setOwner(IPhysicsObject* owner) override;
 
-		virtual bool testCollision(ICollisionMesh const& other, float deltaTime) override;
+		virtual bool testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut) override;
 		virtual float getCollisionTime(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const override;
-		virtual void finalizeMove() override;
 
 		virtual glm::vec3 const& getAxis(int axis) const override;
 
 		virtual glm::vec3 const& getCenter() const override;
 		virtual float getExtent(int extent) const override;
 
-		virtual CollisionInfo generateCollisionInfo(ICollisionMesh const& other, float intersectTime) override;
+		virtual void generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut) override;
 		//TRUE if not intersecting, FALSE if intersecting
 		bool testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const;
 
-		virtual CollisionInfo const& resolveCollision() override;
+		virtual void resolveCollision(CollisionInfo& manifold) override;
 		virtual IPhysicsObject* getOwner() const override;
 	};
 }

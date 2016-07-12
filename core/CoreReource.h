@@ -33,16 +33,16 @@ namespace ginkgo
 
 	struct Material
 	{
-		float collisionTime;
 		float friction;
-		//fraction of velocity gained when bouncing
+		//fraction of rebound velocity (restitution)
+		//minimum restitution is chosen in calculations
 		//0 = no bounce, 1 = 100% bounce
 		float reboundFraction;
 	};
 
 	enum EntityType
 	{
-		entity = 1, renderable = 2, physicsObject = 3
+		entity = 1, renderable = 2, physicsObject = 3, character = 4
 	};
 
 	struct Triangle
@@ -79,6 +79,7 @@ namespace ginkgo
 
 	class ICollisionMesh;
 
+	//Collision manifold between two meshes
 	struct CollisionInfo
 	{
 		CollisionInfo(ICollisionMesh* t, ICollisionMesh* o) : thisMesh(t), otherMesh(o) {}
@@ -88,6 +89,8 @@ namespace ginkgo
 
 		float collisionTime;
 
+		int lastSeparatingAxisType;
+		int intersectSide;
 		glm::vec3 lastSeparatingAxis;
 
 		glm::vec3 intersectionPoint;

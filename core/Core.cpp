@@ -19,7 +19,6 @@ namespace ginkgo
 	void Core::startCore()
 	{
 		core.running = true;
-		//TODO: add event threa
 	}
 
 	void Core::stopCore()
@@ -32,7 +31,7 @@ namespace ginkgo
 		running = false;
 		tickTime = (1.f / 60.f);
 		startTick = GetTickCount64();
-		world = new World(0.0f);
+		world = new World(1.0f);
 		lastTickTime = getEngineTime();
 	}
 

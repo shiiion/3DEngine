@@ -22,7 +22,7 @@ namespace ginkgo
 		float mass;
 		bool canCollide;
 		bool canGravity;
-		std::vector<IPhysicsObject*> colliders;
+		std::vector<CollisionInfo> collisions;
 		UINT32 collisionState;
 		UINT32 movementState;
 		UINT32 collisionType;
@@ -34,6 +34,8 @@ namespace ginkgo
 		static const float minFallAngle;
 
 		bool isWalkableNormal(glm::vec3 const& normal);
+
+		void resolveCollision(CollisionInfo& manifold);
 
 	public:
 		PhysicsObject(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
@@ -81,5 +83,7 @@ namespace ginkgo
 		virtual bool CollisionAlreadyExists(IPhysicsObject* other) const override;
 
 		virtual bool isMoving() const override;
+
+		virtual void finalizeMove(float deltaTime, bool collider) override;
 	};
 }
