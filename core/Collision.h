@@ -26,7 +26,7 @@ namespace ginkgo
 
 		void impulseCorrection();
 
-		//suggested for testing with 50% correction (0.5)
+		//suggested for testing with 20% correction (0.5)
 		void positionalCorrection(float correctionPerIteration);
 
 		void postCorrection();
@@ -34,5 +34,15 @@ namespace ginkgo
 		void updateValidity();
 
 		bool eq(IPhysicsObject* a, IPhysicsObject* b) const;
+
+		Collision& operator=(Collision const& other)
+		{
+			manifold = other.manifold;
+			deltaTime = other.deltaTime;
+			referenceResult = other.referenceResult;
+			otherResult = other.otherResult;
+			valid = other.valid;
+			return *this;
+		}
 	};
 }

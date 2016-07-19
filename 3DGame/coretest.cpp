@@ -27,7 +27,7 @@ int main()
 		glm::vec3(0, 1, 0),
 		glm::vec3(0, 0, 1));
 	Material super;
-	super.reboundFraction = 1;
+	super.reboundFraction = 0;
 	
 	IEntity* newEnt = entityFactory(glm::vec3(0, 1.5, 0), glm::vec3(), glm::vec3(0.1, 0, 0));
 	IEntity* newEnt2 = entityFactory(glm::vec3(0, 0, 0), glm::vec3(), glm::vec3(0, 0, 0));

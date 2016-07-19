@@ -234,7 +234,7 @@ namespace ginkgo
 		{
 			for (Collision& c : collisions)
 			{
-				c.positionalCorrection(0.5f);
+				c.positionalCorrection(0.2f);
 			}
 		}
 

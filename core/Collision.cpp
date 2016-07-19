@@ -39,7 +39,7 @@ namespace ginkgo
 		//if type is worldstatic, mass is infinite (1/mass = 0)
 		float IS = -(1.f + restitution) * contactVel;
 		float invMassThis, invMassOther;
-		
+
 		if (refObj->getCollisionType() == CTYPE_WORLDSTATIC)
 		{
 			invMassThis = 0;
