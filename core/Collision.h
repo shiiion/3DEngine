@@ -35,6 +35,15 @@ namespace ginkgo
 
 		bool eq(IPhysicsObject* a, IPhysicsObject* b) const;
 
+		void getUpdatedParams();
+
+		bool preCorrectionCheck()
+		{
+			getUpdatedParams();
+			updateValidity();
+			return manifold.overlapDist >= MIN_CORRECTDIST;
+		}
+
 		Collision& operator=(Collision const& other)
 		{
 			manifold = other.manifold;

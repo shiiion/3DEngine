@@ -31,8 +31,11 @@ namespace ginkgo
 
 		virtual IPhysicsObject* getOwner() const = 0;
 
-		virtual void setCenter(glm::vec3 const& center) = 0;
-		virtual glm::vec3 const& getCenter() const = 0;
+		virtual void setCachedCenter(glm::vec3 const& center) = 0;
+		virtual glm::vec3 const& getCachedCenter() const = 0;
+
+		virtual void setCachedVelocity(glm::vec3 const& vel) = 0;
+		virtual glm::vec3 const& getCachedVelocity() const = 0;
 	};
 
 	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);

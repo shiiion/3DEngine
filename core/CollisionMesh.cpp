@@ -40,13 +40,15 @@ namespace ginkgo
 		lastMove.velEnd = lastMove.velStart + (lastMove.accel * deltaTime) + (getWorld()->getGravity() * deltaTime);
 		lastMove.accel = owner->getParent()->getAcceleration();
 
-		center = lastMove.centerEnd;
+		cachedCenter = lastMove.centerEnd;
+		cachedVel = lastMove.velEnd;
 	}
 
 	void CollisionMesh::setOwner(IPhysicsObject* owner)
 	{
 		this->owner = owner;
-		center = owner->getParent()->getPosition();
+		cachedCenter = owner->getParent()->getPosition();
+		cachedVel = owner->getParent()->getVelocity();
 	}
 
 	bool CollisionMesh::testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut)
@@ -168,7 +170,7 @@ namespace ginkgo
 
 	bool CollisionMesh::testAxisStationary(glm::vec3 const& axisNorm, ICollisionMesh const& other) const
 	{
-		glm::vec3 centerDiff = (other.getCenter() - center);
+		glm::vec3 centerDiff = (other.getCachedCenter() - cachedCenter);
 		float proj = glm::dot(axisNorm, centerDiff);
 
 		float projThisBox;
@@ -196,7 +198,7 @@ namespace ginkgo
 	
 	float CollisionMesh::getAxisOverlap(glm::vec3 const& axisNorm, ICollisionMesh const& other) const
 	{
-		glm::vec3 centerDiff = (other.getCenter() - center);
+		glm::vec3 centerDiff = (other.getCachedCenter() - cachedCenter);
 		float proj = glm::dot(axisNorm, centerDiff);
 
 		float projThisBox;
@@ -705,14 +707,24 @@ namespace ginkgo
 		return owner;
 	}
 
-	void CollisionMesh::setCenter(glm::vec3 const& center)
+	void CollisionMesh::setCachedCenter(glm::vec3 const& center)
 	{
-		this->center = center;
+		this->cachedCenter = center;
 	}
 	
-	glm::vec3 const& CollisionMesh::getCenter() const
+	glm::vec3 const& CollisionMesh::getCachedCenter() const
 	{
-		return center;
+		return cachedCenter;
+	}
+
+	void CollisionMesh::setCachedVelocity(glm::vec3 const& vel)
+	{
+		this->cachedVel = vel;
+	}
+
+	glm::vec3 const& CollisionMesh::getCachedVelocity() const
+	{
+		return cachedVel;
 	}
 
 	ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis)

@@ -47,7 +47,8 @@ namespace ginkgo
 		//width (x), height(y), length(z)
 		float extents[3];
 		glm::vec3 axes[3];
-		glm::vec3 center;
+		glm::vec3 cachedCenter;
+		glm::vec3 cachedVel;
 
 		IPhysicsObject* owner;
 
@@ -90,7 +91,11 @@ namespace ginkgo
 
 		virtual IPhysicsObject* getOwner() const override;
 
-		virtual void setCenter(glm::vec3 const& center) override;
-		virtual glm::vec3 const& getCenter() const override;
+
+		void setCachedCenter(glm::vec3 const& center) override;
+		glm::vec3 const& getCachedCenter() const override;
+
+		void setCachedVelocity(glm::vec3 const& vel) override;
+		glm::vec3 const& getCachedVelocity() const override;
 	};
 }

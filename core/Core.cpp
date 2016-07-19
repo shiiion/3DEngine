@@ -55,8 +55,8 @@ namespace ginkgo
 	{
 		if (running)
 		{
-			float elapsedTime = 0.016f;//getEngineTime() - lastTickTime;
-			lastTickTime = elapsedTime + lastTickTime;
+			float elapsedTime = 0.0016f;//getEngineTime() - lastTickTime;
+			lastTickTime = getEngineTime();
 
 			processInput();
 			physicsTick(elapsedTime);
@@ -130,7 +130,9 @@ namespace ginkgo
 
 	void Core::sleep()
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds((long long)(tickTime * 1000.f)));
+		long long sleeptime = (long long)(tickTime * 1000.f);
+		sleeptime = max(sleeptime - (long long)((getEngineTime() - lastTickTime) * 1000.f), 1);
+		std::this_thread::sleep_for(std::chrono::milliseconds(sleeptime));
 	}
 
 	void Core::registerInputSystem(IAbstractInputSystem* input, ICharacter* controller)

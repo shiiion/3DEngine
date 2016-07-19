@@ -234,7 +234,11 @@ namespace ginkgo
 		{
 			for (Collision& c : collisions)
 			{
-				c.positionalCorrection(0.2f);
+				//skip c if the overlap is less than min overlap
+				if (c.preCorrectionCheck())
+				{
+					c.positionalCorrection(0.2f);
+				}
 			}
 		}
 
@@ -259,6 +263,10 @@ namespace ginkgo
 	{
 		for (Collision& c : collisions)
 		{
+			c.referenceResult.finalPos = c.manifold.thisMesh->getCachedCenter();
+			c.referenceResult.finalVel = c.manifold.thisMesh->getCachedVelocity();
+			c.otherResult.finalPos = c.manifold.otherMesh->getCachedCenter();
+			c.otherResult.finalVel = c.manifold.otherMesh->getCachedVelocity();
 			c.updateValidity();
 		}
 		clearCollisionCache();

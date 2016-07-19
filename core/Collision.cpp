@@ -8,10 +8,7 @@ namespace ginkgo
 		: deltaTime(deltaTime), manifold(manifold.thisMesh, manifold.otherMesh)
 	{
 		valid = true;
-		referenceResult.finalPos = manifold.thisMesh->getLastMove().centerEnd;
-		referenceResult.finalVel = manifold.thisMesh->getOwner()->getParent()->getVelocity();
-		otherResult.finalPos = manifold.otherMesh->getLastMove().centerEnd;
-		otherResult.finalVel = manifold.otherMesh->getOwner()->getParent()->getVelocity();
+		getUpdatedParams();
 		this->manifold.normal = manifold.collisionNormal;
 		this->manifold.overlapDist = manifold.thisMesh->getAxisOverlap(manifold.collisionNormal, *manifold.otherMesh);
 	}
@@ -69,6 +66,9 @@ namespace ginkgo
 
 		referenceResult.finalVel -= (invMassThis * impulse);
 		otherResult.finalVel += (invMassOther * impulse);
+
+		manifold.thisMesh->setCachedVelocity(referenceResult.finalVel);
+		manifold.otherMesh->setCachedVelocity(otherResult.finalVel);
 	}
 
 	void Collision::positionalCorrectionInternal(float frameSegment)
@@ -93,12 +93,18 @@ namespace ginkgo
 			invMassOther = 1.f / invMassOther;
 		}
 
-		glm::vec3 correction = (glm::max(manifold.overlapDist - MIN_CORRECTDIST, 0.f) / (invMassRef + invMassOther)) * frameSegment * manifold.normal;
+		float correctionScalar = 0;
+		if (manifold.overlapDist >= MIN_CORRECTDIST)
+		{
+			correctionScalar = manifold.overlapDist;
+		}
+
+		glm::vec3 correction = (correctionScalar / (invMassRef + invMassOther)) * frameSegment * manifold.normal;
 		referenceResult.finalPos += invMassRef * correction;
 		otherResult.finalPos -= invMassOther * correction;
 
-		manifold.thisMesh->setCenter(referenceResult.finalPos);
-		manifold.otherMesh->setCenter(otherResult.finalPos);
+		manifold.thisMesh->setCachedCenter(referenceResult.finalPos);
+		manifold.otherMesh->setCachedCenter(otherResult.finalPos);
 	}
 
 	void Collision::positionalCorrection(float correctionPercent)
@@ -110,6 +116,14 @@ namespace ginkgo
 		impulseCorrection();
 		positionalCorrectionInternal(correctionPercent);
 		updateValidity();
+	}
+
+	void Collision::getUpdatedParams()
+	{
+		referenceResult.finalPos = manifold.thisMesh->getCachedCenter();
+		referenceResult.finalVel = manifold.thisMesh->getCachedVelocity();
+		otherResult.finalPos = manifold.otherMesh->getCachedCenter();
+		otherResult.finalVel = manifold.otherMesh->getCachedVelocity();
 	}
 
 	void Collision::postCorrection()

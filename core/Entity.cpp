@@ -67,6 +67,10 @@ namespace ginkgo
 	{
 		if (physicsComponent != nullptr)
 		{
+			if (physicsComponent->getCollisionType() == CTYPE_WORLDSTATIC)
+			{
+				return;
+			}
 			physicsComponent->onTick(elapsedTime);
 		}
 		position += velocity * elapsedTime;
