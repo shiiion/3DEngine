@@ -5,7 +5,8 @@
 #include <Windows.h>
 #include "IPhysicsObject.h"
 #include "IAbstractInputSystem.h"
-
+#include "PhysicsObject.h"
+#include "CollisionMesh.h"
 namespace ginkgo
 {
 	long Core::entityIDBase = 1;
@@ -31,7 +32,7 @@ namespace ginkgo
 		running = false;
 		tickTime = (1.f / 60.f);
 		startTick = GetTickCount64();
-		world = new World(1.0f);
+		world = new World(-1.0f);
 		lastTickTime = getEngineTime();
 	}
 
@@ -54,7 +55,7 @@ namespace ginkgo
 	{
 		if (running)
 		{
-			float elapsedTime = 0.016;//getEngineTime() - lastTickTime;
+			float elapsedTime = 0.016f;//getEngineTime() - lastTickTime;
 			lastTickTime = elapsedTime + lastTickTime;
 
 			processInput();
@@ -77,36 +78,49 @@ namespace ginkgo
 
 	void Core::physicsTick(float elapsedTime)
 	{
-
 		const vector<IEntity*>& entityList = world->getEntityList();
+
+		vector<IPhysicsObject*> physicsObjects;
 
 		for (IEntity* e : entityList)
 		{
-			e->tick(elapsedTime);
+			e->beginTick(elapsedTime);
+			if (e->getEntityType() >= physicsObject)
+			{
+				physicsObjects.emplace_back(e->getPhysics());
+			}
 		}
 
-		const vector<IPhysicsObject*>& physicsObjects = (const vector<IPhysicsObject*>&)world->getEntitiesByType(physicsObject);
+		world->preCollisionTest();
+
 		vector<IPhysicsObject*> colliders;
+
 		for (IPhysicsObject* p : physicsObjects)
 		{
 			if (p->getCollisionType() == CTYPE_WORLDSTATIC)
 			{
 				continue;
 			}
+
 			world->getEntityTree().retrieveCollisions(colliders, p);
+
 			for (IPhysicsObject* collider : physicsObjects)
 			{
-				if (collider->getEntityID() != p->getEntityID() && !p->CollisionAlreadyExists(collider))
+				//OPTIMIZATION: check existing tests (even if there was no result)
+				if (collider->getParent()->getEntityID() != p->getParent()->getEntityID() && !world->collisionExists(p, collider))
 				{
 					p->checkCollision(elapsedTime, collider);
 				}
 			}
 		}
 
-		for (IPhysicsObject* p : physicsObjects)
+		world->resolveCollisions(8);
+
+		for (IEntity* e : entityList)
 		{
-			p->resolveCollisions(elapsedTime);
+			e->endTick(elapsedTime);
 		}
+		world->clearCollisionCache();
 	}
 
 	IWorld* Core::getWorld() const

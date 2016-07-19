@@ -10,7 +10,7 @@ namespace ginkgo
 	World::World(float gravity)
 		: worldTree(0, Prism(WORLD_DIMENSIONS), nullptr)
 	{
-		this->gravity = gravity;
+		this->gravity = glm::vec3(0, gravity, 0);
 	}
 
 	const vector<IEntity*>& World::getEntityList() const
@@ -30,21 +30,14 @@ namespace ginkgo
 			return newEntityList;
 
 		}
-		else if (type == renderable)
-		{
-			for (UINT32 a = 0; a < entityList.size(); a++)
-			{
-				if (entityList.at(a)->getEntityType() > entity)
-					newEntityList.push_back(entityList.at(a));
-			}
-			return newEntityList;
-		}
 		else if (type == physicsObject)
 		{
 			for (UINT32 a = 0; a < entityList.size(); a++)
 			{
-				if (entityList.at(a)->getEntityType() > renderable)
+				if (entityList.at(a)->getEntityType() >= physicsObject)
+				{
 					newEntityList.push_back(entityList.at(a));
+				}
 			}
 			return newEntityList;
 		}
@@ -64,56 +57,56 @@ namespace ginkgo
 
 	void World::setGravity(float gravity)
 	{
-		this->gravity = gravity;
+		this->gravity = glm::vec3(0, gravity, 0);
 	}
 
-	void World::setEntity(long ID, IEntity* entity)
-	{
-		//TODO: tree stuff here
-		IEntity* oldEntity = World::getEntity(ID);
-		if (oldEntity == nullptr)
-			return;
-		IEntity* newEntity;
-		if (entity->getEntityType() >= 1 && oldEntity->getEntityType() >= 1)
-		{
-			entity->setPosition(oldEntity->getPosition());
-			entity->setVelocity(oldEntity->getVelocity());
-			entity->setAcceleration(oldEntity->getAcceleration());
-			entity->setRotation(oldEntity->getRotation());
-			entity->setEntityID(oldEntity->getEntityID());
-			newEntity = entity;
+	//void World::setEntity(long ID, IEntity* entity)
+	//{
+	//	//TODO: tree stuff here
+	//	IEntity* oldEntity = World::getEntity(ID);
+	//	if (oldEntity == nullptr)
+	//		return;
+	//	IEntity* newEntity;
+	//	if (entity->getEntityType() >= 1 && oldEntity->getEntityType() >= 1)
+	//	{
+	//		entity->setPosition(oldEntity->getPosition());
+	//		entity->setVelocity(oldEntity->getVelocity());
+	//		entity->setAcceleration(oldEntity->getAcceleration());
+	//		entity->setRotation(oldEntity->getRotation());
+	//		entity->setEntityID(oldEntity->getEntityID());
+	//		newEntity = entity;
 
-			if (entity->getEntityType() >= 2 && oldEntity->getEntityType() >= 2)
-			{
-				IRenderable* renderable = (IRenderable*)entity;
-				IRenderable* oldRenderable = (IRenderable*)oldEntity;
-				renderable->setRenderMesh(oldRenderable->getRenderMesh());
-				renderable->setScale(oldRenderable->getScale());
-				newEntity = renderable;
+	//		if (entity->getEntityType() >= 2 && oldEntity->getEntityType() >= 2)
+	//		{
+	//			IRenderable* renderable = (IRenderable*)entity;
+	//			IRenderable* oldRenderable = (IRenderable*)oldEntity;
+	//			renderable->setRenderMesh(oldRenderable->getRenderMesh());
+	//			renderable->setScale(oldRenderable->getScale());
+	//			newEntity = renderable;
 
-				if (entity->getEntityType() >= 3 && oldEntity->getEntityType() >= 3)
-				{
-					IPhysicsObject* physicsObject = (IPhysicsObject*)renderable;
-					IPhysicsObject* oldPhysicsObject = (IPhysicsObject*)oldRenderable;
-					physicsObject->setCollisionMesh(oldPhysicsObject->getCollisionMesh());
-					physicsObject->setMass(oldPhysicsObject->getMass());
-					physicsObject->setMaterial(oldPhysicsObject->getMaterial());
-					physicsObject->setCanGravity(oldPhysicsObject->doesHaveGravity());
-					physicsObject->setCanCollide(oldPhysicsObject->doesCollide());
-					newEntity = physicsObject;
+	//			if (entity->getEntityType() >= 3 && oldEntity->getEntityType() >= 3)
+	//			{
+	//				IPhysicsObject* physicsObject = (IPhysicsObject*)renderable;
+	//				IPhysicsObject* oldPhysicsObject = (IPhysicsObject*)oldRenderable;
+	//				physicsObject->setCollisionMesh(oldPhysicsObject->getCollisionMesh());
+	//				physicsObject->setMass(oldPhysicsObject->getMass());
+	//				physicsObject->setMaterial(oldPhysicsObject->getMaterial());
+	//				physicsObject->setCanGravity(oldPhysicsObject->doesHaveGravity());
+	//				physicsObject->setCanCollide(oldPhysicsObject->doesCollide());
+	//				newEntity = physicsObject;
 
-				}
-			}
-		}
-		else
-			return;
+	//			}
+	//		}
+	//	}
+	//	else
+	//		return;
 
-		removeEntity(ID);
-		addEntity(newEntity);
-		//add and remove
-	}
+	//	removeEntity(ID);
+	//	addEntity(newEntity);
+	//	//add and remove
+	//}
 
-	float World::getGravity() const
+	glm::vec3 const& World::getGravity() const
 	{
 		return gravity;
 	}
@@ -134,9 +127,9 @@ namespace ginkgo
 	void World::addEntity(IEntity* entity)
 	{
 		entityList.push_back(entity);
-		if (entity->getEntityType() == physicsObject)
+		if (entity->getEntityType() >= physicsObject)
 		{
-			worldTree.insert((IPhysicsObject*)entity);
+			worldTree.insert(entity->getPhysics());
 		}
 	}
 
@@ -154,11 +147,10 @@ namespace ginkgo
 		}
 		if (entityList[a]->getEntityType() == physicsObject)
 		{
-			worldTree.remove((IPhysicsObject*)entityList[a]);
+			worldTree.remove(ID);
 		}
 		delete entityList.at(a);
 	}
-
 
 	void World::traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut)
 	{
@@ -207,7 +199,6 @@ namespace ginkgo
 		customMovements.push_back(newMove);
 	}
 
-
 	CustomMovement* World::getCustomMovement(int movementValue) const
 	{
 		for (UINT32 a = 0; a < customMovements.size(); a++)
@@ -218,6 +209,59 @@ namespace ginkgo
 			}
 		}
 		return nullptr;
+	}
+
+	void World::addCollision(CollisionInfo const& info, float deltaTime)
+	{
+		collisions.emplace_back(Collision(deltaTime, info));
+	}
+
+	void World::clearCollisionCache()
+	{
+		for (UINT32 a = 0; a < collisions.size(); a++)
+		{
+			if (!collisions[a].valid)
+			{
+				collisions.erase(collisions.begin() + a);
+				a--;
+			}
+		}
+	}
+
+	void World::resolveCollisions(INT32 iterations)
+	{
+		for (INT32 a = 0; a < iterations; a++)
+		{
+			for (Collision& c : collisions)
+			{
+				c.positionalCorrection(0.5f);
+			}
+		}
+
+		for (Collision& c : collisions)
+		{
+			c.postCorrection();
+		}
+	}
+
+	bool World::collisionExists(IPhysicsObject* a, IPhysicsObject* b) const
+	{
+		bool found = false;
+
+		for (Collision const& c : collisions)
+		{
+			found |= c.eq(a, b);
+		}
+		return found;
+	}
+
+	void World::preCollisionTest()
+	{
+		for (Collision& c : collisions)
+		{
+			c.updateValidity();
+		}
+		clearCollisionCache();
 	}
 }
 

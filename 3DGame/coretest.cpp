@@ -27,9 +27,14 @@ int main()
 		glm::vec3(0, 1, 0),
 		glm::vec3(0, 0, 1));
 	Material super;
-	super.reboundFraction = 0.2;
-	IPhysicsObject* newEnt = physicsObjectFactory(moving, CTYPE_WORLDDYNAMIC, 1, super, nullptr, glm::vec3(0, 5, 0), true, true, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0.1, 0, 0));
-	IPhysicsObject* newEnt2 = physicsObjectFactory(moving2, CTYPE_WORLDDYNAMIC, 1, super, nullptr, glm::vec3(0, 0, 0), true, true, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0, 2, 0));
+	super.reboundFraction = 1;
+	
+	IEntity* newEnt = entityFactory(glm::vec3(0, 1.5, 0), glm::vec3(), glm::vec3(0.1, 0, 0));
+	IEntity* newEnt2 = entityFactory(glm::vec3(0, 0, 0), glm::vec3(), glm::vec3(0, 0, 0));
+
+	newEnt->setPhysics(physicsObjectFactory(newEnt, moving, CTYPE_WORLDDYNAMIC, 1, super, true, true));
+	newEnt2->setPhysics(physicsObjectFactory(newEnt2, moving2, CTYPE_WORLDSTATIC, 1, super, true, true));
+
 	getWorld()->addEntity(newEnt);
 	getWorld()->addEntity(newEnt2);
 	while (true)
@@ -39,6 +44,10 @@ int main()
 		glm::vec3 a = getWorld()->getEntity(1)->getPosition();
 		glm::vec3 b = getWorld()->getEntity(2)->getPosition();
 		printf("1: %f, %f, %f | 2: %f, %f, %f\n", a.x, a.y, a.z, b.x, b.y, b.z);
+		sleepTickTime();
+		sleepTickTime();
+		sleepTickTime();
+		sleepTickTime();
 		sleepTickTime();
 	}
 }

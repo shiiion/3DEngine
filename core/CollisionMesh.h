@@ -44,11 +44,10 @@ namespace ginkgo
 	class CollisionMesh : public ICollisionMesh
 	{
 	private:
-		glm::vec3 center;
-
 		//width (x), height(y), length(z)
 		float extents[3];
 		glm::vec3 axes[3];
+		glm::vec3 center;
 
 		IPhysicsObject* owner;
 
@@ -77,17 +76,21 @@ namespace ginkgo
 
 		virtual bool testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut) override;
 		virtual float getCollisionTime(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const override;
+		virtual bool testCollisionStationary(ICollisionMesh const& other, CollisionStationary& collisionOut) override;
 
 		virtual glm::vec3 const& getAxis(int axis) const override;
 
-		virtual glm::vec3 const& getCenter() const override;
 		virtual float getExtent(int extent) const override;
 
 		virtual void generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut) override;
 		//TRUE if not intersecting, FALSE if intersecting
 		bool testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const;
+		bool testAxisStationary(glm::vec3 const& axisNorm, ICollisionMesh const& other) const;
+		float getAxisOverlap(glm::vec3 const& axisNorm, ICollisionMesh const& other) const override;
 
-		virtual void resolveCollision(CollisionInfo& manifold) override;
 		virtual IPhysicsObject* getOwner() const override;
+
+		virtual void setCenter(glm::vec3 const& center) override;
+		virtual glm::vec3 const& getCenter() const override;
 	};
 }

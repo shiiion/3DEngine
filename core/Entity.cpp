@@ -1,5 +1,7 @@
 #include "Entity.h"
 #include "Core.h"
+#include "IPhysicsObject.h"
+#include "IWorld.h"
 
 //	Created by the master and nobody else + loser nerd
 
@@ -13,6 +15,7 @@ namespace ginkgo
 		acceleration = accel;
 
 		entityID = Core::generateID();
+		renderableComponent = nullptr;
 	}
 
 	const glm::vec3& Entity::getAcceleration() const
@@ -60,11 +63,23 @@ namespace ginkgo
 		entityID = ID;
 	}
 
-	void Entity::tick(float elapsedTime)
+	void Entity::beginTick(float elapsedTime)
 	{
-		velocity += acceleration * elapsedTime;
+		if (physicsComponent != nullptr)
+		{
+			physicsComponent->onTick(elapsedTime);
+		}
 		position += velocity * elapsedTime;
-		
+		velocity += acceleration * elapsedTime + getWorld()->getGravity() * elapsedTime;
+	}
+
+	void Entity::endTick(float elapsedTime)
+	{
+		if (physicsComponent != nullptr)
+		{
+			position = physicsComponent->getMoveResult().finalPos;
+			velocity = physicsComponent->getMoveResult().finalVel;
+		}
 	}
 
 	long Entity::getEntityID() const
@@ -74,7 +89,31 @@ namespace ginkgo
 
 	EntityType Entity::getEntityType() const
 	{
-		return entity;
+		if (physicsComponent == nullptr)
+		{
+			return entity;
+		}
+		return physicsObject;
+	}
+
+	IRenderable* Entity::getRenderable() const
+	{
+		return renderableComponent;
+	}
+
+	void Entity::setRenderable(IRenderable* component)
+	{
+		renderableComponent = component;
+	}
+
+	IPhysicsObject* Entity::getPhysics() const
+	{
+		return physicsComponent;
+	}
+
+	void Entity::setPhysics(IPhysicsObject* component)
+	{
+		physicsComponent = component;
 	}
 
 	IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)

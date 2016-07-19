@@ -34,7 +34,7 @@ namespace ginkgo
 		void resetTree(int level, Prism const& bounds);
 		void fillTree(vector<IPhysicsObject*> const& objects);
 		void getChildLeaves(vector<IPhysicsObject*>& outList) const;
-		int remove(IPhysicsObject const* object);
+		int remove(long ID);
 		bool empty() const;
 		Prism const& getBounds() const;
 

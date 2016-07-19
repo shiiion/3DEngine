@@ -2,6 +2,9 @@
 
 #include "CoreReource.h"
 
+#ifdef COMP_DLL_CORE
+#include "World.h"
+#endif
 
 namespace ginkgo
 {
@@ -19,7 +22,7 @@ namespace ginkgo
 
 		bool running;
 		float tickTime;
-		IWorld* world;
+		World* world;
 
 		float lastTickTime;
 

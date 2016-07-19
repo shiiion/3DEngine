@@ -6,30 +6,39 @@ namespace ginkgo
 	class Entity : public IEntity
 	{
 	private:
+		long entityID;
+
+	protected:
 		glm::vec3 position;
 		glm::vec3 rotation;
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
 
-		long entityID;
+		IRenderable* renderableComponent;
+		IPhysicsObject* physicsComponent;
 
 	public:
 		Entity(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 
-		virtual void tick(float elapsedTime) override;
+		virtual void beginTick(float elapsedTime) override;
+		virtual void endTick(float elapsedTime) override;
 
-		virtual const glm::vec3& getPosition() const override;
-		virtual const glm::vec3& getVelocity() const override;
-		virtual const glm::vec3& getAcceleration() const override;
-		virtual const glm::vec3& getRotation() const override;
-		virtual long getEntityID() const override;
+		const glm::vec3& getPosition() const override;
+		const glm::vec3& getVelocity() const override;
+		const glm::vec3& getAcceleration() const override;
+		const glm::vec3& getRotation() const override;
+		long getEntityID() const override;
+		IRenderable* getRenderable() const override;
+		IPhysicsObject* getPhysics() const override;
 
-		virtual void setPosition(const glm::vec3& pos) override;
-		virtual void setVelocity(const glm::vec3& vel) override;
-		virtual void setAcceleration(const glm::vec3& acc) override;
-		virtual void setRotation(const glm::vec3& ang) override;
-		virtual void setEntityID(long ID) override;
+		void setPosition(const glm::vec3& pos) override;
+		void setVelocity(const glm::vec3& vel) override;
+		void setAcceleration(const glm::vec3& acc) override;
+		void setRotation(const glm::vec3& ang) override;
+		void setEntityID(long ID) override;
+		void setRenderable(IRenderable* component) override;
+		void setPhysics(IPhysicsObject* component) override;
 
-		EntityType getEntityType() const override;
+		virtual EntityType getEntityType() const override;
 	};
 }

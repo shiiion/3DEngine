@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="IAbstractInputSystem.h" />
     <ClInclude Include="ICharacter.h" />
     <ClInclude Include="CollisionMesh.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionMesh.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />

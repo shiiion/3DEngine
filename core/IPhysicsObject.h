@@ -15,19 +15,16 @@
 //object is always resolved (pushed out of the way)
 //typically for moving objects in the world
 #define CTYPE_WORLDDYNAMIC 2
-//object is always resolved (pushed out of the way)
-//typically for the player object, as it doesn't bounce off of surfaces
-#define CTYPE_WORLDDYNAMIC_NOREBOUND 3
 
 namespace ginkgo
 {
 	class ICollisionMesh;
+	struct Collision;
 
-	class IPhysicsObject : public IRenderable
+	class IPhysicsObject
 	{
 	public:
 		virtual void checkCollision(float deltaTime, IPhysicsObject* other) = 0;
-		virtual void resolveCollisions(float deltaTime) = 0;
 		
 		virtual void setMaterial(const Material& mat) = 0;
 		virtual void setMass(float mass) = 0;
@@ -46,12 +43,16 @@ namespace ginkgo
 		virtual UINT32 getMovementState() const = 0;
 		virtual UINT32 getCollisionType() const = 0;
 
-		virtual bool CollisionAlreadyExists(IPhysicsObject* other) const = 0;
-
 		virtual bool isMoving() const = 0;
 
-		virtual void finalizeMove(float deltaTime, bool collider) = 0;
+		virtual void setFinalMove(MoveResult const& finalMove) = 0;
+
+		virtual void onTick(float elapsedTime) = 0;
+
+		virtual IEntity* const getParent() const = 0;
+
+		virtual const MoveResult& getMoveResult() const = 0;
 	};
 
-	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, IRenderMesh const* mesh, const glm::vec3& pos, bool canGravity = true, bool canCollide = true, const glm::vec3& scl = glm::vec3(1, 1, 1), const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
+	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canGravity = true, bool canCollide = true);
 }

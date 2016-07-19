@@ -3,11 +3,11 @@
 
 namespace ginkgo
 {
-	Renderable::Renderable(IRenderMesh const* mesh, const glm::vec3& pos, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	Renderable::Renderable(IEntity* parent, IRenderMesh const* mesh, const glm::vec3& scl) 
+		: parent(parent)
 	{
 		scale = scl;
 		this->mesh = mesh;
-		entityID = Core::generateID();
 	}
 
 	const glm::vec3& Renderable::getScale() const
@@ -30,75 +30,19 @@ namespace ginkgo
 		this->mesh = mesh;
 	}
 
-	void Renderable::render()
+	void Renderable::render(const glm::vec3& pos)
 	{
 
 	}
 
-	const glm::vec3& Renderable::getAcceleration() const
+	IEntity* const Renderable::getParent() const
 	{
-		return acceleration;
+		return parent;
 	}
 
-	const glm::vec3& Renderable::getVelocity() const
+	IRenderable* renderableFactory(IEntity* parent, IRenderMesh const* mesh, const glm::vec3& scl)
 	{
-		return velocity;
-	}
-
-	const glm::vec3& Renderable::getRotation() const
-	{
-		return rotation;
-	}
-
-	const glm::vec3& Renderable::getPosition() const
-	{
-		return position;
-	}
-
-	long Renderable::getEntityID() const
-	{
-		return entityID;
-	}
-
-	void Renderable::setAcceleration(const glm::vec3& accel)
-	{
-		acceleration = accel;
-	}
-
-	void Renderable::setVelocity(const glm::vec3& vel)
-	{
-		velocity = vel;
-	}
-
-	void Renderable::setRotation(const glm::vec3& rot)
-	{
-		rotation = rot;
-	}
-
-	void Renderable::setPosition(const glm::vec3& pos)
-	{
-		position = pos;
-	}
-
-	void Renderable::setEntityID(long ID)
-	{
-		entityID = ID;
-	}
-
-	void Renderable::tick(float elapsedTime)
-	{
-		velocity += acceleration * elapsedTime;
-		position += velocity * elapsedTime;
-	}
-
-	EntityType Renderable::getEntityType() const
-	{
-		return renderable;
-	}
-
-	IRenderable* renderableFactory(IRenderMesh const* mesh, const glm::vec3& pos, const glm::vec3& scl, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
-	{
-		return new Renderable(mesh, pos, scl, rot, vel, accel);
+		return new Renderable(parent, mesh, scl);
 	}
 }
 

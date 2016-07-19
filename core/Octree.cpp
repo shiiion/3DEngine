@@ -307,13 +307,13 @@ namespace ginkgo
 		}
 	}
 
-	int Octree::remove(IPhysicsObject const* object)
+	int Octree::remove(long ID)
 	{
 		bool thisTree = false;
 		UINT32 index;
 		for (index = 0; index < objects.size(); index++)
 		{
-			if (objects[index]->getEntityID() == object->getEntityID())
+			if (objects[index]->getParent()->getEntityID() == ID)
 			{
 				thisTree = true;
 			}
@@ -334,7 +334,7 @@ namespace ginkgo
 			{
 				if (leaves[a] != nullptr)
 				{
-					int ret = leaves[a]->remove(object);
+					int ret = leaves[a]->remove(ID);
 					switch (ret)
 						{
 						case REMOVE_FOUNDNOTEMPTY:

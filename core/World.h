@@ -1,6 +1,7 @@
 #pragma once
 #include "IWorld.h"
 #include "Octree.h"
+#include "Collision.h"
 //world space is a box spanning -4000000 ~ 4000000 L, W, and H
 #define WORLD_DIMENSIONS -4000000.f, -4000000.f, -4000000.f, 8000000.f, 8000000.f, 8000000.f
 
@@ -12,35 +13,44 @@ namespace ginkgo
 	class World : public IWorld
 	{
 	private:
-		float gravity;
+		glm::vec3 gravity;
 		vector<IEntity*> entityList;
 		Octree worldTree;
 		mutable vector<CustomMovement> customMovements;
+		vector<Collision> collisions;
 
 	public:
 		World(float gravity);
-		virtual vector<IEntity*> getEntitiesByType(EntityType type) const override;
-		virtual const vector<IEntity*>& getEntityList() const;
+		vector<IEntity*> getEntitiesByType(EntityType type) const override;
+		const vector<IEntity*>& getEntityList() const;
 
-		virtual void clearWorld() override;
+		void clearWorld() override;
 
-		virtual void setGravity(float gravity) override;
-		virtual void setEntity(long ID, IEntity* entity) override;
+		void setGravity(float gravity) override;
+		//virtual void setEntity(long ID, IEntity* entity) override;
 
-		virtual float getGravity() const override;
-		virtual IEntity* getEntity(long ID) const override;
+		glm::vec3 const& getGravity() const override;
+		IEntity* getEntity(long ID) const override;
 
-		virtual void addEntity(IEntity* entity) override;
-		virtual void removeEntity(long ID) override;
+		void addEntity(IEntity* entity) override;
+		void removeEntity(long ID) override;
 
-		virtual void traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut) override;
+		void traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut) override;
 
-		virtual void registerCustomMovement(CustomMovement const& newMove) override;
-		virtual CustomMovement* getCustomMovement(int movementValue) const override;
+		void registerCustomMovement(CustomMovement const& newMove) override;
+		CustomMovement* getCustomMovement(int movementValue) const override;
 
-		virtual Octree const& getEntityTree() const override
+		Octree const& getEntityTree() const override
 		{
 			return worldTree;
 		}
+
+		void addCollision(CollisionInfo const& info, float deltaTime) override;
+		void clearCollisionCache() override;
+
+		void resolveCollisions(INT32 iterations) override;
+		bool collisionExists(IPhysicsObject* a, IPhysicsObject* b) const override;
+
+		void preCollisionTest();
 	};
 }

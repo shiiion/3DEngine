@@ -42,7 +42,7 @@ namespace ginkgo
 
 	enum EntityType
 	{
-		entity = 1, renderable = 2, physicsObject = 3, character = 4
+		entity = 1, physicsObject = 3, character = 4
 	};
 
 	struct Triangle
@@ -97,6 +97,27 @@ namespace ginkgo
 
 		glm::vec3 collisionNormal;
 
+	};
+
+	struct CollisionStationary
+	{
+		CollisionStationary(ICollisionMesh* t, ICollisionMesh* o) : thisMesh(t), otherMesh(o) {}
+
+		ICollisionMesh* otherMesh;
+		ICollisionMesh* thisMesh;
+
+		glm::vec3 normal;
+
+		float overlapDist;
+	};
+
+	struct MoveResult
+	{
+		MoveResult(glm::vec3 finalPos = glm::vec3(), glm::vec3 finalVel = glm::vec3())
+			: finalPos(finalPos), finalVel(finalVel)
+		{}
+		glm::vec3 finalPos;
+		glm::vec3 finalVel;
 	};
 
 	struct RaytraceResult
