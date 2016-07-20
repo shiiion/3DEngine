@@ -103,6 +103,9 @@ namespace ginkgo
 		referenceResult.finalPos += invMassRef * correction;
 		otherResult.finalPos -= invMassOther * correction;
 
+		referenceResult.finalPos = glm::round(referenceResult.finalPos * 10000.f) / 10000.f;
+		otherResult.finalPos = glm::round(otherResult.finalPos * 10000.f) / 10000.f;
+
 		manifold.thisMesh->setCachedCenter(referenceResult.finalPos);
 		manifold.otherMesh->setCachedCenter(otherResult.finalPos);
 	}

@@ -129,6 +129,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)bin\core\$(Configuration)\$(ProjectName).dll" "$(SolutionDir)bin\3DGame\$(Configuration)\$(ProjectName).dll"</Command>
@@ -147,6 +148,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <MidlCommandFile>/env x64</MidlCommandFile>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)bin\core\$(Configuration)\$(ProjectName).dll" "$(SolutionDir)bin\3DGame\$(Configuration)\$(ProjectName).dll"</Command>
@@ -160,6 +162,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="JNAInterfaceFunctions.h" />
     <ClInclude Include="Octree.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="ICollisionMesh.h" />
@@ -179,6 +182,7 @@
     <ClCompile Include="CollisionMesh.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="JNAInterfaceFunctions.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Surface.cpp" />

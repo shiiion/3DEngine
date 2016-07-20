@@ -32,7 +32,7 @@ namespace ginkgo
 		running = false;
 		tickTime = (1.f / 60.f);
 		startTick = GetTickCount64();
-		world = new World(-1.0f);
+		world = new World(-9.8f);
 		lastTickTime = getEngineTime();
 	}
 
@@ -55,7 +55,7 @@ namespace ginkgo
 	{
 		if (running)
 		{
-			float elapsedTime = 0.0016f;//getEngineTime() - lastTickTime;
+			float elapsedTime = 0.016f;//getEngineTime() - lastTickTime;
 			lastTickTime = getEngineTime();
 
 			processInput();
@@ -114,7 +114,7 @@ namespace ginkgo
 			}
 		}
 
-		world->resolveCollisions(8);
+		world->resolveCollisions(16);
 
 		for (IEntity* e : entityList)
 		{

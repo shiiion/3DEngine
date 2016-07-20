@@ -1,7 +1,13 @@
 #pragma once
-
 #ifdef COMP_DLL_CORE
+
+#ifdef _WIN64
+//THIS IS USED FOR JNA
+#define DECLSPEC_CORE extern "C" __declspec(dllexport)
+#else
 #define DECLSPEC_CORE __declspec(dllexport)
+#endif
+
 #else
 #define DECLSPEC_CORE __declspec(dllimport)
 #endif

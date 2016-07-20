@@ -14,7 +14,7 @@ namespace ginkgo
 		MoveResult referenceResult;
 		MoveResult otherResult;
 
-		const float MIN_CORRECTDIST = 0.01f;
+		const float MIN_CORRECTDIST = 0.001f;
 
 		bool valid;
 	private:

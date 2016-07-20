@@ -195,7 +195,7 @@ namespace ginkgo
 		}
 		return false;
 	}
-	
+
 	float CollisionMesh::getAxisOverlap(glm::vec3 const& axisNorm, ICollisionMesh const& other) const
 	{
 		glm::vec3 centerDiff = (other.getCachedCenter() - cachedCenter);
