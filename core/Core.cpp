@@ -90,11 +90,12 @@ namespace ginkgo
 				physicsObjects.emplace_back(e->getPhysics());
 			}
 		}
-
+		world->recalculateTree();
 		world->preCollisionTest();
 
 		vector<IPhysicsObject*> colliders;
 
+		//COLLISION DETECTION
 		for (IPhysicsObject* p : physicsObjects)
 		{
 			if (p->getCollisionType() == CTYPE_WORLDSTATIC)
@@ -104,7 +105,7 @@ namespace ginkgo
 
 			world->getEntityTree().retrieveCollisions(colliders, p);
 
-			for (IPhysicsObject* collider : physicsObjects)
+			for (IPhysicsObject* collider : colliders)
 			{
 				//OPTIMIZATION: check existing tests (even if there was no result)
 				if (collider->getParent()->getEntityID() != p->getParent()->getEntityID() && !world->collisionExists(p, collider))
@@ -112,6 +113,7 @@ namespace ginkgo
 					p->checkCollision(elapsedTime, collider);
 				}
 			}
+			colliders.clear();
 		}
 
 		world->resolveCollisions(16);

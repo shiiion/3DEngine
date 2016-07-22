@@ -299,11 +299,14 @@ namespace ginkgo
 		parent = nullptr;
 	}
 
-	void Octree::fillTree(vector<IPhysicsObject*> const& objects)
+	void Octree::fillTree(vector<IEntity*> const& objects)
 	{
-		for (IPhysicsObject* object : objects)
+		for (IEntity* object : objects)
 		{
-			insert(object);
+			if (object->getEntityType() >= physicsObject)
+			{
+				insert(object->getPhysics());
+			}
 		}
 	}
 
@@ -417,9 +420,9 @@ namespace ginkgo
 		glm::vec3 const& yAxis = mesh.getAxis(1);
 		glm::vec3 const& zAxis = mesh.getAxis(2);
 		float xY, yY, zY;
-		xY = max(xAxis.y * mesh.getExtent(0), xAxis.y * -mesh.getExtent(0));
-		yY = max(yAxis.y * mesh.getExtent(1), yAxis.y * -mesh.getExtent(1));
-		zY = max(zAxis.y * mesh.getExtent(2), zAxis.y * -mesh.getExtent(2));
+		xY = max(xAxis.y * mesh.getExtent(0), xAxis.y * -mesh.getExtent(0)) + mesh.getCachedCenter().y;
+		yY = max(yAxis.y * mesh.getExtent(1), yAxis.y * -mesh.getExtent(1)) + mesh.getCachedCenter().y;
+		zY = max(zAxis.y * mesh.getExtent(2), zAxis.y * -mesh.getExtent(2)) + mesh.getCachedCenter().y;
 
 		return max(xY, max(yY, zY));
 	}
@@ -431,9 +434,9 @@ namespace ginkgo
 		glm::vec3 const& yAxis = mesh.getAxis(1);
 		glm::vec3 const& zAxis = mesh.getAxis(2);
 		float xY, yY, zY;
-		xY = min(xAxis.y * mesh.getExtent(0), xAxis.y * -mesh.getExtent(0));
-		yY = min(yAxis.y * mesh.getExtent(1), yAxis.y * -mesh.getExtent(1));
-		zY = min(zAxis.y * mesh.getExtent(2), zAxis.y * -mesh.getExtent(2));
+		xY = min(xAxis.y * mesh.getExtent(0), xAxis.y * -mesh.getExtent(0)) + mesh.getCachedCenter().y;
+		yY = min(yAxis.y * mesh.getExtent(1), yAxis.y * -mesh.getExtent(1)) + mesh.getCachedCenter().y;
+		zY = min(zAxis.y * mesh.getExtent(2), zAxis.y * -mesh.getExtent(2)) + mesh.getCachedCenter().y;
 
 		return min(xY, min(yY, zY));
 	}
@@ -445,9 +448,9 @@ namespace ginkgo
 		glm::vec3 const& yAxis = mesh.getAxis(1);
 		glm::vec3 const& zAxis = mesh.getAxis(2);
 		float xX, yX, zX;
-		xX = min(xAxis.x * mesh.getExtent(0), xAxis.x * -mesh.getExtent(0));
-		yX = min(yAxis.x * mesh.getExtent(1), yAxis.x * -mesh.getExtent(1));
-		zX = min(zAxis.x * mesh.getExtent(2), zAxis.x * -mesh.getExtent(2));
+		xX = min(xAxis.x * mesh.getExtent(0), xAxis.x * -mesh.getExtent(0)) + mesh.getCachedCenter().x;
+		yX = min(yAxis.x * mesh.getExtent(1), yAxis.x * -mesh.getExtent(1)) + mesh.getCachedCenter().x;
+		zX = min(zAxis.x * mesh.getExtent(2), zAxis.x * -mesh.getExtent(2)) + mesh.getCachedCenter().x;
 
 		return min(xX, min(yX, zX));
 	}
@@ -459,9 +462,9 @@ namespace ginkgo
 		glm::vec3 const& yAxis = mesh.getAxis(1);
 		glm::vec3 const& zAxis = mesh.getAxis(2);
 		float xX, yX, zX;
-		xX = max(xAxis.x * mesh.getExtent(0), xAxis.x * -mesh.getExtent(0));
-		yX = max(yAxis.x * mesh.getExtent(1), yAxis.x * -mesh.getExtent(1));
-		zX = max(zAxis.x * mesh.getExtent(2), zAxis.x * -mesh.getExtent(2));
+		xX = max(xAxis.x * mesh.getExtent(0), xAxis.x * -mesh.getExtent(0)) + mesh.getCachedCenter().x;
+		yX = max(yAxis.x * mesh.getExtent(1), yAxis.x * -mesh.getExtent(1)) + mesh.getCachedCenter().x;
+		zX = max(zAxis.x * mesh.getExtent(2), zAxis.x * -mesh.getExtent(2)) + mesh.getCachedCenter().x;
 
 		return max(xX, max(yX, zX));
 	}
@@ -473,9 +476,9 @@ namespace ginkgo
 		glm::vec3 const& yAxis = mesh.getAxis(1);
 		glm::vec3 const& zAxis = mesh.getAxis(2);
 		float xZ, yZ, zZ;
-		xZ = max(xAxis.z * mesh.getExtent(0), xAxis.z * -mesh.getExtent(0));
-		yZ = max(yAxis.z * mesh.getExtent(1), yAxis.z * -mesh.getExtent(1));
-		zZ = max(zAxis.z * mesh.getExtent(2), zAxis.z * -mesh.getExtent(2));
+		xZ = max(xAxis.z * mesh.getExtent(0), xAxis.z * -mesh.getExtent(0)) + mesh.getCachedCenter().z;
+		yZ = max(yAxis.z * mesh.getExtent(1), yAxis.z * -mesh.getExtent(1)) + mesh.getCachedCenter().z;
+		zZ = max(zAxis.z * mesh.getExtent(2), zAxis.z * -mesh.getExtent(2)) + mesh.getCachedCenter().z;
 
 		return max(xZ, max(yZ, zZ));
 	}
@@ -487,9 +490,9 @@ namespace ginkgo
 		glm::vec3 const& yAxis = mesh.getAxis(1);
 		glm::vec3 const& zAxis = mesh.getAxis(2);
 		float xZ, yZ, zZ;
-		xZ = min(xAxis.z * mesh.getExtent(0), xAxis.z * -mesh.getExtent(0));
-		yZ = min(yAxis.z * mesh.getExtent(1), yAxis.z * -mesh.getExtent(1));
-		zZ = min(zAxis.z * mesh.getExtent(2), zAxis.z * -mesh.getExtent(2));
+		xZ = min(xAxis.z * mesh.getExtent(0), xAxis.z * -mesh.getExtent(0)) + mesh.getCachedCenter().z;
+		yZ = min(yAxis.z * mesh.getExtent(1), yAxis.z * -mesh.getExtent(1)) + mesh.getCachedCenter().z;
+		zZ = min(zAxis.z * mesh.getExtent(2), zAxis.z * -mesh.getExtent(2)) + mesh.getCachedCenter().z;
 
 		return min(xZ, min(yZ, zZ));
 	}

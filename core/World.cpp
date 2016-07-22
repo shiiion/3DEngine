@@ -275,5 +275,11 @@ namespace ginkgo
 		}
 		clearCollisionCache();
 	}
+
+	void World::recalculateTree()
+	{
+		worldTree.resetTree(1, Prism(WORLD_DIMENSIONS));
+		worldTree.fillTree(entityList);
+	}
 }
 

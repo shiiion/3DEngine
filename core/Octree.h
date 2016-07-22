@@ -5,6 +5,7 @@
 namespace ginkgo
 {
 	class IPhysicsObject;
+	class IEntity;
 #define OCTREE_MAXENTS 16
 #define OCTREE_MAXLEVELS 20
 
@@ -32,7 +33,7 @@ namespace ginkgo
 		void retrieveCollisions(vector<IPhysicsObject*>& outList, IPhysicsObject* collider) const;
 		void retrieveCollisions(vector<IPhysicsObject*>& outList, Ray const& ray, float dist) const;
 		void resetTree(int level, Prism const& bounds);
-		void fillTree(vector<IPhysicsObject*> const& objects);
+		void fillTree(vector<IEntity*> const& objects);
 		void getChildLeaves(vector<IPhysicsObject*>& outList) const;
 		int remove(long ID);
 		bool empty() const;
