@@ -1,6 +1,7 @@
 #include "Collision.h"
 #include "ICollisionMesh.h"
 #include "IPhysicsObject.h"
+#include "Core.h"
 
 namespace ginkgo
 {
@@ -11,6 +12,157 @@ namespace ginkgo
 		getUpdatedParams();
 		this->manifold.normal = manifold.collisionNormal;
 		this->manifold.overlapDist = manifold.thisMesh->getAxisOverlap(manifold.collisionNormal, *manifold.otherMesh);
+	}
+
+	void Collision::applyFriction()
+	{
+		float COF = glm::min(manifold.thisMesh->getOwner()->getMaterial().friction, manifold.otherMesh->getOwner()->getMaterial().friction);
+		if (manifold.otherMesh->getExtent(0) == 1)
+		{
+			int a = 0;
+		}
+
+
+		glm::vec3 normal = glm::normalize(manifold.normal);
+		glm::vec3 invNormal = -normal;
+
+		float normalScalar = glm::length(getWorld()->getGravity()) * (glm::dot(glm::normalize(getWorld()->getGravity()), normal));
+
+		glm::vec3 refRVel = referenceResult.finalVel - otherResult.finalVel;
+		glm::vec3 invRVel = -refRVel;
+
+		//PERPENDICULAR FORMULA: (N dot N / Vel dot N) * vel - N
+		//resist motion along velocity direction
+		float vDotNormal = glm::dot(refRVel, normal);
+		float vDotInvNormal = glm::dot(invRVel, normal);
+
+		glm::vec3 frictVector;
+		glm::vec3 invFrictVector;
+
+		if (vDotNormal == 0.f)
+		{
+			frictVector = -glm::normalize(refRVel) * normalScalar;
+		}
+		else
+		{
+			glm::vec3 pVec = (1.f / vDotNormal) * refRVel - normal;
+
+			float pLen = glm::length(pVec);
+
+			if (pLen != 0.f)
+			{
+				frictVector = -glm::normalize(pVec) * normalScalar;
+				pVec = (glm::dot(refRVel, pVec) / (pLen * pLen)) * pVec;
+				if (glm::length(pVec) < glm::length(frictVector))
+				{
+					frictVector = -pVec;
+				}
+			}
+		}
+		frictVector *= deltaTime * COF;
+
+		if (manifold.otherMesh->getOwner()->getCollisionType() == CTYPE_WORLDDYNAMIC)
+		{
+			if (vDotInvNormal == 0.f)
+			{
+				invFrictVector = -glm::normalize(invRVel) * normalScalar;
+			}
+			else
+			{
+				glm::vec3 pVec = (1.f / vDotInvNormal) * invRVel - invNormal;
+
+				float pLen = glm::length(pVec);
+
+				if (pLen != 0.f)
+				{
+					invFrictVector = -glm::normalize(pVec) * normalScalar;
+					pVec = (glm::dot(invRVel, pVec) / (pLen * pLen)) * pVec;
+					if (glm::length(pVec) < glm::length(invFrictVector))
+					{
+						invFrictVector = -pVec;
+					}
+				}
+			}
+			invFrictVector *= deltaTime * COF;
+		}
+
+		referenceResult.finalVel += frictVector;
+		otherResult.finalVel += invFrictVector;
+
+		manifold.thisMesh->setCachedVelocity(referenceResult.finalVel);
+		manifold.otherMesh->setCachedVelocity(otherResult.finalVel);
+
+		/* 
+*******************!!ALTERNATE IMPLEMENTATION!!********************
+		float COF = glm::min(manifold.thisMesh->getOwner()->getMaterial().friction, manifold.otherMesh->getOwner()->getMaterial().friction);
+
+		float xe = manifold.otherMesh->getExtent(0);
+
+
+		//PERPENDICULAR FORMULA: (N dot N / Vel dot N) * vel - N
+		glm::vec3 normal = glm::normalize(manifold.normal);
+		float vDotNormal = glm::dot(referenceResult.finalVel, normal);
+
+		glm::vec3 pVecRef;
+
+		if (vDotNormal == 0.f)
+		{
+		pVecRef = referenceResult.finalVel;
+		}
+		else
+		{
+		pVecRef = (1.f / vDotNormal) * referenceResult.finalVel - normal;
+
+		float pLen = glm::length(pVecRef);
+
+		if (pLen != 0.f)
+		{
+		pVecRef = (glm::dot(referenceResult.finalVel, pVecRef) / (pLen * pLen)) * pVecRef;
+		}
+		}
+		glm::vec3 nVecRef = vDotNormal * normal;
+
+		glm::vec3 invNormal = -normal;
+		float vDotInvNormal = glm::dot(otherResult.finalVel, invNormal);
+		glm::vec3 pVecOther;
+		if (vDotInvNormal == 0.f)
+		{
+		pVecOther = otherResult.finalVel;
+		}
+		else
+		{
+		pVecOther = (1.f / vDotInvNormal) * otherResult.finalVel - invNormal;
+
+		float pLen = glm::length(pVecOther);
+
+		if (pLen != 0.f)
+		{
+		pVecOther = (glm::dot(otherResult.finalVel, pVecOther) / (pLen * pLen)) * pVecOther;
+		}
+		}
+
+		glm::vec3 nVecOther = vDotInvNormal * invNormal;
+
+		pVecRef *= glm::pow(COF, deltaTime);
+		pVecOther *= glm::pow(COF, deltaTime);
+
+		if (glm::length(pVecRef) < 0.0001f)
+		{
+		pVecRef = glm::vec3();
+		}
+
+		if (glm::length(pVecOther) < 0.0001f)
+		{
+		pVecOther = glm::vec3();
+		}
+
+		referenceResult.finalVel = pVecRef + nVecRef;
+		otherResult.finalVel = pVecOther + nVecOther;
+
+		manifold.thisMesh->setCachedVelocity(referenceResult.finalVel);
+		manifold.otherMesh->setCachedVelocity(otherResult.finalVel);
+		*/
+
 	}
 
 	void Collision::impulseCorrection()

@@ -9,7 +9,7 @@
 
 namespace ginkgo
 {
-	IEntity* createAddEntity(float x, float y, float z, float xr, float yr, float zr, float xv, float yv, float zv, float xe, float ye, float ze, float rebound, int dynamic, float mass)
+	IEntity* createAddEntity(float x, float y, float z, float xr, float yr, float zr, float xv, float yv, float zv, float xe, float ye, float ze, float rebound, int dynamic, float mass, float friction)
 	{
 		glm::vec3 xAxis = glm::rotateX(glm::rotateY(glm::rotateZ(glm::vec3(1, 0, 0), xr), yr), zr);
 		glm::vec3 yAxis = glm::rotateX(glm::rotateY(glm::rotateZ(glm::vec3(0, 1, 0), xr), yr), zr);
@@ -23,6 +23,7 @@ namespace ginkgo
 
 		Material mat;
 		mat.reboundFraction = rebound;
+		mat.friction = friction;
 
 		newEnt->setPhysics(physicsObjectFactory(newEnt, pcm, dyn, mass, mat));
 		getWorld()->addEntity(newEnt);

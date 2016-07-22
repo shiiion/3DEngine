@@ -237,6 +237,10 @@ namespace ginkgo
 				//skip c if the overlap is less than min overlap
 				if (c.preCorrectionCheck())
 				{
+					if (a == 0)
+					{
+						c.applyFriction();
+					}
 					c.positionalCorrection(0.2f);
 				}
 			}

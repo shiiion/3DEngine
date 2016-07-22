@@ -20,9 +20,12 @@ namespace ginkgo
 	private:
 		void positionalCorrectionInternal(float frameSegment);
 
+
 	public:
 
 		Collision(float deltaTime, CollisionInfo const& manifold);
+
+		void applyFriction();
 
 		void impulseCorrection();
 
