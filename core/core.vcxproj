@@ -87,6 +87,7 @@
     <TargetExt>.dll</TargetExt>
     <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dependencies\lib;$(LibraryPath)</LibraryPath>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

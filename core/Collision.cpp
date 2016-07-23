@@ -26,7 +26,9 @@ namespace ginkgo
 		glm::vec3 normal = glm::normalize(manifold.normal);
 		glm::vec3 invNormal = -normal;
 
-		float normalScalar = glm::length(getWorld()->getGravity()) * (glm::dot(glm::normalize(getWorld()->getGravity()), normal));
+		float angle = glm::min(glm::acos(glm::dot(-glm::normalize(getWorld()->getGravity()), normal)), glm::acos(glm::dot(glm::normalize(getWorld()->getGravity()), normal)));
+
+		float normalScalar = glm::abs(glm::length(getWorld()->getGravity()) * glm::cos(angle));
 
 		glm::vec3 refRVel = referenceResult.finalVel - otherResult.finalVel;
 		glm::vec3 invRVel = -refRVel;
@@ -34,14 +36,18 @@ namespace ginkgo
 		//PERPENDICULAR FORMULA: (N dot N / Vel dot N) * vel - N
 		//resist motion along velocity direction
 		float vDotNormal = glm::dot(refRVel, normal);
-		float vDotInvNormal = glm::dot(invRVel, normal);
+		float vDotInvNormal = glm::dot(invRVel, invNormal);
 
 		glm::vec3 frictVector;
 		glm::vec3 invFrictVector;
 
 		if (vDotNormal == 0.f)
 		{
-			frictVector = -glm::normalize(refRVel) * normalScalar;
+			frictVector = -glm::normalize(refRVel) * normalScalar * deltaTime * COF;
+			if (glm::abs(normalScalar) > glm::length(refRVel))
+			{
+				frictVector = -refRVel;
+			}
 		}
 		else
 		{
@@ -51,21 +57,24 @@ namespace ginkgo
 
 			if (pLen != 0.f)
 			{
-				frictVector = -glm::normalize(pVec) * normalScalar;
 				pVec = (glm::dot(refRVel, pVec) / (pLen * pLen)) * pVec;
+				frictVector = -glm::normalize(pVec) * normalScalar * deltaTime * COF;
 				if (glm::length(pVec) < glm::length(frictVector))
 				{
 					frictVector = -pVec;
 				}
 			}
 		}
-		frictVector *= deltaTime * COF;
 
 		if (manifold.otherMesh->getOwner()->getCollisionType() == CTYPE_WORLDDYNAMIC)
 		{
 			if (vDotInvNormal == 0.f)
 			{
-				invFrictVector = -glm::normalize(invRVel) * normalScalar;
+				invFrictVector = -glm::normalize(invRVel) * normalScalar * deltaTime * COF;
+				if (glm::abs(normalScalar) > glm::length(invRVel))
+				{
+					invFrictVector = -invRVel;
+				}
 			}
 			else
 			{
@@ -75,15 +84,14 @@ namespace ginkgo
 
 				if (pLen != 0.f)
 				{
-					invFrictVector = -glm::normalize(pVec) * normalScalar;
 					pVec = (glm::dot(invRVel, pVec) / (pLen * pLen)) * pVec;
+					invFrictVector = -glm::normalize(pVec) * normalScalar * deltaTime * COF;
 					if (glm::length(pVec) < glm::length(invFrictVector))
 					{
 						invFrictVector = -pVec;
 					}
 				}
 			}
-			invFrictVector *= deltaTime * COF;
 		}
 
 		referenceResult.finalVel += frictVector;
