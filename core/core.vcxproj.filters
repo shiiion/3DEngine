@@ -87,6 +87,9 @@
     <ClInclude Include="JNAInterfaceFunctions.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
+    <ClInclude Include="InputWrapper.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
@@ -123,6 +126,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JNAInterfaceFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
