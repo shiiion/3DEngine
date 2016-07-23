@@ -15,15 +15,17 @@ namespace ginkgo
 
 		virtual void reloadInputMapping() = 0;
 
-		virtual void addControl(Control const& ctl) = 0;
+		virtual void addControl(int in, int out, OnInputFunc callback) = 0;
 		virtual void removeControl(int inputCode) = 0;
 
 		virtual void setOwner(ICharacter* owner) = 0;
 		virtual ICharacter* getOwner() const = 0;
 
-		virtual void checkInput() = 0;
+		virtual void onInputCode(Control const& input, bool set) = 0;
 		virtual void runInput() = 0;
+
+		virtual Control const& getControl(int inputState) = 0;
 	};
 
-
+	DECLSPEC_CORE IAbstractInputSystem* createUserInputSystem();
 }
