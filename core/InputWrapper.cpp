@@ -1,6 +1,8 @@
+
 #include "InputWrapper.h"
 #include "Core.h"
 #include "IAbstractInputSystem.h"
+#ifndef _WIN64
 #include <GLFW\glfw3.h>
 
 namespace ginkgo
@@ -36,3 +38,12 @@ namespace ginkgo
 		glfwSetMouseButtonCallback(window, setMouseButtonCallback);
 	}
 }
+#else
+namespace ginkgo
+{
+	void registerCallbacks(GLFWwindow* window)
+	{
+		//do nothing
+	}
+}
+#endif

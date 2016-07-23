@@ -113,6 +113,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)bin\core\$(Configuration)\$(ProjectName).dll" "$(SolutionDir)bin\3DGame\$(Configuration)\$(ProjectName).dll"</Command>
@@ -152,6 +153,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <MidlCommandFile>/env x64</MidlCommandFile>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)bin\core\$(Configuration)\$(ProjectName).dll" "$(SolutionDir)bin\3DGame\$(Configuration)\$(ProjectName).dll"</Command>
