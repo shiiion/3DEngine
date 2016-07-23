@@ -98,7 +98,6 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)bin\core\$(Configuration)\$(ProjectName).dll" "$(SolutionDir)bin\3DGame\$(Configuration)\$(ProjectName).dll"</Command>
@@ -132,7 +131,6 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)bin\core\$(Configuration)\$(ProjectName).dll" "$(SolutionDir)bin\3DGame\$(Configuration)\$(ProjectName).dll"</Command>
@@ -165,7 +163,6 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="InputWrapper.h" />
     <ClInclude Include="JNAInterfaceFunctions.h" />
     <ClInclude Include="Octree.h" />
     <ClInclude Include="Surface.h" />
@@ -186,7 +183,6 @@
     <ClCompile Include="CollisionMesh.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="InputWrapper.cpp" />
     <ClCompile Include="JNAInterfaceFunctions.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />

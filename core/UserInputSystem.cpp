@@ -22,10 +22,9 @@ namespace ginkgo
 		}
 	}
 
-	void UserInputSystem::addControl(int in, int out, OnInputFunc callback)
+	void UserInputSystem::addControl(Control const& ctl)
 	{
-		controlList.push_back(Control(INPUTTYPE_USER, in, out));
-		controlStates.push_back(InputState(out, callback));
+		controlList.push_back(ctl);
 	}
 
 	void UserInputSystem::removeControl(int inputCode)
@@ -69,47 +68,58 @@ namespace ginkgo
 	
 	void UserInputSystem::runInput()
 	{
-		for (InputState& state : controlStates)
+		for (InputState const& state : controlStates)
 		{
-			if (state.isSet ^ state.prevSet)
+			if (state.isSet || state.prevSet)
 			{
 				if (state.inputFunc != nullptr)
 				{
-					state.inputFunc(this, state.outputCode, state.isSet);
+					state.inputFunc(this, state.outputCode);
 				}
-				state.prevSet = state.isSet;
 			}
 		}
 	}
 
-	void UserInputSystem::onInputCode(Control const& input, bool set)
+	void UserInputSystem::checkInput()
 	{
-		for (InputState& state : controlStates)
+		vector<int> setCodes;
+		vector<int> resetCodes;
+		for (UINT32 a = 0; a < controlList.size(); a++)
 		{
-			if (input.outputCode == state.outputCode)
+			if (GetAsyncKeyState(controlList[a].inputCode))
 			{
-				state.isSet = set;
+				setCodes.emplace_back(controlList[a].outputCode);
+			}
+			else
+			{
+				resetCodes.emplace_back(controlList[a].outputCode);
 			}
 		}
-	}
-
-	Control const& UserInputSystem::getControl(int inputCode)
-	{
-		for (Control const& c : controlList)
+		for (UINT32 a = 0; a < setCodes.size(); a++)
 		{
-			if (c.inputCode == inputCode)
+			for (UINT32 b = 0; b < controlStates.size(); b++)
 			{
-				return c;
+				if (setCodes[a] == controlStates[b].outputCode)
+				{
+					controlStates[b].prevSet = controlStates[b].isSet;
+					controlStates[b].isSet = true;
+					break;
+				}
 			}
 		}
-
-		return invalidControl;
+		for (UINT32 a = 0; a < resetCodes.size(); a++)
+		{
+			for (UINT32 b = 0; b < controlStates.size(); b++)
+			{
+				if (resetCodes[a] == controlStates[b].outputCode)
+				{
+					controlStates[b].prevSet = controlStates[b].isSet;
+					controlStates[b].isSet = false;
+					break;
+				}
+			}
+		}
 	}
 
 
-
-	IAbstractInputSystem* createUserInputSystem()
-	{
-		return new UserInputSystem();
-	}
 }

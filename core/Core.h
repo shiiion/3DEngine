@@ -6,8 +6,6 @@
 #include "World.h"
 #endif
 
-struct GLFWwindow;
-
 namespace ginkgo
 {
 	class IWorld;
@@ -34,11 +32,6 @@ namespace ginkgo
 		static Core core;
 		Core();
 
-		vector<IAbstractInputSystem*> const& getInputSystemList()
-		{
-			return inputSystemList;
-		}
-
 		void coreTick();
 		void physicsTick(float elapsedTime);
 
@@ -55,7 +48,6 @@ namespace ginkgo
 		static long generateID();
 		static void startCore();
 		static void stopCore();
-		static void setupInput(GLFWwindow* window);
 		static void registerInputSystem(IAbstractInputSystem* input, ICharacter* controller);
 		
 	};
@@ -72,7 +64,4 @@ namespace ginkgo
 	DECLSPEC_CORE void sleepTickTime();
 
 	DECLSPEC_CORE void registerInputSystem(IAbstractInputSystem* input, ICharacter* controller);
-	DECLSPEC_CORE vector<IAbstractInputSystem*> const& getAllInputSystems();
-
-	DECLSPEC_CORE void setupInput(GLFWwindow* window);
 }
