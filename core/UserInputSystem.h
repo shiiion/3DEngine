@@ -7,6 +7,8 @@ namespace ginkgo
 	class UserInputSystem : public IAbstractInputSystem
 	{
 	private:
+		const Control invalidControl = Control(INPUTTYPE_INVALID, -1, -1);
+
 		ICharacter* owner;
 		vector<Control> controlList;
 		vector<InputState> controlStates;
@@ -18,14 +20,16 @@ namespace ginkgo
 
 		virtual void reloadInputMapping() override;
 
-		virtual void addControl(Control const& ctl) override;
+		virtual void addControl(int in, int out, OnInputFunc callback) override;
 		virtual void removeControl(int inputCode) override;
 
 		virtual void setOwner(ICharacter* owner) override;
 		virtual ICharacter* getOwner() const override;
 
-		virtual void checkInput() override;
+		virtual void onInputCode(Control const& input, bool set) override;
 		virtual void runInput() override;
+
+		virtual Control const& getControl(int inputState) override;
 	};
 
 

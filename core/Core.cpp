@@ -7,6 +7,9 @@
 #include "IAbstractInputSystem.h"
 #include "PhysicsObject.h"
 #include "CollisionMesh.h"
+#include "InputWrapper.h"
+#include <GLFW\glfw3.h>
+
 namespace ginkgo
 {
 	long Core::entityIDBase = 1;
@@ -20,6 +23,11 @@ namespace ginkgo
 	void Core::startCore()
 	{
 		core.running = true;
+	}
+
+	void Core::setupInput(GLFWwindow* window)
+	{
+		registerCallbacks(window);
 	}
 
 	void Core::stopCore()
@@ -65,11 +73,6 @@ namespace ginkgo
 
 	void Core::processInput()
 	{
-		for (IAbstractInputSystem* input : inputSystemList)
-		{
-			input->checkInput();
-		}
-
 		for (IAbstractInputSystem* input : inputSystemList)
 		{
 			input->runInput();
@@ -188,5 +191,15 @@ namespace ginkgo
 	void registerInputSystem(IAbstractInputSystem* input, ICharacter* controller)
 	{
 		Core::registerInputSystem(input, controller);
+	}
+
+	vector<IAbstractInputSystem*> const& getAllInputSystems()
+	{
+		return Core::core.getInputSystemList();
+	}
+
+	void setupInput(GLFWwindow* window)
+	{
+		Core::core.setupInput(window);
 	}
 }

@@ -35,7 +35,7 @@ namespace ginkgo
 	typedef bool(__cdecl* RaytraceFunc)(IPhysicsObject* hitObject);
 	typedef void(__cdecl* CustomMoveTick)(IPhysicsObject& object, float deltaTime);
 	typedef void(__cdecl* CustomMoveResolve)(ICollisionMesh& mesh);
-	typedef void(__cdecl* OnInputFunc)(IAbstractInputSystem* inputSystem, int outputCode);
+	typedef void(__cdecl* OnInputFunc)(IAbstractInputSystem* inputSystem, int outputCode, bool set);
 
 	struct Material
 	{
@@ -166,17 +166,26 @@ namespace ginkgo
 		float l, w, h;
 	};
 
+#define INPUTTYPE_INVALID	-1
+#define INPUTTYPE_USER		1
+#define INPUTTYPE_OTHER		2
+
 	struct Control
 	{
-		Control(int in, int out)
+		Control(int inputType, int in, int out)
 		{
+			this->inputType = inputType;
+
 			inputCode = in;
 			outputCode = out;
 		}
+		int inputType;
 
 		int inputCode;
 		int outputCode;
 
+		//microsoft should burn in hell
+		
 	};
 
 	struct InputState

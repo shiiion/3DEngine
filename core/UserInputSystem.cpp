@@ -22,9 +22,10 @@ namespace ginkgo
 		}
 	}
 
-	void UserInputSystem::addControl(Control const& ctl)
+	void UserInputSystem::addControl(int in, int out, OnInputFunc callback)
 	{
-		controlList.push_back(ctl);
+		controlList.push_back(Control(INPUTTYPE_USER, in, out));
+		controlStates.push_back(InputState(out, callback));
 	}
 
 	void UserInputSystem::removeControl(int inputCode)
@@ -68,58 +69,47 @@ namespace ginkgo
 	
 	void UserInputSystem::runInput()
 	{
-		for (InputState const& state : controlStates)
+		for (InputState& state : controlStates)
 		{
-			if (state.isSet || state.prevSet)
+			if (state.isSet ^ state.prevSet)
 			{
 				if (state.inputFunc != nullptr)
 				{
-					state.inputFunc(this, state.outputCode);
+					state.inputFunc(this, state.outputCode, state.isSet);
 				}
+				state.prevSet = state.isSet;
 			}
 		}
 	}
 
-	void UserInputSystem::checkInput()
+	void UserInputSystem::onInputCode(Control const& input, bool set)
 	{
-		vector<int> setCodes;
-		vector<int> resetCodes;
-		for (UINT32 a = 0; a < controlList.size(); a++)
+		for (InputState& state : controlStates)
 		{
-			if (GetAsyncKeyState(controlList[a].inputCode))
+			if (input.outputCode == state.outputCode)
 			{
-				setCodes.emplace_back(controlList[a].outputCode);
-			}
-			else
-			{
-				resetCodes.emplace_back(controlList[a].outputCode);
-			}
-		}
-		for (UINT32 a = 0; a < setCodes.size(); a++)
-		{
-			for (UINT32 b = 0; b < controlStates.size(); b++)
-			{
-				if (setCodes[a] == controlStates[b].outputCode)
-				{
-					controlStates[b].prevSet = controlStates[b].isSet;
-					controlStates[b].isSet = true;
-					break;
-				}
-			}
-		}
-		for (UINT32 a = 0; a < resetCodes.size(); a++)
-		{
-			for (UINT32 b = 0; b < controlStates.size(); b++)
-			{
-				if (resetCodes[a] == controlStates[b].outputCode)
-				{
-					controlStates[b].prevSet = controlStates[b].isSet;
-					controlStates[b].isSet = false;
-					break;
-				}
+				state.isSet = set;
 			}
 		}
 	}
 
+	Control const& UserInputSystem::getControl(int inputCode)
+	{
+		for (Control const& c : controlList)
+		{
+			if (c.inputCode == inputCode)
+			{
+				return c;
+			}
+		}
 
+		return invalidControl;
+	}
+
+
+
+	IAbstractInputSystem* createUserInputSystem()
+	{
+		return new UserInputSystem();
+	}
 }
