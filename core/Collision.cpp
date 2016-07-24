@@ -50,7 +50,7 @@ namespace ginkgo
 
 			float pLen = glm::length(pVec);
 
-			if (pLen != 0.f)
+			if (pLen > 0.00001f)
 			{
 				pVec = (glm::dot(refRVel, pVec) / (pLen * pLen)) * pVec;
 				frictVector = -glm::normalize(pVec) * normalScalar * deltaTime * COF;
@@ -77,7 +77,7 @@ namespace ginkgo
 
 				float pLen = glm::length(pVec);
 
-				if (pLen != 0.f)
+				if (pLen > 0.00001f)
 				{
 					pVec = (glm::dot(invRVel, pVec) / (pLen * pLen)) * pVec;
 					invFrictVector = -glm::normalize(pVec) * normalScalar * deltaTime * COF;
@@ -192,14 +192,7 @@ namespace ginkgo
 		float IS = -(1.f + restitution) * contactVel;
 		float invMassThis, invMassOther;
 
-		if (refObj->getCollisionType() == CTYPE_WORLDSTATIC)
-		{
-			invMassThis = 0;
-		}
-		else
-		{
-			invMassThis = 1 / mass;
-		}
+		invMassThis = 1.f / mass;
 
 		if (otherObj->getCollisionType() == CTYPE_WORLDSTATIC)
 		{
@@ -212,7 +205,7 @@ namespace ginkgo
 
 		IS /= (invMassThis + invMassOther);
 
-		if (glm::abs(IS) < /*MINREBOUND*/0.01f)
+		if (glm::abs(IS) < glm::length(getWorld()->getGravity()) * deltaTime)
 		{
 			IS = (-contactVel) / (invMassThis + invMassOther);
 		}

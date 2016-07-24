@@ -52,6 +52,6 @@ namespace ginkgo
 		bool collisionExists(IPhysicsObject* a, IPhysicsObject* b) const override;
 
 		void preCollisionTest();
-		void recalculateTree();
+		void updateOctreeIndex(IEntity* entity);
 	};
 }

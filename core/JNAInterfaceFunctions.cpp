@@ -77,6 +77,11 @@ namespace ginkgo
 			return 0;
 		}
 	}
+
+	void setVel(IEntity* entity, float x, float y, float z)
+	{
+		entity->setVelocity(glm::vec3(x, y, z));
+	}
 }
 
 #endif

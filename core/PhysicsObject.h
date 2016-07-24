@@ -32,7 +32,7 @@ namespace ginkgo
 	public:
 		PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canGravity = true, bool canCollide = true);
 
-		void checkCollision(float deltaTime, IPhysicsObject* other) override;
+		bool checkCollision(float deltaTime, IPhysicsObject* other) override;
 
 		void setMaterial(const Material& mat) override;
 		void setMass(float mass) override;

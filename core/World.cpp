@@ -237,7 +237,7 @@ namespace ginkgo
 
 		for (Collision const& c : collisions)
 		{
-			found |= c.eq(a, b);
+			if (found |= c.eq(a, b)) break;
 		}
 		return found;
 	}
@@ -255,10 +255,9 @@ namespace ginkgo
 		clearCollisionCache();
 	}
 
-	void World::recalculateTree()
+	void World::updateOctreeIndex(IEntity* entity)
 	{
-		worldTree.resetTree(1, Prism(WORLD_DIMENSIONS));
-		worldTree.fillTree(entityList);
+		worldTree.reinsert(entity);
 	}
 }
 

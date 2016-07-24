@@ -227,6 +227,42 @@ namespace ginkgo
 		return index;
 	}
 
+	void Octree::reinsert(IEntity* entity)
+	{
+		Octree* insertTree = nullptr;
+		if (!shouldMove(entity->getPhysics(), &insertTree))
+		{
+			if (insertTree != nullptr)
+			{
+				remove(entity->getEntityID());
+				insertTree->insert(entity->getPhysics());
+			}
+		}
+	}
+
+	bool Octree::shouldMove(IPhysicsObject* object, Octree** cachedFind)
+	{
+		int index = getIndex(object);
+		if (index != -1)
+		{
+			if (leaves[index] == nullptr)
+			{
+				return false;
+			}
+			return leaves[index]->shouldMove(object, cachedFind);
+		}
+		bool found = false;
+		for (IPhysicsObject* o : objects)
+		{
+			if (object->getParent()->getEntityID() == o->getParent()->getEntityID())
+			{
+				return true;
+			}
+		}
+		(*cachedFind) = this;
+		return false;
+	}
+
 	void Octree::insert(IPhysicsObject* object)
 	{
 		if (leaves[0] != nullptr)
@@ -239,7 +275,7 @@ namespace ginkgo
 			}
 		}
 
-		objects.push_back(object);
+		objects.emplace_back(object);
 		
 		if (objects.size() > OCTREE_MAXENTS && level < OCTREE_MAXLEVELS)
 		{
@@ -275,7 +311,7 @@ namespace ginkgo
 
 		for (UINT32 a = 0; a < objects.size(); a++)
 		{
-			outObjects.push_back(objects[a]);
+			outObjects.emplace_back(objects[a]);
 		}
 	}
 
@@ -328,6 +364,7 @@ namespace ginkgo
 			if (objects[index]->getParent()->getEntityID() == ID)
 			{
 				thisTree = true;
+				break;
 			}
 		}
 
@@ -347,42 +384,7 @@ namespace ginkgo
 				if (leaves[a] != nullptr)
 				{
 					int ret = leaves[a]->remove(ID);
-					switch (ret)
-						{
-						case REMOVE_FOUNDNOTEMPTY:
-							return REMOVE_FOUNDBYCHILD;
-						case REMOVE_FOUNDEMPTY:
-						{
-							bool allEmpty = true;
-							for (int b = 0; b < 8; b++)
-							{
-								if (leaves[b] != nullptr)
-								{
-									if (!leaves[b]->empty())
-									{
-										allEmpty = false;
-									}
-								}
-							}
-							if (allEmpty)
-							{
-								return REMOVE_FOUNDEMPTY;
-							}
-							else
-							{
-								vector<IPhysicsObject*> leafEnts;
-								leaves[a]->getChildLeaves(leafEnts);
-								leaves[a]->clear();
-								for (UINT32 b = 0; b < leafEnts.size(); b++)
-								{
-									leaves[a]->insert(leafEnts[b]);
-								}
-							}
-							return REMOVE_FOUNDBYCHILD;
-						}
-						case REMOVE_FOUNDBYCHILD:
-							return REMOVE_FOUNDBYCHILD;
-					}
+					
 				}
 			}
 		}

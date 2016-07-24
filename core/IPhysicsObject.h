@@ -24,7 +24,7 @@ namespace ginkgo
 	class IPhysicsObject
 	{
 	public:
-		virtual void checkCollision(float deltaTime, IPhysicsObject* other) = 0;
+		virtual bool checkCollision(float deltaTime, IPhysicsObject* other) = 0;
 		
 		virtual void setMaterial(const Material& mat) = 0;
 		virtual void setMass(float mass) = 0;

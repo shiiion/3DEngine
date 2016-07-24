@@ -30,6 +30,8 @@ namespace ginkgo
 		int getIndex(IPhysicsObject* object) const;
 		int getIndex(Ray const& ray, float dist) const;
 		void insert(IPhysicsObject* object);
+		void reinsert(IEntity* entity);
+		bool shouldMove(IPhysicsObject* entity, Octree** cachedFind);
 		void retrieveCollisions(vector<IPhysicsObject*>& outList, IPhysicsObject* collider) const;
 		void retrieveCollisions(vector<IPhysicsObject*>& outList, Ray const& ray, float dist) const;
 		void resetTree(int level, Prism const& bounds);

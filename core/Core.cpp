@@ -59,11 +59,11 @@ namespace ginkgo
 		return (float)(GetTickCount64() - startTick) / 1000.f;
 	}
 
-	void Core::coreTick()
+	void Core::coreTick(float timeScale)
 	{
 		if (running)
 		{
-			float elapsedTime = 0.016f;//getEngineTime() - lastTickTime;
+			float elapsedTime = 0.016f * timeScale;//(getEngineTime() - lastTickTime) * timeScale;
 			lastTickTime = getEngineTime();
 
 			processInput();
@@ -85,15 +85,16 @@ namespace ginkgo
 
 		vector<IPhysicsObject*> physicsObjects;
 
-		for (IEntity* e : entityList)
+ 		for (IEntity* e : entityList)
 		{
 			e->beginTick(elapsedTime);
 			if (e->getEntityType() >= physicsObject)
 			{
 				physicsObjects.emplace_back(e->getPhysics());
 			}
+			world->updateOctreeIndex(e);
 		}
-		world->recalculateTree();
+		//world->recalculateTree();
 		world->preCollisionTest();
 
 		vector<IPhysicsObject*> colliders;
@@ -111,9 +112,12 @@ namespace ginkgo
 			for (IPhysicsObject* collider : colliders)
 			{
 				//OPTIMIZATION: check existing tests (even if there was no result)
-				if (collider->getParent()->getEntityID() != p->getParent()->getEntityID() && !world->collisionExists(p, collider))
+				if (collider->getParent()->getEntityID() != p->getParent()->getEntityID())
 				{
-					p->checkCollision(elapsedTime, collider);
+					if (!world->collisionExists(p, collider))
+					{
+						p->checkCollision(elapsedTime, collider);
+					}
 				}
 			}
 			colliders.clear();
@@ -178,9 +182,9 @@ namespace ginkgo
 		return Core::core.getWorld();
 	}
 
-	void tickCore()
+	void tickCore(float ts)
 	{
-		Core::core.coreTick();
+		Core::core.coreTick(ts);
 	}
 
 	void sleepTickTime()

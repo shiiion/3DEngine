@@ -39,7 +39,7 @@ namespace ginkgo
 			return inputSystemList;
 		}
 
-		void coreTick();
+		void coreTick(float timeScale);
 		void physicsTick(float elapsedTime);
 
 		void processInput();
@@ -67,7 +67,7 @@ namespace ginkgo
 	DECLSPEC_CORE void stopCore();
 	DECLSPEC_CORE IWorld* getWorld();
 
-	DECLSPEC_CORE void tickCore();
+	DECLSPEC_CORE void tickCore(float timeScale);
 
 	DECLSPEC_CORE void sleepTickTime();
 

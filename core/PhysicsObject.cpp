@@ -22,11 +22,11 @@ namespace ginkgo
 		collision->setOwner(this);
 	}
 
-	void PhysicsObject::checkCollision(float deltaTime, IPhysicsObject* other)
+	bool PhysicsObject::checkCollision(float deltaTime, IPhysicsObject* other)
 	{
 		if (collisionType == CTYPE_WORLDSTATIC)
 		{
-			return;
+			return false;
 		}
 		ICollisionMesh* otherCollision = other->getCollisionMesh();
 
@@ -35,7 +35,9 @@ namespace ginkgo
 		if (!collisionMesh->testCollision(*otherCollision, deltaTime, manifold))
 		{
 			getWorld()->addCollision(manifold, deltaTime);
+			return true;
 		}
+		return false;
 	}
 
 	void PhysicsObject::setFinalMove(MoveResult const& result)
@@ -159,7 +161,7 @@ namespace ginkgo
 	{
 		return finalMove;
 	}
-
+	
 	IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canGravity, bool canCollide)
 	{
 		return new PhysicsObject(parent, collision, collisionType, mass, mat, canGravity, canCollide);

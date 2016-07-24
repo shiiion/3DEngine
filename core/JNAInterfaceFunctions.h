@@ -13,5 +13,7 @@ namespace ginkgo
 
 	//0 = x, 1 = y, 2 = z
 	DECLSPEC_CORE float getAxis(IEntity* entity, int ind, int ind2);
+
+	DECLSPEC_CORE void setVel(IEntity* entity, float x, float y, float z);
 }
 #endif
