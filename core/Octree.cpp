@@ -1,19 +1,19 @@
 
 #include "Octree.h"
 #include "IPhysicsObject.h"
-#include "ICollisionMesh.h"
+#include "CollisionMesh.h"
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define max(a, b) ((a) < (b) ? (b) : (a))
 
 namespace ginkgo
 {
-	float getTop(ICollisionMesh const& mesh);
-	float getBot(ICollisionMesh const& mesh);
-	float getLeft(ICollisionMesh const& mesh);
-	float getRight(ICollisionMesh const& mesh);
-	float getFront(ICollisionMesh const& mesh);
-	float getBack(ICollisionMesh const& mesh);
+	float getTop(CollisionMesh const& mesh);
+	float getBot(CollisionMesh const& mesh);
+	float getLeft(CollisionMesh const& mesh);
+	float getRight(CollisionMesh const& mesh);
+	float getFront(CollisionMesh const& mesh);
+	float getBack(CollisionMesh const& mesh);
 
 
 	Octree::Octree(int level, Prism const& bounds, Octree* parent)
@@ -75,12 +75,21 @@ namespace ginkgo
 
 		ICollisionMesh* mesh = object->getCollisionMesh();
 
-		float top = getTop(*mesh);
-		float bot = getBot(*mesh);
-		float left = getLeft(*mesh);
-		float right = getRight(*mesh);
-		float front = getFront(*mesh);
-		float back = getBack(*mesh);
+		float top, bot, left, right, front, back;
+
+		if (mesh->getCollisionShape() == CMESH_SHAPE_OBB)
+		{
+			top = getTop(*(CollisionMesh*)mesh);
+			bot = getBot(*(CollisionMesh*)mesh);
+			left = getLeft(*(CollisionMesh*)mesh);
+			right = getRight(*(CollisionMesh*)mesh);
+			front = getFront(*(CollisionMesh*)mesh);
+			back = getBack(*(CollisionMesh*)mesh);
+		}
+		else
+		{
+			//IMPLEMENTME
+		}
 
 		bool topHalf = (bot > hfHeight);
 		bool botHalf = (top < hfHeight);
@@ -414,7 +423,7 @@ namespace ginkgo
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	//y+
-	float getTop(ICollisionMesh const& mesh)
+	float getTop(CollisionMesh const& mesh)
 	{
 		glm::vec3 const& xAxis = mesh.getAxis(0);
 		glm::vec3 const& yAxis = mesh.getAxis(1);
@@ -428,7 +437,7 @@ namespace ginkgo
 	}
 
 	//y-
-	float getBot(ICollisionMesh const& mesh)
+	float getBot(CollisionMesh const& mesh)
 	{
 		glm::vec3 const& xAxis = mesh.getAxis(0);
 		glm::vec3 const& yAxis = mesh.getAxis(1);
@@ -442,7 +451,7 @@ namespace ginkgo
 	}
 
 	//x-
-	float getLeft(ICollisionMesh const& mesh)
+	float getLeft(CollisionMesh const& mesh)
 	{
 		glm::vec3 const& xAxis = mesh.getAxis(0);
 		glm::vec3 const& yAxis = mesh.getAxis(1);
@@ -456,7 +465,7 @@ namespace ginkgo
 	}
 
 	//x+
-	float getRight(ICollisionMesh const& mesh)
+	float getRight(CollisionMesh const& mesh)
 	{
 		glm::vec3 const& xAxis = mesh.getAxis(0);
 		glm::vec3 const& yAxis = mesh.getAxis(1);
@@ -470,7 +479,7 @@ namespace ginkgo
 	}
 
 	//z+
-	float getFront(ICollisionMesh const& mesh)
+	float getFront(CollisionMesh const& mesh)
 	{
 		glm::vec3 const& xAxis = mesh.getAxis(0);
 		glm::vec3 const& yAxis = mesh.getAxis(1);
@@ -484,7 +493,7 @@ namespace ginkgo
 	}
 
 	//z-
-	float getBack(ICollisionMesh const& mesh)
+	float getBack(CollisionMesh const& mesh)
 	{
 		glm::vec3 const& xAxis = mesh.getAxis(0);
 		glm::vec3 const& yAxis = mesh.getAxis(1);

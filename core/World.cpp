@@ -162,35 +162,14 @@ namespace ginkgo
 
 		for (IPhysicsObject* collider : possibleCollisions)
 		{
-			SurfaceCollisionMesh surfaceMesh(collider->getCollisionMesh());
-			for (int a = 0; a < 6; a++)
+			if (collider->getCollisionMesh()->testRay(params, resultOut))
 			{
-				if (surfaceMesh.faces[a].intersectsWithSurface(ray, dist))
-				{
-					if (params.func != nullptr)
-					{
-						if (params.func(collider))
-						{
-							resultOut.didHit = true;
-							resultOut.firstCollision = collider;
-							resultOut.collisionDist = surfaceMesh.faces[a].getIntersectionValue(ray);
-							return;
-						}
-					}
-					else
-					{
-						resultOut.didHit = true;
-						resultOut.firstCollision = collider;
-						resultOut.collisionDist = surfaceMesh.faces[a].getIntersectionValue(ray);
-						return;
-					}
-				}
+				return;
 			}
 		}
 		resultOut.firstCollision = nullptr;
 		resultOut.didHit = false;
 		resultOut.collisionDist = -1;
-		return;
 	}
 
 

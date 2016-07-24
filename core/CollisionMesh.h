@@ -54,48 +54,51 @@ namespace ginkgo
 
 		MoveInfo lastMove;
 
-		void getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut);
-		void this_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void other_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A0xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A0xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A0xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A1xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A1xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A1xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A2xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A2xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
-		void A2xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut);
+		void getLastSeparatingAxis(CollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut);
+		void this_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void other_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A0xB0_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A0xB1_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A0xB2_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A1xB0_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A1xB1_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A1xB2_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A2xB0_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A2xB1_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
+		void A2xB2_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
 
 	public:
 		CollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);
-		virtual glm::vec3 const* getBoundingVertices() const override;
-		virtual MoveInfo const& getLastMove() const override;
-		virtual void generateVertexPath(float deltaTime) override;
+		MoveInfo const& getLastMove() const override;
+		void generateVertexPath(float deltaTime) override;
 
 		virtual void setOwner(IPhysicsObject* owner) override;
 
-		virtual bool testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut) override;
-		virtual float getCollisionTime(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const override;
-		virtual bool testCollisionStationary(ICollisionMesh const& other, CollisionStationary& collisionOut) override;
+		bool testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut) override;
+		bool testCollisionStationary(ICollisionMesh const& other, CollisionStationary& collisionOut) override;
+		bool testRay(RaytraceParams& params, RaytraceResult& resultOut) const override;
 
-		virtual glm::vec3 const& getAxis(int axis) const override;
+		glm::vec3 const& getAxis(int axis) const;
+		float getExtent(int extent) const;
 
-		virtual float getExtent(int extent) const override;
-
-		virtual void generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut) override;
+		void generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut) override;
 		//TRUE if not intersecting, FALSE if intersecting
-		bool testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const;
-		bool testAxisStationary(glm::vec3 const& axisNorm, ICollisionMesh const& other) const;
+		bool testAxis(glm::vec3 const& axisNorm, CollisionMesh const& other, float deltaTime) const;
+		bool testAxisStationary(glm::vec3 const& axisNorm, CollisionMesh const& other) const;
+		float getCollisionTime(glm::vec3 const& axisNorm, CollisionMesh const& other, float deltaTime) const;
 		float getAxisOverlap(glm::vec3 const& axisNorm, ICollisionMesh const& other) const override;
 
 		virtual IPhysicsObject* getOwner() const override;
-
 
 		void setCachedCenter(glm::vec3 const& center) override;
 		glm::vec3 const& getCachedCenter() const override;
 
 		void setCachedVelocity(glm::vec3 const& vel) override;
 		glm::vec3 const& getCachedVelocity() const override;
+
+		int getCollisionShape() const override
+		{
+			return CMESH_SHAPE_OBB;
+		}
 	};
 }

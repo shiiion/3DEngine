@@ -2,7 +2,7 @@
 
 #include "CoreReource.h"
 #include "Surface.h"
-#include "ICollisionMesh.h"
+#include "CollisionMesh.h"
 
 //	collision mesh represented by 6 surfaces
 
@@ -10,7 +10,7 @@ namespace ginkgo
 {
 	struct SurfaceCollisionMesh
 	{
-		SurfaceCollisionMesh(ICollisionMesh* mesh)
+		SurfaceCollisionMesh(CollisionMesh const* mesh)
 			: mesh(mesh)
 		{
 			createSurfacesFromMesh();
@@ -19,7 +19,7 @@ namespace ginkgo
 		void createSurfacesFromMesh();
 
 		Surface faces[6];
-		ICollisionMesh* mesh;
+		CollisionMesh const* mesh;
 	};
 
 	

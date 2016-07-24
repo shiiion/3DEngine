@@ -6,6 +6,7 @@
 #include "ICollisionMesh.h"
 #include "IPhysicsObject.h"
 #include <glm/gtx/rotate_vector.hpp>
+#include "CollisionMesh.h"
 
 namespace ginkgo
 {
@@ -52,13 +53,13 @@ namespace ginkgo
 		switch (ind)
 		{
 		case 0:
-			axis = entity->getPhysics()->getCollisionMesh()->getAxis(0) * entity->getPhysics()->getCollisionMesh()->getExtent(0);
+			axis = ((CollisionMesh*)entity->getPhysics()->getCollisionMesh())->getAxis(0) * ((CollisionMesh*)entity->getPhysics()->getCollisionMesh())->getExtent(0);
 			break;
 		case 1:
-			axis = entity->getPhysics()->getCollisionMesh()->getAxis(1) * entity->getPhysics()->getCollisionMesh()->getExtent(1);
+			axis = ((CollisionMesh*)entity->getPhysics()->getCollisionMesh())->getAxis(1) * ((CollisionMesh*)entity->getPhysics()->getCollisionMesh())->getExtent(1);
 			break;
 		case 2:
-			axis = entity->getPhysics()->getCollisionMesh()->getAxis(2) * entity->getPhysics()->getCollisionMesh()->getExtent(2);
+			axis = ((CollisionMesh*)entity->getPhysics()->getCollisionMesh())->getAxis(2) * ((CollisionMesh*)entity->getPhysics()->getCollisionMesh())->getExtent(2);
 			break;
 		default:
 			return 0;

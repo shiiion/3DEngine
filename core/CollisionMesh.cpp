@@ -4,6 +4,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include "Core.h"
 #include "IWorld.h"
+#include "SurfaceCollisionMesh.h"
 
 namespace ginkgo
 {
@@ -17,11 +18,6 @@ namespace ginkgo
 		axes[0] = wAxis;
 		axes[1] = hAxis;
 		axes[2] = lAxis;
-	}
-
-	glm::vec3 const* CollisionMesh::getBoundingVertices() const
-	{
-		return nullptr;
 	}
 
 	MoveInfo const& CollisionMesh::getLastMove() const
@@ -51,30 +47,34 @@ namespace ginkgo
 		cachedVel = owner->getParent()->getVelocity();
 	}
 
-	bool CollisionMesh::testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut)
+	bool CollisionMesh::testCollision(ICollisionMesh const& o, float deltaTime, CollisionInfo& collisionOut)
 	{
 		//15 tests
-
-		for (int a = 0; a < 3; a++)
+		if (o.getCollisionShape() == CMESH_SHAPE_OBB)
 		{
-			if (testAxis(axes[a], other, deltaTime) || testAxis(other.getAxis(a), other, deltaTime))
+			CollisionMesh const& other = (CollisionMesh const&)o;
+			for (int a = 0; a < 3; a++)
 			{
-				return true;
-			}
-			for (int b = 0; b < 3; b++)
-			{
-				if(testAxis(glm::normalize(glm::cross(axes[a], other.getAxis(b))), other, deltaTime))
+				if (testAxis(axes[a], other, deltaTime) || testAxis(other.getAxis(a), other, deltaTime))
 				{
 					return true;
 				}
+				for (int b = 0; b < 3; b++)
+				{
+					if (testAxis(glm::normalize(glm::cross(axes[a], other.getAxis(b))), other, deltaTime))
+					{
+						return true;
+					}
+				}
 			}
+			getLastSeparatingAxis(other, deltaTime, collisionOut);
+			generateCollisionInfo(other, collisionOut);
+			return false;
 		}
-		getLastSeparatingAxis(other, deltaTime, collisionOut);
-		generateCollisionInfo(other, collisionOut);
 		return false;
 	}
 
-	void CollisionMesh::getLastSeparatingAxis(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut)
+	void CollisionMesh::getLastSeparatingAxis(CollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut)
 	{
 		float longestTime = getCollisionTime(axes[0], other, deltaTime);
 		float ct;
@@ -146,29 +146,33 @@ namespace ginkgo
 		collisionOut.collisionTime = longestTime;
 	}
 
-	bool CollisionMesh::testCollisionStationary(ICollisionMesh const& other, CollisionStationary& collisionOut)
+	bool CollisionMesh::testCollisionStationary(ICollisionMesh const& o, CollisionStationary& collisionOut)
 	{
-		for (int a = 0; a < 3; a++)
+		if (o.getCollisionShape() == CMESH_SHAPE_OBB)
 		{
-			if (testAxisStationary(axes[a], other) || testAxisStationary(other.getAxis(a), other))
+			CollisionMesh const& other = (CollisionMesh const&)o;
+			for (int a = 0; a < 3; a++)
 			{
-				return true;
-			}
-			for (int b = 0; b < 3; b++)
-			{
-				if (testAxisStationary(glm::normalize(glm::cross(axes[a], other.getAxis(b))), other))
+				if (testAxisStationary(axes[a], other) || testAxisStationary(other.getAxis(a), other))
 				{
 					return true;
 				}
+				for (int b = 0; b < 3; b++)
+				{
+					if (testAxisStationary(glm::normalize(glm::cross(axes[a], other.getAxis(b))), other))
+					{
+						return true;
+					}
+				}
 			}
+
+			collisionOut.overlapDist = getAxisOverlap(collisionOut.normal, other);
+			return false;
 		}
-
-		collisionOut.overlapDist = getAxisOverlap(collisionOut.normal, other);
-
 		return false;
 	}
 
-	bool CollisionMesh::testAxisStationary(glm::vec3 const& axisNorm, ICollisionMesh const& other) const
+	bool CollisionMesh::testAxisStationary(glm::vec3 const& axisNorm, CollisionMesh const& other) const
 	{
 		glm::vec3 centerDiff = (other.getCachedCenter() - cachedCenter);
 		float proj = glm::dot(axisNorm, centerDiff);
@@ -196,24 +200,29 @@ namespace ginkgo
 		return false;
 	}
 
-	float CollisionMesh::getAxisOverlap(glm::vec3 const& axisNorm, ICollisionMesh const& other) const
+	float CollisionMesh::getAxisOverlap(glm::vec3 const& axisNorm, ICollisionMesh const& o) const
 	{
-		glm::vec3 centerDiff = (other.getCachedCenter() - cachedCenter);
-		float proj = glm::dot(axisNorm, centerDiff);
+		if (o.getCollisionShape() == CMESH_SHAPE_OBB)
+		{
+			CollisionMesh const& other = (CollisionMesh const&)o;
+			glm::vec3 centerDiff = (other.getCachedCenter() - cachedCenter);
+			float proj = glm::dot(axisNorm, centerDiff);
 
-		float projThisBox;
-		float projOtherBox;
-		float otherW = other.getExtent(0), otherL = other.getExtent(2), otherH = other.getExtent(1);
+			float projThisBox;
+			float projOtherBox;
+			float otherW = other.getExtent(0), otherL = other.getExtent(2), otherH = other.getExtent(1);
 
-		projThisBox = (extents[0] * glm::sign(glm::dot(axisNorm, axes[0])) * glm::dot(axisNorm, axes[0])) +
-			(extents[1] * glm::sign(glm::dot(axisNorm, axes[1])) * glm::dot(axisNorm, axes[1])) +
-			(extents[2] * glm::sign(glm::dot(axisNorm, axes[2])) * glm::dot(axisNorm, axes[2]));
-		projOtherBox = (otherW * glm::sign(glm::dot(axisNorm, other.getAxis(0))) * glm::dot(axisNorm, other.getAxis(0))) +
-			(otherH * glm::sign(glm::dot(axisNorm, other.getAxis(1))) * glm::dot(axisNorm, other.getAxis(1))) +
-			(otherL * glm::sign(glm::dot(axisNorm, other.getAxis(2))) * glm::dot(axisNorm, other.getAxis(2)));
-		float r = projThisBox + projOtherBox;
+			projThisBox = (extents[0] * glm::sign(glm::dot(axisNorm, axes[0])) * glm::dot(axisNorm, axes[0])) +
+				(extents[1] * glm::sign(glm::dot(axisNorm, axes[1])) * glm::dot(axisNorm, axes[1])) +
+				(extents[2] * glm::sign(glm::dot(axisNorm, axes[2])) * glm::dot(axisNorm, axes[2]));
+			projOtherBox = (otherW * glm::sign(glm::dot(axisNorm, other.getAxis(0))) * glm::dot(axisNorm, other.getAxis(0))) +
+				(otherH * glm::sign(glm::dot(axisNorm, other.getAxis(1))) * glm::dot(axisNorm, other.getAxis(1))) +
+				(otherL * glm::sign(glm::dot(axisNorm, other.getAxis(2))) * glm::dot(axisNorm, other.getAxis(2)));
+			float r = projThisBox + projOtherBox;
 
-		return r - glm::abs(proj);
+			return r - glm::abs(proj);
+		}
+		return 0;
 	}
 
 //	implementation based off of http://www.geometrictools.com/Documentation/DynamicCollisionDetection.pdf
@@ -222,7 +231,7 @@ namespace ginkgo
 //	Ai = axes of this
 //	Bi = axes of other
 
-	bool CollisionMesh::testAxis(glm::vec3 const& axisNorm, ICollisionMesh const& other, float deltaTime) const
+	bool CollisionMesh::testAxis(glm::vec3 const& axisNorm, CollisionMesh const& other, float deltaTime) const
 	{
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart);
 		glm::vec3 velDiff = (other.getLastMove().velStart - lastMove.velStart);
@@ -258,7 +267,7 @@ namespace ginkgo
 		return false;
 	}
 
-	float CollisionMesh::getCollisionTime(const glm::vec3& axisNorm, const ICollisionMesh& other, float deltaTime) const
+	float CollisionMesh::getCollisionTime(const glm::vec3& axisNorm, const CollisionMesh& other, float deltaTime) const
 	{
 
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart);
@@ -318,7 +327,7 @@ namespace ginkgo
 		return extents[extent];
 	}
 
-	void CollisionMesh::this_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::this_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 #define CIJ(i, j) (glm::dot(axes[i], other.getAxis(j)))
 		int index = 0;
@@ -399,7 +408,7 @@ namespace ginkgo
 #undef CIJ
 	}
 
-	void CollisionMesh::other_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::other_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 #define CJI(j, i) (glm::dot(axes[j], other.getAxis(i)))
 		int index = 0;
@@ -483,7 +492,7 @@ namespace ginkgo
 #pragma region xproduct info generation
 #define CIJ(i, j) (glm::dot(axes[i], other.getAxis(j)))
 
-	void CollisionMesh::A0xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::A0xB0_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -502,7 +511,7 @@ namespace ginkgo
 		collisionOut.intersectionPoint = ((x0 * axes[0]) + (x1 * axes[1]) + (x2 * axes[2])) + CAI;
 	}
 
-	void CollisionMesh::A0xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::A0xB1_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -521,7 +530,7 @@ namespace ginkgo
 		collisionOut.intersectionPoint = ((x0 * axes[0]) + (x1 * axes[1]) + (x2 * axes[2])) + CAI;
 	}
 
-	void CollisionMesh::A0xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut) 
+	void CollisionMesh::A0xB2_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut) 
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -540,7 +549,7 @@ namespace ginkgo
 		collisionOut.intersectionPoint = ((x0 * axes[0]) + (x1 * axes[1]) + (x2 * axes[2])) + CAI;
 	}
 
-	void CollisionMesh::A1xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::A1xB0_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -559,7 +568,7 @@ namespace ginkgo
 		collisionOut.intersectionPoint = ((x0 * axes[0]) + (x1 * axes[1]) + (x2 * axes[2])) + CAI;
 	}
 
-	void CollisionMesh::A1xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::A1xB1_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -578,7 +587,7 @@ namespace ginkgo
 		collisionOut.intersectionPoint = ((x0 * axes[0]) + (x1 * axes[1]) + (x2 * axes[2])) + CAI;
 	}
 
-	void CollisionMesh::A1xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::A1xB2_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -597,7 +606,7 @@ namespace ginkgo
 		collisionOut.intersectionPoint = ((x0 * axes[0]) + (x1 * axes[1]) + (x2 * axes[2])) + CAI;
 	}
 
-	void CollisionMesh::A2xB0_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::A2xB0_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -616,7 +625,7 @@ namespace ginkgo
 		collisionOut.intersectionPoint = ((x0 * axes[0]) + (x1 * axes[1]) + (x2 * axes[2])) + CAI;
 	}
 
-	void CollisionMesh::A2xB1_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::A2xB1_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -635,7 +644,7 @@ namespace ginkgo
 		collisionOut.intersectionPoint = ((x0 * axes[0]) + (x1 * axes[1]) + (x2 * axes[2])) + CAI;
 	}
 
-	void CollisionMesh::A2xB2_lastSeparatingAxis(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::A2xB2_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut)
 	{
 		glm::vec3 CAI = (lastMove.centerStart + (lastMove.velStart * collisionOut.collisionTime));
 		glm::vec3 centerDiff = (other.getLastMove().centerStart - lastMove.centerStart) + (other.getLastMove().velStart - lastMove.velStart) * collisionOut.collisionTime;
@@ -656,49 +665,53 @@ namespace ginkgo
 #undef CIJ
 #pragma endregion
 
-	void CollisionMesh::generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut)
+	void CollisionMesh::generateCollisionInfo(ICollisionMesh const& o, CollisionInfo& collisionOut)
 	{
-		switch (collisionOut.lastSeparatingAxisType)
+		if (o.getCollisionShape() == CMESH_SHAPE_OBB)
 		{
-		//FACE V ?
-		//? V FACE
-		case AXIS_THIS_1:
-		case AXIS_THIS_2:
-		case AXIS_THIS_3:
-			this_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_OTHER_1:
-		case AXIS_OTHER_2:
-		case AXIS_OTHER_3:
-			other_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_1X1:
-			A0xB0_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_1X2:
-			A0xB1_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_1X3:
-			A0xB2_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_2X1:
-			A1xB0_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_2X2:
-			A1xB1_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_2X3:
-			A1xB2_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_3X1:
-			A2xB0_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_3X2:
-			A2xB1_lastSeparatingAxis(other, collisionOut);
-			break;
-		case AXIS_3X3:
-			A2xB2_lastSeparatingAxis(other, collisionOut);
-			break;
+			CollisionMesh const& other = (CollisionMesh const&)o;
+			switch (collisionOut.lastSeparatingAxisType)
+			{
+				//FACE V ?
+				//? V FACE
+			case AXIS_THIS_1:
+			case AXIS_THIS_2:
+			case AXIS_THIS_3:
+				this_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_OTHER_1:
+			case AXIS_OTHER_2:
+			case AXIS_OTHER_3:
+				other_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_1X1:
+				A0xB0_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_1X2:
+				A0xB1_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_1X3:
+				A0xB2_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_2X1:
+				A1xB0_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_2X2:
+				A1xB1_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_2X3:
+				A1xB2_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_3X1:
+				A2xB0_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_3X2:
+				A2xB1_lastSeparatingAxis(other, collisionOut);
+				break;
+			case AXIS_3X3:
+				A2xB2_lastSeparatingAxis(other, collisionOut);
+				break;
+			}
 		}
 	}
 
@@ -730,5 +743,34 @@ namespace ginkgo
 	ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis)
 	{
 		return new CollisionMesh(w, h, l, wAxis, hAxis, lAxis);
+	}
+
+	bool CollisionMesh::testRay(RaytraceParams& params, RaytraceResult& resultOut) const
+	{
+		SurfaceCollisionMesh surfaceMesh(this);
+		for (int a = 0; a < 6; a++)
+		{
+			if (surfaceMesh.faces[a].intersectsWithSurface(resultOut.ray, resultOut.rayDist))
+			{
+				if (params.func != nullptr)
+				{
+					if (params.func(getOwner()))
+					{
+						resultOut.didHit = true;
+						resultOut.firstCollision = getOwner();
+						resultOut.collisionDist = surfaceMesh.faces[a].getIntersectionValue(resultOut.ray);
+						return true;
+					}
+				}
+				else
+				{
+					resultOut.didHit = true;
+					resultOut.firstCollision = getOwner();
+					resultOut.collisionDist = surfaceMesh.faces[a].getIntersectionValue(resultOut.ray);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

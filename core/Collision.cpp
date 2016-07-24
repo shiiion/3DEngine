@@ -17,12 +17,7 @@ namespace ginkgo
 	void Collision::applyFriction()
 	{
 		float COF = glm::min(manifold.thisMesh->getOwner()->getMaterial().friction, manifold.otherMesh->getOwner()->getMaterial().friction);
-		if (manifold.otherMesh->getExtent(0) == 1)
-		{
-			int a = 0;
-		}
-
-
+		
 		glm::vec3 normal = glm::normalize(manifold.normal);
 		glm::vec3 invNormal = -normal;
 
