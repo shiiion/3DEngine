@@ -67,19 +67,20 @@ namespace ginkgo
 	{
 		if (physicsComponent != nullptr)
 		{
-			if (physicsComponent->getCollisionType() == CTYPE_WORLDSTATIC)
-			{
-				return;
-			}
+			//THE COST OF PREMATURE OPTIMIZATION IS EXPENSIVE
+			//if (physicsComponent->getCollisionType() == CTYPE_WORLDSTATIC)
+			//{
+			//	return;
+			//}
 			physicsComponent->onTick(elapsedTime);
 		}
 		position += velocity * elapsedTime;
-		velocity += acceleration * elapsedTime + getWorld()->getGravity() * elapsedTime;
+		velocity += acceleration * elapsedTime;
 	}
 
 	void Entity::endTick(float elapsedTime)
 	{
-		if (physicsComponent != nullptr)
+		if (physicsComponent != nullptr && physicsComponent->getCollisionType() != CTYPE_WORLDSTATIC)
 		{
 			position = physicsComponent->getMoveResult().finalPos;
 			velocity = physicsComponent->getMoveResult().finalVel;

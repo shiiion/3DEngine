@@ -22,6 +22,7 @@ namespace ginkgo
 		virtual void setPosition(const glm::vec3& pos) = 0;
 		virtual void setVelocity(const glm::vec3& vel) = 0;
 		virtual void setAcceleration(const glm::vec3& acc) = 0;
+		virtual void addAcceleration(const glm::vec3& acc) = 0;
 		virtual void setRotation(const glm::vec3& ang) = 0;
 		virtual void setEntityID(long ID) = 0;
 

@@ -34,6 +34,7 @@ namespace ginkgo
 		void setPosition(const glm::vec3& pos) override;
 		void setVelocity(const glm::vec3& vel) override;
 		void setAcceleration(const glm::vec3& acc) override;
+		void addAcceleration(const glm::vec3& acc) override { acceleration += acc; }
 		void setRotation(const glm::vec3& ang) override;
 		void setEntityID(long ID) override;
 		void setRenderable(IRenderable* component) override;

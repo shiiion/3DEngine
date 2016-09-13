@@ -17,6 +17,10 @@ namespace ginkgo
 		collisionMesh = collision;
 		this->canCollide = canCollide;
 		this->canGravity = canGravity;
+		if (canGravity && collisionType == CTYPE_WORLDDYNAMIC)
+		{
+			parent->addAcceleration(getWorld()->getGravity());
+		}
 		collisionState = CSTATE_NOCOLLISION;
 		this->collisionType = collisionType;
 		collision->setOwner(this);
@@ -144,10 +148,11 @@ namespace ginkgo
 
 	void PhysicsObject::onTick(float elapsedTime)
 	{
-		if (collisionType == CTYPE_WORLDSTATIC)
+		//THE COST OF PREMATURE OPTIMIZATION IS EXPENSIVE
+		/*if (collisionType == CTYPE_WORLDSTATIC)
 		{
 			return;
-		}
+		}*/
 		collisionMesh->generateVertexPath(elapsedTime);
 		finalMove = MoveResult(collisionMesh->getLastMove().centerEnd, collisionMesh->getLastMove().velEnd);
 	}
