@@ -80,7 +80,7 @@ namespace ginkgo
 
 	void Entity::endTick(float elapsedTime)
 	{
-		if (physicsComponent != nullptr && physicsComponent->getCollisionType() != CTYPE_WORLDSTATIC)
+		if (physicsComponent != nullptr)
 		{
 			position = physicsComponent->getMoveResult().finalPos;
 			velocity = physicsComponent->getMoveResult().finalVel;
