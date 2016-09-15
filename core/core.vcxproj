@@ -169,7 +169,9 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="InputWrapper.h" />
     <ClInclude Include="JNAInterfaceFunctions.h" />
+    <ClInclude Include="MovementStateCallbackManager.h" />
     <ClInclude Include="Octree.h" />
+    <ClInclude Include="RegisteredMovementState.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="ICollisionMesh.h" />
     <ClInclude Include="IEntity.h" />
@@ -190,6 +192,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="InputWrapper.cpp" />
     <ClCompile Include="JNAInterfaceFunctions.cpp" />
+    <ClCompile Include="MovementStateCallbackManager.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Surface.cpp" />
