@@ -46,10 +46,12 @@ namespace ginkgo {
 	void MovementStateCallbackManager::CheckMovementStates(const std::vector<IEntity*>& entities)
 	{
 		for (IEntity* entity : entities) {
-			for (std::vector<int>::size_type i = 0; i < entity->getAllowedMovementStates().size(); ++i) {
+			ICharacter* character = dynamic_cast<ICharacter*>(entity);
+			if (character == nullptr) continue;
+			for (std::vector<int>::size_type i = 0; i < character->getMovementStates().size(); ++i) {
 				const RegisteredMovementState& state = this->states.at(i);
-				if (state.CheckMovementState(*entity)) {
-					entity->setMovementState(i);
+				if (state.CheckMovementState(*character)) {
+					character->setMovementState(i);
 					break;
 				}
 			}
@@ -59,7 +61,9 @@ namespace ginkgo {
 	void MovementStateCallbackManager::DoCallbacks(const std::vector<IEntity*>& entities)
 	{
 		for (IEntity* entity : entities) {
-			this->states.at(entity->getMovementState()).OnMovementState(*entity); //masking?
+			ICharacter* character = dynamic_cast<ICharacter*>(entity);
+			if (character == nullptr) continue;
+			this->states.at(character->getMovementState()).OnMovementState(*character); //masking?
 		}
 	}
 

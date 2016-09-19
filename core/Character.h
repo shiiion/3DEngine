@@ -36,6 +36,7 @@ namespace ginkgo
 		const glm::vec3& getRotation() const override { return rotation; }
 
 		long getEntityID() const override { return entityID; }
+		int getMovementState() const override { return this->movementState; }
 
 		IRenderable* getRenderable() const override { return renderableComponent; }
 		IPhysicsObject* getPhysics() const override { return physicsComponent; }
@@ -43,8 +44,10 @@ namespace ginkgo
 		void setPosition(const glm::vec3& pos) override { position = pos; }
 		void setVelocity(const glm::vec3& vel) override { velocity = vel; }
 		void setAcceleration(const glm::vec3& acc) override { acceleration = acc; }
+		void addAcceleration(const glm::vec3& acc) override { acceleration += acc; }
 		void setRotation(const glm::vec3& ang) override { rotation = ang; }
 		void setEntityID(long ID) override { entityID = ID; }
+		void setMovementState(int newState) override { this->movementState = newState;  }
 		void setRenderable(IRenderable* component) override { renderableComponent = component; }
 		void setPhysics(IPhysicsObject* component) override { physicsComponent = component; }
 

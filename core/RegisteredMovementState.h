@@ -3,7 +3,7 @@
 #include <string>
 #include <functional>
 
-#include "IEntity.h"
+#include "ICharacter.h"
 
 namespace ginkgo {
 	struct RegisteredMovementState {
@@ -15,8 +15,8 @@ namespace ginkgo {
 		}
 
 		std::wstring name;
-		std::function<bool(const IEntity&)> CheckMovementState;
-		std::function<void(IEntity&)> OnMovementState;
+		std::function<bool(const ICharacter&)> CheckMovementState;
+		std::function<void(ICharacter&)> OnMovementState;
 	};
 
 	static const RegisteredMovementState NullMovementState(L"NullMovementState", [](const IEntity&) {return false; }, [](const IEntity&) {return; });
