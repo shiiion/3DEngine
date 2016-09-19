@@ -74,6 +74,7 @@ namespace ginkgo
 			physicsComponent->onTick(elapsedTime);
 		}
 		position += velocity * elapsedTime;
+		//TODO: get rid of getGravity()
 		velocity += acceleration * elapsedTime + getWorld()->getGravity() * elapsedTime;
 	}
 

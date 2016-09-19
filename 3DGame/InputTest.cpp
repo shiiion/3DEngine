@@ -16,7 +16,7 @@
 //	glfwShowWindow(window);
 //
 //	ginkgo::IAbstractInputSystem* is = ginkgo::createUserInputSystem();
-//	is->addControl(GLFW_KEY_Z, 0, testFunc);
+//	is->addControl(GLFW_KEY_Z, 0, tesunc);
 //
 //	ginkgo::registerInputSystem(is, nullptr);
 //

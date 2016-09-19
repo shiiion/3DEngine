@@ -160,6 +160,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Character.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="IAbstractInputSystem.h" />
     <ClInclude Include="ICharacter.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionMesh.cpp" />
     <ClCompile Include="Core.cpp" />
