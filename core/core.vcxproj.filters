@@ -140,11 +140,10 @@
     <ClCompile Include="InputWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="MovementStateCallbackManager.cpp">
-=======
+	  <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Character.cpp">
->>>>>>> single_thread
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
