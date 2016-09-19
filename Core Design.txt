@@ -34,7 +34,7 @@ COLLISION HANDLING DESIGN:
 
 	movementMode/customMovementMode design:
 		ignored if the object is static
-		each movementMode has a corresponding movementMode tick callback and movement correction callback
+		each movementMode has a corresponding movementMode tick callback and check callback
 			custom movement modes can be registered using instance of IWorld class. once registered, any nonstatic object can use that movement mode
 		walking:
 			check if walking state should be placed on object each tick by tracing a ray from the lowest outer points of the mesh

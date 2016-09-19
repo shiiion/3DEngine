@@ -87,6 +87,8 @@ namespace ginkgo
 
  		for (IEntity* e : entityList)
 		{
+			//do world movement thing here
+			//world->function(); -- callback(characterInstance, elapsedTime);
 			e->beginTick(elapsedTime);
 			if (e->getEntityType() >= physicsObject)
 			{
@@ -122,6 +124,10 @@ namespace ginkgo
 			}
 			colliders.clear();
 		}
+
+		//update all characters' movement states
+		//world->otherfunction() -- for(all available movement states) if(callback(characterInstance)) change characterInstance's movementState
+		//if all callbacks fail, default to 0 (freemove)
 
 		world->resolveCollisions(16);
 

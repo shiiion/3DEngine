@@ -46,6 +46,6 @@ namespace ginkgo
 		void setRenderable(IRenderable* component) override;
 		void setPhysics(IPhysicsObject* component) override;
 
-		virtual EntityType getEntityType() const override;
+		EntityType getEntityType() const override;
 	};
 }

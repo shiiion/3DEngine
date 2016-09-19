@@ -94,6 +94,9 @@
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="MovementStateCallbackManager.h">
+	  <Filter>Header Files\Implementations</Filter>
+	</ClInclude>
+    <ClInclude Include="Character.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
   </ItemGroup>
@@ -137,7 +140,11 @@
     <ClCompile Include="InputWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="MovementStateCallbackManager.cpp">
+=======
+    <ClCompile Include="Character.cpp">
+>>>>>>> single_thread
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
