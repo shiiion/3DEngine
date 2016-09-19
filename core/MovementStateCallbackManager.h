@@ -16,11 +16,13 @@ namespace ginkgo {
 	public:
 		MovementStateCallbackManager();
 		~MovementStateCallbackManager();
-		void RegisterMovementState(const RegisteredMovementState& state);
+		int RegisterMovementState(const RegisteredMovementState& state);
 		int GetMovementStateID(const std::wstring& state_name) const;
-		std::wstring GetMovementStateName(int ID) const;
+		RegisteredMovementState& GetMovementState(int ID);
+		const RegisteredMovementState& GetMovementState(int ID) const;
 		void CheckMovementStates(const std::vector<IEntity*>& entities);
 		void DoCallbacks(const std::vector<IEntity*>& entities);
+		std::vector<RegisteredMovementState> GetRegisteredMovementStates() const;
 
 
 	private:

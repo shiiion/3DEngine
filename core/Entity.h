@@ -7,6 +7,8 @@ namespace ginkgo
 	{
 	private:
 		long entityID;
+		int movementState;
+		std::vector<int> allowedMovementStates;
 
 	protected:
 		glm::vec3 position;
@@ -28,6 +30,9 @@ namespace ginkgo
 		const glm::vec3& getAcceleration() const override;
 		const glm::vec3& getRotation() const override;
 		long getEntityID() const override;
+		int getMovementState() const override;
+		std::vector<int>& getAllowedMovementStates() override;
+		const std::vector<int>& getAllowedMovementStates() const override;
 		IRenderable* getRenderable() const override;
 		IPhysicsObject* getPhysics() const override;
 
@@ -37,6 +42,7 @@ namespace ginkgo
 		void addAcceleration(const glm::vec3& acc) override { acceleration += acc; }
 		void setRotation(const glm::vec3& ang) override;
 		void setEntityID(long ID) override;
+		void setMovementState(int ID) override;
 		void setRenderable(IRenderable* component) override;
 		void setPhysics(IPhysicsObject* component) override;
 

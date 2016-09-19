@@ -7,7 +7,7 @@
 
 namespace ginkgo 
 {
-	Entity::Entity(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	Entity::Entity(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel) : allowedMovementStates({1,2})
 	{
 		position = pos;
 		rotation = rot;
@@ -15,6 +15,7 @@ namespace ginkgo
 		acceleration = accel;
 
 		entityID = Core::generateID();
+		movementState = 0;
 		renderableComponent = nullptr;
 	}
 
@@ -63,6 +64,11 @@ namespace ginkgo
 		entityID = ID;
 	}
 
+	void Entity::setMovementState(int state)
+	{
+		this->movementState = state;
+	}
+
 	void Entity::beginTick(float elapsedTime)
 	{
 		if (physicsComponent != nullptr)
@@ -90,6 +96,21 @@ namespace ginkgo
 	long Entity::getEntityID() const
 	{
 		return entityID;
+	}
+
+	int Entity::getMovementState() const
+	{
+		return this->movementState;
+	}
+
+	std::vector<int>& Entity::getAllowedMovementStates()
+	{
+		return this->allowedMovementStates;
+	}
+
+	const std::vector<int>& Entity::getAllowedMovementStates() const
+	{
+		return this->allowedMovementStates;
 	}
 
 	EntityType Entity::getEntityType() const
