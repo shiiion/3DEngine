@@ -4,10 +4,10 @@
 namespace ginkgo {
 	MovementStateCallbackManager::MovementStateCallbackManager()
 	{
-		RegisteredMovementState fallingState = NullMovementState;
+		RegisteredMovementState fallingState = RegisteredMovementState::GetNullMovementState();
 		fallingState.name = "FallingMovementState";
 		this->RegisterMovementState(fallingState);
-		RegisteredMovementState walkingState = NullMovementState;
+		RegisteredMovementState walkingState = RegisteredMovementState::GetNullMovementState();
 		walkingState.name = "WalkingMovementState";
 		this->RegisterMovementState(walkingState);
 	}
@@ -49,6 +49,7 @@ namespace ginkgo {
 			ICharacter* character = dynamic_cast<ICharacter*>(entity);
 			if (character == nullptr) continue;
 			//TODO: ignore world static objects
+			character->setMovementState(0);
 			for (std::vector<int>::size_type i = 0; i < character->getMovementStates().size(); ++i) {
 				const RegisteredMovementState& state = this->states.at(i);
 				if (state.CheckMovementState(*character)) {

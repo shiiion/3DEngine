@@ -155,9 +155,12 @@ namespace ginkgo
 		std::string name;
 		CheckIfMovementState CheckMovementState;
 		DoOnMovementState OnMovementState;
-	};
 
-	static const RegisteredMovementState NullMovementState("NullMovementState", [](const ICharacter&) {return false; }, [](const ICharacter&) {return; });
+		static RegisteredMovementState GetNullMovementState()
+		{
+			return RegisteredMovementState("NullMovementState", [](const ICharacter&) {return false; }, [](const ICharacter&) {return; });
+		}
+	};
 
 	struct Prism
 	{
