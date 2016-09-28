@@ -4,6 +4,7 @@
 
 #ifdef COMP_DLL_CORE
 #include "World.h"
+#include "MovementStateCallbackManager.h"
 #endif
 
 struct GLFWwindow;
@@ -27,6 +28,8 @@ namespace ginkgo
 		World* world;
 
 		float lastTickTime;
+
+		MovementStateCallbackManager manager;
 
 		vector<IAbstractInputSystem*> inputSystemList;
 
@@ -73,6 +76,9 @@ namespace ginkgo
 
 	DECLSPEC_CORE void registerInputSystem(IAbstractInputSystem* input, ICharacter* controller);
 	DECLSPEC_CORE vector<IAbstractInputSystem*> const& getAllInputSystems();
+
+	DECLSPEC_CORE int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState);
+	DECLSPEC_CORE int getMovementState(const std::string& name);
 
 	DECLSPEC_CORE void setupInput(GLFWwindow* window);
 }

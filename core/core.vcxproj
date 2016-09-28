@@ -172,7 +172,6 @@
     <ClInclude Include="JNAInterfaceFunctions.h" />
     <ClInclude Include="MovementStateCallbackManager.h" />
     <ClInclude Include="Octree.h" />
-    <ClInclude Include="RegisteredMovementState.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="ICollisionMesh.h" />
     <ClInclude Include="IEntity.h" />

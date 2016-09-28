@@ -12,6 +12,7 @@
 #define DECLSPEC_CORE __declspec(dllimport)
 #endif
 #include <vector>
+#include <functional>
 #include <condition_variable>
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
@@ -31,10 +32,11 @@ namespace ginkgo
 	class IPhysicsObject;
 	class ICollisionMesh;
 	class IAbstractInputSystem;
+	class ICharacter;
 
 	typedef bool(__cdecl* RaytraceFunc)(IPhysicsObject* hitObject);
-	typedef void(__cdecl* CustomMoveTick)(IPhysicsObject& object, float deltaTime);
-	typedef void(__cdecl* CustomMoveResolve)(ICollisionMesh& mesh);
+	typedef std::function<bool(const ICharacter&)> CheckIfMovementState;
+	typedef std::function<void(ICharacter&)> DoOnMovementState;
 	typedef void(__cdecl* OnInputFunc)(IAbstractInputSystem* inputSystem, int outputCode, bool set);
 
 	struct Material
@@ -143,12 +145,19 @@ namespace ginkgo
 		RaytraceFunc func;
 	};
 
-	struct CustomMovement
-	{
-		int movementValue;
-		CustomMoveTick tickFunc;
-		CustomMoveResolve resolveFunc;
+	struct RegisteredMovementState {
+		RegisteredMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState) :
+			name(name),
+			CheckMovementState(CheckMovementState),
+			OnMovementState(OnMovementState)
+		{}
+
+		std::string name;
+		CheckIfMovementState CheckMovementState;
+		DoOnMovementState OnMovementState;
 	};
+
+	static const RegisteredMovementState NullMovementState("NullMovementState", [](const ICharacter&) {return false; }, [](const ICharacter&) {return; });
 
 	struct Prism
 	{

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CoreReource.h"
+#include <string>
+#include <functional>
 
 namespace ginkgo
 {
@@ -29,9 +31,13 @@ namespace ginkgo
 
 		virtual Octree const& getEntityTree() const = 0;
 
-		virtual CustomMovement* getCustomMovement(int movementValue) const = 0;
+		//virtual CustomMovement* getCustomMovement(int movementValue) const = 0;
+		//virtual void registerCustomMovement(CustomMovement const& newMove) = 0;
 
-		virtual void registerCustomMovement(CustomMovement const& newMove) = 0;
+		virtual int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState) = 0;
+		virtual int getMovementState(const std::string& name) const = 0;
+		virtual void checkMovementStates() = 0;
+		virtual void doMovementStates() = 0;
 
 		virtual void addCollision(CollisionInfo const& info, float deltaTime) = 0;
 		virtual void clearCollisionCache() = 0;

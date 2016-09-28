@@ -10,6 +10,10 @@
 #include "InputWrapper.h"
 #include <GLFW\glfw3.h>
 
+#include <vector>
+#include "MovementStateCallbackManager.h"
+#include "Character.h"
+
 namespace ginkgo
 {
 	long Core::entityIDBase = 1;
@@ -89,6 +93,7 @@ namespace ginkgo
 		{
 			//do world movement thing here
 			//world->function(); -- callback(characterInstance, elapsedTime);
+			
 			e->beginTick(elapsedTime);
 			if (e->getEntityType() >= physicsObject)
 			{
@@ -131,10 +136,13 @@ namespace ginkgo
 
 		world->resolveCollisions(16);
 
+
 		for (IEntity* e : entityList)
 		{
 			e->endTick(elapsedTime);
 		}
+		world->checkMovementStates();
+		world->doMovementStates();
 		world->clearCollisionCache();
 	}
 
@@ -206,6 +214,18 @@ namespace ginkgo
 	vector<IAbstractInputSystem*> const& getAllInputSystems()
 	{
 		return Core::core.getInputSystemList();
+	}
+
+	DECLSPEC_CORE int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState)
+	{
+		IWorld* world = getWorld();
+		return world->registerMovementState(name, CheckMovementState, OnMovementState);
+	}
+
+	DECLSPEC_CORE int getMovementState(const std::string & name)
+	{
+		IWorld* world = getWorld();
+		return world->getMovementState(name);
 	}
 
 	void setupInput(GLFWwindow* window)

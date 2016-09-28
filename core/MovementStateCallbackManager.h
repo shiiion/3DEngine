@@ -1,8 +1,7 @@
 #pragma once
 
 #include <vector>
-
-#include "RegisteredMovementState.h"
+#include "CoreReource.h"
 
 /*
 Unsolved problems:
@@ -12,12 +11,14 @@ exempting certain entities from callbacks
 */
 
 namespace ginkgo {
+	class IEntity;
+
 	class MovementStateCallbackManager {
 	public:
 		MovementStateCallbackManager();
 		~MovementStateCallbackManager();
 		int RegisterMovementState(const RegisteredMovementState& state);
-		int GetMovementStateID(const std::wstring& state_name) const;
+		int GetMovementStateID(const std::string& state_name) const;
 		RegisteredMovementState& GetMovementState(int ID);
 		const RegisteredMovementState& GetMovementState(int ID) const;
 		void CheckMovementStates(const std::vector<IEntity*>& entities);

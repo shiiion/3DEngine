@@ -2,6 +2,7 @@
 #include "IWorld.h"
 #include "Octree.h"
 #include "Collision.h"
+#include "MovementStateCallbackManager.h"
 //world space is a box spanning -4000000 ~ 4000000 L, W, and H
 #define WORLD_DIMENSIONS -4000000.f, -4000000.f, -4000000.f, 8000000.f, 8000000.f, 8000000.f
 
@@ -16,8 +17,8 @@ namespace ginkgo
 		glm::vec3 gravity;
 		vector<IEntity*> entityList;
 		Octree worldTree;
-		mutable vector<CustomMovement> customMovements;
 		vector<Collision> collisions;
+		MovementStateCallbackManager manager;
 
 	public:
 		World(float gravity);
@@ -37,8 +38,13 @@ namespace ginkgo
 
 		void traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut) override;
 
-		void registerCustomMovement(CustomMovement const& newMove) override;
-		CustomMovement* getCustomMovement(int movementValue) const override;
+		//void registerCustomMovement(CustomMovement const& newMove) override;
+		//CustomMovement* getCustomMovement(int movementValue) const override;
+
+		virtual int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState) override;
+		virtual int getMovementState(const std::string& name) const override;
+		virtual void checkMovementStates() override;
+		virtual void doMovementStates() override;
 
 		Octree const& getEntityTree() const override
 		{

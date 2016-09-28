@@ -90,12 +90,9 @@
     <ClInclude Include="InputWrapper.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="RegisteredMovementState.h">
+    <ClInclude Include="MovementStateCallbackManager.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="MovementStateCallbackManager.h">
-	  <Filter>Header Files\Implementations</Filter>
-	</ClInclude>
     <ClInclude Include="Character.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
@@ -141,7 +138,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MovementStateCallbackManager.cpp">
-	  <Filter>Source Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>Source Files</Filter>

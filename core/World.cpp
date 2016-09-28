@@ -172,22 +172,25 @@ namespace ginkgo
 		resultOut.collisionDist = -1;
 	}
 
-
-	void World::registerCustomMovement(CustomMovement const& newMove)
+	int World::registerMovementState(const std::string & name, const CheckIfMovementState & CheckMovementState, const DoOnMovementState & OnMovementState)
 	{
-		customMovements.push_back(newMove);
+		RegisteredMovementState state(name, CheckMovementState, OnMovementState);
+		return manager.RegisterMovementState(state);
 	}
 
-	CustomMovement* World::getCustomMovement(int movementValue) const
+	int World::getMovementState(const std::string & name) const
 	{
-		for (UINT32 a = 0; a < customMovements.size(); a++)
-		{
-			if (customMovements[a].movementValue == movementValue)
-			{
-				return &customMovements[a];
-			}
-		}
-		return nullptr;
+		return manager.GetMovementStateID(name);
+	}
+
+	void World::checkMovementStates()
+	{
+		manager.CheckMovementStates(this->entityList);
+	}
+
+	void World::doMovementStates()
+	{
+		manager.DoCallbacks(this->entityList);
 	}
 
 	void World::addCollision(CollisionInfo const& info, float deltaTime)
