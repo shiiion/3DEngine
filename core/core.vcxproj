@@ -168,6 +168,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="IComponent.h" />
     <ClInclude Include="InputWrapper.h" />
     <ClInclude Include="JNAInterfaceFunctions.h" />
     <ClInclude Include="MovementStateCallbackManager.h" />

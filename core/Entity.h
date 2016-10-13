@@ -17,6 +17,8 @@ namespace ginkgo
 		IRenderable* renderableComponent;
 		IPhysicsObject* physicsComponent;
 
+		vector<IComponent*> componentList;
+
 	public:
 		Entity(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 
@@ -41,5 +43,7 @@ namespace ginkgo
 		void setPhysics(IPhysicsObject* component) override;
 
 		EntityType getEntityType() const override;
+
+		void addComponent(IComponent* component) override;
 	};
 }

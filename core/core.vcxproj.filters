@@ -96,6 +96,9 @@
     <ClInclude Include="Character.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
+    <ClInclude Include="IComponent.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">

@@ -1,3 +1,4 @@
+#include "IComponent.h"
 #include "Entity.h"
 #include "Core.h"
 #include "IPhysicsObject.h"
@@ -65,6 +66,11 @@ namespace ginkgo
 
 	void Entity::beginTick(float elapsedTime)
 	{
+		for (IComponent* component : componentList)
+		{
+			component->onTick(elapsedTime);
+		}
+
 		if (physicsComponent != nullptr)
 		{
 			//THE COST OF PREMATURE OPTIMIZATION IS EXPENSIVE
@@ -80,6 +86,10 @@ namespace ginkgo
 
 	void Entity::endTick(float elapsedTime)
 	{
+		for (IComponent* component : componentList)
+		{
+			component->onTickEnd(elapsedTime);
+		}
 		if (physicsComponent != nullptr)
 		{
 			position = physicsComponent->getMoveResult().finalPos;
@@ -119,6 +129,11 @@ namespace ginkgo
 	void Entity::setPhysics(IPhysicsObject* component)
 	{
 		physicsComponent = component;
+	}
+
+	void Entity::addComponent(IComponent* component)
+	{
+		componentList.emplace_back(component);
 	}
 
 	IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)

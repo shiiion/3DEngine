@@ -6,6 +6,7 @@
 namespace ginkgo
 {
 	class IRenderable;
+	class IComponent;
 
 	class IEntity
 	{
@@ -32,6 +33,8 @@ namespace ginkgo
 		virtual IPhysicsObject* getPhysics() const = 0;
 		virtual void setRenderable(IRenderable* component) = 0;
 		virtual void setPhysics(IPhysicsObject* component) = 0;
+
+		virtual void addComponent(IComponent* component) = 0;
 	};
 	DECLSPEC_CORE IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
 };
