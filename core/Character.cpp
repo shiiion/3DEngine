@@ -9,6 +9,7 @@ namespace ginkgo
 		rotation = rot;
 		velocity = vel;
 		acceleration = accel;
+		airSpeedFactor = .5;
 
 		entityID = Core::generateID();
 		renderableComponent = nullptr;

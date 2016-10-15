@@ -75,22 +75,73 @@ namespace ginkgo
 			//}
 		}
 		
-		//void checkMovemetState - needs implementation
-		void setAirSpeedFactor(int factor){airSpeedFactor = factor}
-		void resloveMovementState() {
-			if (this->movementState == 0) {
-				setAcceleration(glm::vec3(0,0,-9.8));
-				setVelocity(velocity *= airSpeedFactor);
-			}
-			else if (this->movementState == 1) {
+		void checkMovementState() {
+			if (isColliding)//some boolean for collision
+			{
 				glm::vec3 collisionNormal = ;//TODO find collision normal
-				glm::vec3 xyUnitVec = glm::vec3(collisionNormal[0], collisionNormal[1],0);
+				glm::vec3 xyUnitVec = glm::vec3(collisionNormal[0], collisionNormal[1], 0);
 				double angle = acos(dot(collisionNormal, xyUnitVec) / (length(collisionNormal)*length(xyUnitVec)));
-				if (angle <= 45 && angle >= 0) {//pretty sure this is okay
-
-				} else { 
+				//basically if the angle is negative or greater than 45, the player will slide on the slope
+				if (angle <= 45 && angle >= 0)//pretty sure this is okay, you can change the angle if you want
+				{
+					setMovementState(1);
+				}
+				else
+				{
 					setMovementState(0);
 				}
+			}
+			else
+			{
+				setMovementState(0);
+			}
+		}
+		void setAirSpeedFactor(int factor) { airSpeedFactor = factor; }
+		const void resloveMovementState() {
+			if (this->movementState == 0) {
+				if (isColliding)//some boolean for collision
+				{
+					glm::vec3 collisionNormal = ;//TODO find collision normal
+					glm::vec3 xyUnitVec = glm::vec3(collisionNormal[0], collisionNormal[1], 0);
+					glm::vec3 zUnitVec = glm::vec3(0, 0, -1);
+					glm::vec3 slopeVec = (collisionNormal + zUnitVec);//always down the slope
+					glm::vec3 velocityProjectionOnNormal = (collisionNormal * dot(velocity, collisionNormal) / pow(length(collisionNormal), 2));
+					double angle = acos(dot(collisionNormal, xyUnitVec) / (length(collisionNormal)*length(xyUnitVec)));
+					//TODO: add friction coefficient for sliding on slope
+					if (angle < 0)
+					{
+						setAcceleration(glm::vec3(0, 0, -9.8));
+						setVelocity(velocity *= airSpeedFactor);
+					}
+					else
+					{
+						//projects accel down slope, projects player's velocity on slope, allows for regular movement
+						if (length(velocity + collisionNormal) > length(velocity)) {
+							setAcceleration(slopeVec * dot(glm::vec3(0, 0, -9.8), slopeVec) / (pow(length(slopeVec), 2)));
+							setVelocity(velocity - velocityProjectionOnNormal);
+						}
+						else {
+							setAcceleration(slopeVec * dot(glm::vec3(0, 0, -9.8), slopeVec) / (pow(length(slopeVec), 2)));
+							setVelocity(velocity + velocityProjectionOnNormal);
+						}
+					}
+
+				}
+				else
+				{
+					setAcceleration(glm::vec3(0, 0, -9.8));
+					setVelocity(velocity *= airSpeedFactor);
+				}
+			} else if (this->movementState == 1) {
+				glm::vec3 collisionNormal = ;//TODO find collision normal
+				glm::vec3 velocityProjectionOnNormal = (collisionNormal * dot(velocity, collisionNormal) / pow(length(collisionNormal), 2));//should work
+					//checks if slope is away or towards the player's movement, projects velocity on slope
+					if (length(velocity + collisionNormal) > length(velocity)){
+						setVelocity(velocity - velocityProjectionOnNormal);
+					} else {
+						setVelocity(velocity + velocityProjectionOnNormal);
+					}
+				
 			}
 
 		}
