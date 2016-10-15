@@ -2,6 +2,7 @@
 
 #include "ICharacter.h"
 #include "Core.h"
+#include <xtgmath.h>
 
 namespace ginkgo
 {
@@ -15,6 +16,7 @@ namespace ginkgo
 		glm::vec3 rotation;
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
+		int airSpeedFactor;
 
 		IRenderable* renderableComponent;
 		IPhysicsObject* physicsComponent;
@@ -71,6 +73,26 @@ namespace ginkgo
 			//{
 				movementStateList.emplace_back(movementStateID);
 			//}
+		}
+		
+		//void checkMovemetState - needs implementation
+		void setAirSpeedFactor(int factor){airSpeedFactor = factor}
+		void resloveMovementState() {
+			if (this->movementState == 0) {
+				setAcceleration(glm::vec3(0,0,-9.8));
+				setVelocity(velocity *= airSpeedFactor);
+			}
+			else if (this->movementState == 1) {
+				glm::vec3 collisionNormal = ;//TODO find collision normal
+				glm::vec3 xyUnitVec = glm::vec3(collisionNormal[0], collisionNormal[1],0);
+				double angle = acos(dot(collisionNormal, xyUnitVec) / (length(collisionNormal)*length(xyUnitVec)));
+				if (angle <= 45 && angle >= 0) {//pretty sure this is okay
+
+				} else { 
+					setMovementState(0);
+				}
+			}
+
 		}
 	};
 }
