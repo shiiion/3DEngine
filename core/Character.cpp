@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "IPhysicsObject.h"
+#include "IComponent.h"
 
 namespace ginkgo
 {
@@ -24,6 +25,10 @@ namespace ginkgo
 
 	void Character::beginTick(float elapsedTime)
 	{
+		for (IComponent* component : componentList)
+		{
+			component->onTick(elapsedTime);
+		}
 		if (physicsComponent != nullptr)
 		{
 			if (physicsComponent->getCollisionType() == CTYPE_WORLDSTATIC)
@@ -39,11 +44,20 @@ namespace ginkgo
 
 	void Character::endTick(float elapsedTime)
 	{
+		for (IComponent* component : componentList)
+		{
+			component->onTickEnd(elapsedTime);
+		}
 		if (physicsComponent != nullptr)
 		{
 			position = physicsComponent->getMoveResult().finalPos;
 			velocity = physicsComponent->getMoveResult().finalVel;
 		}
+	}
+
+	void Character::addComponent(IComponent* component)
+	{
+		componentList.emplace_back(component);
 	}
 
 	ICharacter* characterFactory(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)

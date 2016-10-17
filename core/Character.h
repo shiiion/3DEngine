@@ -22,6 +22,8 @@ namespace ginkgo
 		vector<int> movementStateList;
 		IAbstractInputSystem* inputSystem;
 
+		vector<IComponent*> componentList;
+
 		int movementState;
 
 	public:
@@ -50,6 +52,8 @@ namespace ginkgo
 		void setMovementState(int newState) override { this->movementState = newState;  }
 		void setRenderable(IRenderable* component) override { renderableComponent = component; }
 		void setPhysics(IPhysicsObject* component) override { physicsComponent = component; }
+
+		void addComponent(IComponent* component) override;
 
 		EntityType getEntityType() const override
 		{
