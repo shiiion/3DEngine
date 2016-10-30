@@ -1,14 +1,12 @@
 #include "MovementStateCallbackManager.h"
-#include "ICharacter.h"
+#include "Character.h"
 
 namespace ginkgo {
 	MovementStateCallbackManager::MovementStateCallbackManager()
 	{
-		RegisteredMovementState fallingState = RegisteredMovementState::GetNullMovementState();
-		fallingState.name = "FallingMovementState";
+		RegisteredMovementState fallingState("FallingMovementState", [](const ICharacter&) { return false; }, DoOnMovementState(resolveFreemove));
 		this->RegisterMovementState(fallingState);
-		RegisteredMovementState walkingState = RegisteredMovementState::GetNullMovementState();
-		walkingState.name = "WalkingMovementState";
+		RegisteredMovementState walkingState("WalkingMovementState", CheckIfMovementState(checkWalking), DoOnMovementState(resolveWalking));
 		this->RegisterMovementState(walkingState);
 	}
 

@@ -60,52 +60,6 @@ namespace ginkgo
 		this->gravity = glm::vec3(0, gravity, 0);
 	}
 
-	//void World::setEntity(long ID, IEntity* entity)
-	//{
-	//	//TODO: tree stuff here
-	//	IEntity* oldEntity = World::getEntity(ID);
-	//	if (oldEntity == nullptr)
-	//		return;
-	//	IEntity* newEntity;
-	//	if (entity->getEntityType() >= 1 && oldEntity->getEntityType() >= 1)
-	//	{
-	//		entity->setPosition(oldEntity->getPosition());
-	//		entity->setVelocity(oldEntity->getVelocity());
-	//		entity->setAcceleration(oldEntity->getAcceleration());
-	//		entity->setRotation(oldEntity->getRotation());
-	//		entity->setEntityID(oldEntity->getEntityID());
-	//		newEntity = entity;
-
-	//		if (entity->getEntityType() >= 2 && oldEntity->getEntityType() >= 2)
-	//		{
-	//			IRenderable* renderable = (IRenderable*)entity;
-	//			IRenderable* oldRenderable = (IRenderable*)oldEntity;
-	//			renderable->setRenderMesh(oldRenderable->getRenderMesh());
-	//			renderable->setScale(oldRenderable->getScale());
-	//			newEntity = renderable;
-
-	//			if (entity->getEntityType() >= 3 && oldEntity->getEntityType() >= 3)
-	//			{
-	//				IPhysicsObject* physicsObject = (IPhysicsObject*)renderable;
-	//				IPhysicsObject* oldPhysicsObject = (IPhysicsObject*)oldRenderable;
-	//				physicsObject->setCollisionMesh(oldPhysicsObject->getCollisionMesh());
-	//				physicsObject->setMass(oldPhysicsObject->getMass());
-	//				physicsObject->setMaterial(oldPhysicsObject->getMaterial());
-	//				physicsObject->setCanGravity(oldPhysicsObject->doesHaveGravity());
-	//				physicsObject->setCanCollide(oldPhysicsObject->doesCollide());
-	//				newEntity = physicsObject;
-
-	//			}
-	//		}
-	//	}
-	//	else
-	//		return;
-
-	//	removeEntity(ID);
-	//	addEntity(newEntity);
-	//	//add and remove
-	//}
-
 	glm::vec3 const& World::getGravity() const
 	{
 		return gravity;
@@ -196,6 +150,8 @@ namespace ginkgo
 	void World::addCollision(CollisionInfo const& info, float deltaTime)
 	{
 		collisions.emplace_back(Collision(deltaTime, info));
+		info.thisMesh->getOwner()->incrementCollision();
+		info.otherMesh->getOwner()->incrementCollision();
 	}
 
 	void World::clearCollisionCache()
@@ -204,6 +160,9 @@ namespace ginkgo
 		{
 			if (!collisions[a].valid)
 			{
+				//collisions[a].manifold.thisMesh->getOwner()->setCollisionState(CSTATE_NO)
+				collisions[a].manifold.thisMesh->getOwner()->decrementCollision();
+				collisions[a].manifold.otherMesh->getOwner()->decrementCollision();
 				collisions.erase(collisions.begin() + a);
 				a--;
 			}

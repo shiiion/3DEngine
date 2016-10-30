@@ -13,21 +13,15 @@ namespace ginkgo
 		float mass;
 		bool canCollide;
 		bool canGravity;
-		UINT32 collisionState;
+		UINT32 numCollisions;
 		UINT32 movementState;
 		UINT32 collisionType;
-
-		//FOR WALKING
-		IPhysicsObject* walkSurface;
-		glm::vec3 surfaceNormal;
-		//minimum angle between normal and vertical (0, -1, 0) at which falling turns to walking
-		static const float minFallAngle;
-
-		bool isWalkableNormal(glm::vec3 const& normal);
 
 		IEntity* const parent;
 
 		MoveResult finalMove;
+
+		glm::vec3 primaryCollisionNormal;
 
 	public:
 		PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canGravity = true, bool canCollide = true);
@@ -39,16 +33,16 @@ namespace ginkgo
 		void setCanCollide(bool collides) override;
 		void setCanGravity(bool canGravity) override;
 		void setCollisionMesh(ICollisionMesh* collision) override;
-		void setCollisionState(UINT32 state) override;
+		void incrementCollision() override;
+		void decrementCollision() override;
 		void setMovementState(UINT32 state) override;
 
 		const Material& getMaterial() const override;
 		float getMass() const override;
 		bool doesCollide() const override;
 		bool doesHaveGravity() const override;
-		UINT32 getCollisionState() const override;
 		ICollisionMesh* getCollisionMesh() const override;
-		UINT32 getMovementState() const override;
+		UINT32 getNumCollisions() const override;
 		UINT32 getCollisionType() const override;
 
 		bool isMoving() const override;
@@ -60,5 +54,7 @@ namespace ginkgo
 		IEntity* const getParent() const override;
 
 		const MoveResult& getMoveResult() const override;
+		
+		glm::vec3 const& getPrimaryCollisionNormal() const override;
 	};
 }

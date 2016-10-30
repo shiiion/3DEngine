@@ -15,6 +15,9 @@ namespace ginkgo
 		virtual void addMovementState(int movementStateID) = 0;
 		virtual void setMovementState(int movementStateID) = 0;
 		virtual int getMovementState() const = 0;
+
+		virtual float getAirSpeedFactor() const = 0;
+		virtual void setAirSpeedFactor(float factor) = 0;
 	};
 
 	DECLSPEC_CORE ICharacter* characterFactory(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());

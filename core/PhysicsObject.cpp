@@ -7,7 +7,6 @@
 
 namespace ginkgo
 {
-	const float PhysicsObject::minFallAngle = 35;
 
 	PhysicsObject::PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canGravity, bool canCollide)
 		: parent(parent)
@@ -21,7 +20,7 @@ namespace ginkgo
 		{
 			parent->addAcceleration(getWorld()->getGravity());
 		}
-		collisionState = CSTATE_NOCOLLISION;
+		numCollisions = 0;
 		this->collisionType = collisionType;
 		collision->setOwner(this);
 	}
@@ -39,31 +38,16 @@ namespace ginkgo
 		if (!collisionMesh->testCollision(*otherCollision, deltaTime, manifold))
 		{
 			getWorld()->addCollision(manifold, deltaTime);
+			primaryCollisionNormal = manifold.collisionNormal;
+			((PhysicsObject*)other)->primaryCollisionNormal = -manifold.collisionNormal;
 			return true;
 		}
 		return false;
 	}
 
 	void PhysicsObject::setFinalMove(MoveResult const& result)
-	{
+	{    
 		finalMove = result;
-	}
-
-	bool PhysicsObject::isWalkableNormal(glm::vec3 const& normal)
-	{
-		if (normal.y <= 0)
-		{
-			return false;
-		}
-		glm::vec3 normalized = glm::normalize(normal);
-		glm::vec3 vertical(0, -1, 0);
-
-		float angBetween = glm::acos(glm::dot(-normalized, vertical));
-		if (angBetween >= minFallAngle)
-		{
-			return false;
-		}
-		return true;
 	}
 
 	const Material& PhysicsObject::getMaterial() const
@@ -86,19 +70,14 @@ namespace ginkgo
 		return canGravity;
 	}
 
-	UINT32 PhysicsObject::getCollisionState() const
-	{
-		return collisionState;
-	}
-
 	ICollisionMesh* PhysicsObject::getCollisionMesh() const
 	{
 		return collisionMesh;
 	}
 
-	UINT32 PhysicsObject::getMovementState() const
+	UINT32 PhysicsObject::getNumCollisions() const
 	{
-		return movementState;
+		return numCollisions;
 	}
 
 	UINT32 PhysicsObject::getCollisionType() const
@@ -109,6 +88,11 @@ namespace ginkgo
 	bool PhysicsObject::isMoving() const
 	{
 		return glm::length(parent->getVelocity()) > 0.f || glm::length(parent->getVelocity()) > 0.0f;
+	}
+
+	glm::vec3 const& PhysicsObject::getPrimaryCollisionNormal() const
+	{
+		return primaryCollisionNormal;
 	}
 
 	void PhysicsObject::setMaterial(const Material& mat)
@@ -136,9 +120,17 @@ namespace ginkgo
 		collisionMesh = collision;
 	}
 
-	void PhysicsObject::setCollisionState(UINT32 state)
+	void PhysicsObject::incrementCollision()
 	{
-		collisionState = state;
+		numCollisions++;
+	}
+
+	void PhysicsObject::decrementCollision()
+	{
+		if (numCollisions > 0)
+		{
+			numCollisions--;
+		}
 	}
 
 	void PhysicsObject::setMovementState(UINT32 state)
@@ -148,11 +140,6 @@ namespace ginkgo
 
 	void PhysicsObject::onTick(float elapsedTime)
 	{
-		//THE COST OF PREMATURE OPTIMIZATION IS EXPENSIVE
-		/*if (collisionType == CTYPE_WORLDSTATIC)
-		{
-			return;
-		}*/
 		collisionMesh->generateVertexPath(elapsedTime);
 		finalMove = MoveResult(collisionMesh->getLastMove().centerEnd, collisionMesh->getLastMove().velEnd);
 	}

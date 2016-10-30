@@ -143,6 +143,7 @@ namespace ginkgo
 		}
 		world->checkMovementStates();
 		world->doMovementStates();
+
 		world->clearCollisionCache();
 	}
 
