@@ -10,7 +10,7 @@ namespace ginkgo
 		rotation = rot;
 		velocity = vel;
 		acceleration = accel;
-		airSpeedFactor = .5;
+		airSpeedFactor = 1;
 
 		entityID = Core::generateID();
 		renderableComponent = nullptr;
@@ -98,7 +98,7 @@ namespace ginkgo
 		glm::vec3 vertical(0, -1, 0);
 
 		float angBetween = glm::acos(glm::dot(-normalized, vertical));
-		return (angBetween >= 45);
+		return (angBetween <= 45);
 	}
 
 	bool checkWalking(ICharacter const& character)
@@ -109,5 +109,5 @@ namespace ginkgo
 			return isWalkableNormal(collisionNormal);
 		}
 		return false;
-	}
+	} 
 }

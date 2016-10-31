@@ -15,15 +15,6 @@ using namespace ginkgo;
 int main()
 {
 	startCore();
-	int y_less_than_zero_movementstate = getWorld()->registerMovementState("Y_LESS_THAN_ZERO",
-		[](const ICharacter& c)->bool {return c.getPosition().y < 0; },
-		[](ICharacter& c)->void
-		{
-			std::stringstream description;
-			description << "ID: " << c.getEntityID() << "\n "
-				<< c.getPosition().x << ',' << c.getPosition().y << ',' << c.getPosition().z << " Y_LESS_THAN_ZERO";
-			//MessageBoxA(NULL, description.str().c_str(), "wow!", MB_ABORTRETRYIGNORE | MB_ICONHAND)
-		});
 
 	ginkgo::setTickTime(1.f / 60.f);
 	//ICollisionMesh* moving = createCollisionMesh(1, 1, 1, glm::rotateZ(glm::rotateX(glm::vec3(1, 0, 0), PI / 4.f), PI / 4.f),
@@ -37,20 +28,18 @@ int main()
 		glm::vec3(0, 1, 0),
 		glm::vec3(0, 0, 1));
 
-	ICollisionMesh* still = createCollisionMesh(100, 1, 100, glm::vec3(1, 0, 0),
+	ICollisionMesh* still = createCollisionMesh(1, 1, 1, glm::vec3(1, 0, 0),
 		glm::vec3(0, 1, 0),
 		glm::vec3(0, 0, 1));
 	Material super;
 	super.reboundFraction = 0;
-	super.friction = 1;
-	ICharacter* newEnt1 = characterFactory(glm::vec3(0, 5, 0), glm::vec3(), glm::vec3(0, 0, 0));
-	newEnt1->addMovementState(y_less_than_zero_movementstate);
+	super.friction = 0;
+	ICharacter* newEnt1 = characterFactory(glm::vec3(0, 5, 0), glm::vec3(), glm::vec3(0.1f, 0, 0));
 	newEnt1->setPhysics(physicsObjectFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true, true));
 
 	getWorld()->addEntity(newEnt1);
 
-	ICharacter* newEnt2 = characterFactory(glm::vec3(0, -4, 0), glm::vec3(), glm::vec3(0, 0, 0));
-	newEnt2->addMovementState(y_less_than_zero_movementstate);
+	IEntity* newEnt2 = entityFactory(glm::vec3(0, -4, 0), glm::vec3(), glm::vec3(0, 0, 0));
 	newEnt2->setPhysics(physicsObjectFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true, true));
 
 	getWorld()->addEntity(newEnt2);
@@ -76,7 +65,8 @@ int main()
 	while (true)
 	{
 		glm::vec3 b = getWorld()->getEntity(1)->getPosition();
-		printf("position: %f, %f, %f\n", b.x, b.y, b.z);
+		unsigned int movementState = ((ICharacter*)getWorld()->getEntity(1))->getMovementState();
+		printf("position: %f, %f, %f, %d\n", b.x, b.y, b.z, movementState);
 		tickCore(1);
 
 		iter++;
