@@ -43,8 +43,8 @@ namespace ginkgo
 
 		virtual int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState) override;
 		virtual int getMovementState(const std::string& name) const override;
-		virtual void checkMovementStates() override;
-		virtual void doMovementStates() override;
+		virtual void checkMovementStates(float elapsedTime) override;
+		virtual void doMovementStates(float elapsedTime) override;
 
 		Octree const& getEntityTree() const override
 		{

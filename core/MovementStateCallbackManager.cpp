@@ -4,9 +4,9 @@
 namespace ginkgo {
 	MovementStateCallbackManager::MovementStateCallbackManager()
 	{
-		RegisteredMovementState fallingState("FallingMovementState", [](const ICharacter&) { return false; }, DoOnMovementState(resolveFreemove));
+		RegisteredMovementState fallingState("FallingMovementState", [](const ICharacter&, float) { return false; }, resolveFreemove);
 		this->RegisterMovementState(fallingState);
-		RegisteredMovementState walkingState("WalkingMovementState", CheckIfMovementState(checkWalking), DoOnMovementState(resolveWalking));
+		RegisteredMovementState walkingState("WalkingMovementState", checkWalking, resolveWalking);
 		this->RegisterMovementState(walkingState);
 	}
 
@@ -41,7 +41,7 @@ namespace ginkgo {
 		return this->states.at(ID);
 	}
 
-	void MovementStateCallbackManager::CheckMovementStates(const std::vector<IEntity*>& entities)
+	void MovementStateCallbackManager::CheckMovementStates(const std::vector<IEntity*>& entities, float elapsedTime)
 	{
 		for (IEntity* entity : entities) {
 			ICharacter* character = dynamic_cast<ICharacter*>(entity);
@@ -50,7 +50,7 @@ namespace ginkgo {
 			character->setMovementState(0);
 			for (std::vector<int>::size_type i = 0; i < character->getMovementStates().size(); ++i) {
 				const RegisteredMovementState& state = this->states.at(i);
-				if (state.CheckMovementState(*character)) {
+				if (state.CheckMovementState(*character, elapsedTime)) {
 					character->setMovementState(i);
 					break;
 				}
@@ -58,12 +58,12 @@ namespace ginkgo {
 		}
 	}
 
-	void MovementStateCallbackManager::DoCallbacks(const std::vector<IEntity*>& entities)
+	void MovementStateCallbackManager::DoCallbacks(const std::vector<IEntity*>& entities, float elapsedTime)
 	{
 		for (IEntity* entity : entities) {
 			ICharacter* character = dynamic_cast<ICharacter*>(entity);
 			if (character == nullptr) continue;
-			this->states.at(character->getMovementState()).OnMovementState(*character); //masking?
+			this->states.at(character->getMovementState()).OnMovementState(*character, elapsedTime); //masking?
 		}
 	}
 

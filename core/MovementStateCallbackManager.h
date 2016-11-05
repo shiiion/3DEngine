@@ -21,8 +21,8 @@ namespace ginkgo {
 		int GetMovementStateID(const std::string& state_name) const;
 		RegisteredMovementState& GetMovementState(int ID);
 		const RegisteredMovementState& GetMovementState(int ID) const;
-		void CheckMovementStates(const std::vector<IEntity*>& entities);
-		void DoCallbacks(const std::vector<IEntity*>& entities);
+		void CheckMovementStates(const std::vector<IEntity*>& entities, float elapsedTime);
+		void DoCallbacks(const std::vector<IEntity*>& entities, float elapsedTime);
 		std::vector<RegisteredMovementState> GetRegisteredMovementStates() const;
 
 

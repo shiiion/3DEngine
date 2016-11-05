@@ -137,14 +137,14 @@ namespace ginkgo
 		return manager.GetMovementStateID(name);
 	}
 
-	void World::checkMovementStates()
+	void World::checkMovementStates(float elapsedTime)
 	{
-		manager.CheckMovementStates(this->entityList);
+		manager.CheckMovementStates(this->entityList, elapsedTime);
 	}
 
-	void World::doMovementStates()
+	void World::doMovementStates(float elapsedTime)
 	{
-		manager.DoCallbacks(this->entityList);
+		manager.DoCallbacks(this->entityList, elapsedTime);
 	}
 
 	void World::addCollision(CollisionInfo const& info, float deltaTime)

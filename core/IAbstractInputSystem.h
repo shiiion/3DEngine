@@ -19,7 +19,7 @@ namespace ginkgo
 		virtual void removeControl(int inputCode) = 0;
 
 		virtual void setOwner(ICharacter* owner) = 0;
-		virtual ICharacter* getOwner() const = 0;
+		virtual ICharacter* getOwner() = 0;
 
 		virtual void onInputCode(Control const& input, bool set) = 0;
 		virtual void runInput() = 0;

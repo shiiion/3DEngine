@@ -24,7 +24,7 @@ namespace ginkgo
 		virtual void removeControl(int inputCode) override;
 
 		virtual void setOwner(ICharacter* owner) override;
-		virtual ICharacter* getOwner() const override;
+		virtual ICharacter* getOwner() override;
 
 		virtual void onInputCode(Control const& input, bool set) override;
 		virtual void runInput() override;

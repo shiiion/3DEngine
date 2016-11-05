@@ -4,6 +4,11 @@
 #include "IPhysicsObject.h"
 #include "Core.h"
 
+#define FWD_MOVE 0x01
+#define LEFT_MOVE 0x02
+#define RIGHT_MOVE 0x04
+#define BACK_MOVE 0x08
+
 namespace ginkgo
 {
 	class Character : public ICharacter
@@ -27,6 +32,8 @@ namespace ginkgo
 		vector<IComponent*> componentList;
 
 		int movementState;
+
+		int movementCtlFlags;
 
 	public:
 		Character(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
@@ -83,10 +90,16 @@ namespace ginkgo
 
 		float getAirSpeedFactor() const override { return airSpeedFactor; }
 		void setAirSpeedFactor(float factor) override { airSpeedFactor = factor; }
+
+		void setMovementControlFlag(int flag) override { movementCtlFlags |= flag; }
+		void resetMovementControlFlag(int flag) override { movementCtlFlags &= (~flag); }
+
+
+		int getMovementControlFlags() const override { return movementCtlFlags; }
 	};
 
 
-	void resolveFreemove(ICharacter& character);
-	void resolveWalking(ICharacter& character);
-	bool checkWalking(ICharacter const& character);
+	void resolveFreemove(ICharacter& character, float elapsedTime);
+	void resolveWalking(ICharacter& character, float elapsedTime);
+	bool checkWalking(ICharacter const& character, float elapsedTime);
 }

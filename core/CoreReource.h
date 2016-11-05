@@ -35,8 +35,8 @@ namespace ginkgo
 	class ICharacter;
 
 	typedef bool(__cdecl* RaytraceFunc)(IPhysicsObject* hitObject);
-	typedef std::function<bool(const ICharacter&)> CheckIfMovementState;
-	typedef std::function<void(ICharacter&)> DoOnMovementState;
+	typedef std::function<bool(const ICharacter&, float)> CheckIfMovementState;
+	typedef std::function<void(ICharacter&, float)> DoOnMovementState;
 	typedef void(__cdecl* OnInputFunc)(IAbstractInputSystem* inputSystem, int outputCode, bool set);
 
 	struct Material
@@ -158,7 +158,7 @@ namespace ginkgo
 
 		static RegisteredMovementState GetNullMovementState()
 		{
-			return RegisteredMovementState("NullMovementState", [](const ICharacter&) {return false; }, [](const ICharacter&) {return; });
+			return RegisteredMovementState("NullMovementState", [](const ICharacter&, float) {return false; }, [](const ICharacter&, float) {return; });
 		}
 	};
 

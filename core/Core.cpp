@@ -77,6 +77,7 @@ namespace ginkgo
 
 	void Core::processInput()
 	{
+		glfwPollEvents();
 		for (IAbstractInputSystem* input : inputSystemList)
 		{
 			input->runInput();
@@ -141,8 +142,8 @@ namespace ginkgo
 		{
 			e->endTick(elapsedTime);
 		}
-		world->checkMovementStates();
-		world->doMovementStates();
+		world->checkMovementStates(elapsedTime);
+		world->doMovementStates(elapsedTime);
 
 		world->clearCollisionCache();
 	}

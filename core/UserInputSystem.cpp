@@ -62,7 +62,7 @@ namespace ginkgo
 		this->owner = owner;
 	}
 
-	ICharacter* UserInputSystem::getOwner() const
+	ICharacter* UserInputSystem::getOwner()
 	{
 		return owner;
 	}

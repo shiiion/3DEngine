@@ -36,8 +36,8 @@ namespace ginkgo
 
 		virtual int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState) = 0;
 		virtual int getMovementState(const std::string& name) const = 0;
-		virtual void checkMovementStates() = 0;
-		virtual void doMovementStates() = 0;
+		virtual void checkMovementStates(float elapsedTime) = 0;
+		virtual void doMovementStates(float elapsedTime) = 0;
 
 		virtual void addCollision(CollisionInfo const& info, float deltaTime) = 0;
 		virtual void clearCollisionCache() = 0;
