@@ -182,9 +182,9 @@ namespace ginkgo
 #define INPUTTYPE_USER		1
 #define INPUTTYPE_OTHER		2
 
-	struct Control
+	struct Bind
 	{
-		Control(int inputType, int in, int out)
+		Bind(int inputType, int in, int out)
 		{
 			this->inputType = inputType;
 
@@ -196,24 +196,31 @@ namespace ginkgo
 		int inputCode;
 		int outputCode;
 
-		//microsoft should burn in hell
-
 	};
 
-	struct InputState
+	struct Command
 	{
-		InputState(int out, OnInputFunc func)
+		Command(int out, OnInputFunc func)
 		{
 			outputCode = out;
-			isSet = false;
-			prevSet = false;
-			inputFunc = func;
+			onCommand = func;
 		}
 
 		int outputCode;
+		OnInputFunc onCommand;
+	};
+
+	struct CommandState
+	{
+		CommandState(Command const& command) : command(command)
+		{
+			isSet = false;
+			prevSet = false;
+		}
+
 		bool isSet;
 		bool prevSet;
-		OnInputFunc inputFunc;
+		Command command;
 	};
 
 	typedef unsigned __int8 UBYTE;

@@ -11,7 +11,7 @@ namespace ginkgo
 	{
 		for (IAbstractInputSystem* s : getAllInputSystems())
 		{
-			Control const& ctl = s->getControl(key);
+			Bind const& ctl = s->getControl(key);
 			if (ctl.inputType == INPUTTYPE_USER && action != GLFW_REPEAT)
 			{
 				s->onInputCode(ctl, action == GLFW_PRESS);
@@ -23,7 +23,7 @@ namespace ginkgo
 	{
 		for (IAbstractInputSystem * s : getAllInputSystems())
 		{
-			Control const& ctl = s->getControl(button);
+			Bind const& ctl = s->getControl(button);
 			if (ctl.inputType == INPUTTYPE_USER)
 			{
 				s->onInputCode(ctl, action == GLFW_PRESS);

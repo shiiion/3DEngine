@@ -22,23 +22,45 @@ namespace ginkgo
 		}
 	}
 
-	void UserInputSystem::addControl(int in, int out, OnInputFunc callback)
+	Command const& UserInputSystem::findCommand(int outputCode) const
 	{
-		controlList.push_back(Control(INPUTTYPE_USER, in, out));
-		controlStates.push_back(InputState(out, callback));
+		for (Command const& c : commandList)
+		{
+			if (c.outputCode == outputCode)
+			{
+				return c;
+			}
+		}
+		return invalidCommand;
 	}
 
-	void UserInputSystem::removeControl(int inputCode)
+	void UserInputSystem::addCommand(Command const& command)
+	{
+		commandList.emplace_back(command);
+	}
+
+	void UserInputSystem::bindInputCode(int in, int out)
+	{
+		Command const& outputCommand = findCommand(out);
+		if (outputCommand.onCommand == nullptr && outputCommand.outputCode == -1)
+		{
+			return;
+		}
+		bindings.push_back(Bind(INPUTTYPE_USER, in, out));
+		controlStates.push_back(CommandState(outputCommand));
+	}
+
+	void UserInputSystem::unbindInputCode(int inputCode)
 	{
 		int outCode;
 		bool codeFound = false;
-		for (UINT32 a = 0; a < controlList.size(); a++)
+		for (UINT32 a = 0; a < bindings.size(); a++)
 		{
-			if (controlList[a].inputCode == inputCode)
+			if (bindings[a].inputCode == inputCode)
 			{
-				outCode = controlList[a].outputCode;
+				outCode = bindings[a].outputCode;
 				codeFound = true;
-				controlList.erase(controlList.begin() + a);
+				bindings.erase(bindings.begin() + a);
 				break;
 			}
 		}
@@ -49,7 +71,7 @@ namespace ginkgo
 
 		for (UINT32 a = 0; a < controlStates.size(); a++)
 		{
-			if (controlStates[a].outputCode == outCode)
+			if (controlStates[a].command.outputCode == outCode)
 			{
 				controlStates.erase(controlStates.begin() + a);
 				break;
@@ -69,33 +91,33 @@ namespace ginkgo
 
 	void UserInputSystem::runInput()
 	{
-		for (InputState& state : controlStates)
+		for (CommandState& state : controlStates)
 		{
 			if (state.isSet ^ state.prevSet)
 			{
-				if (state.inputFunc != nullptr)
+				if (state.command.onCommand != nullptr)
 				{
-					state.inputFunc(this, state.outputCode, state.isSet);
+					state.command.onCommand(this, state.command.outputCode, state.isSet);
 				}
 				state.prevSet = state.isSet;
 			}
 		}
 	}
 
-	void UserInputSystem::onInputCode(Control const& input, bool set)
+	void UserInputSystem::onInputCode(Bind const& input, bool set)
 	{
-		for (InputState& state : controlStates)
+		for (CommandState& state : controlStates)
 		{
-			if (input.outputCode == state.outputCode)
+			if (input.outputCode == state.command.outputCode)
 			{
 				state.isSet = set;
 			}
 		}
 	}
 
-	Control const& UserInputSystem::getControl(int inputCode)
+	Bind const& UserInputSystem::getControl(int inputCode)
 	{
-		for (Control const& c : controlList)
+		for (Bind const& c : bindings)
 		{
 			if (c.inputCode == inputCode)
 			{

@@ -24,7 +24,8 @@ namespace ginkgo
 		movementState = 0;
 		
 		inputSystem = createUserInputSystem();
-		inputSystem->addControl(GLFW_KEY_W, 1, [](IAbstractInputSystem* inputSystem, int outputCode, bool set) 
+
+		inputSystem->addCommand(Command(1, [](IAbstractInputSystem* inputSystem, int outputCode, bool set)
 		{
 			if (set)
 			{
@@ -34,8 +35,8 @@ namespace ginkgo
 			{
 				inputSystem->getOwner()->resetMovementControlFlag(FWD_MOVE);
 			}
-		});
-		inputSystem->addControl(GLFW_KEY_S, 2, [](IAbstractInputSystem* inputSystem, int outputCode, bool set)
+		}));
+		inputSystem->addCommand(Command(2, [](IAbstractInputSystem* inputSystem, int outputCode, bool set)
 		{
 			if (set)
 			{
@@ -45,8 +46,8 @@ namespace ginkgo
 			{
 				inputSystem->getOwner()->resetMovementControlFlag(BACK_MOVE);
 			}
-		});
-		inputSystem->addControl(GLFW_KEY_A, 3, [](IAbstractInputSystem* inputSystem, int outputCode, bool set)
+		}));
+		inputSystem->addCommand(Command(3, [](IAbstractInputSystem* inputSystem, int outputCode, bool set)
 		{
 			if (set)
 			{
@@ -56,8 +57,8 @@ namespace ginkgo
 			{
 				inputSystem->getOwner()->resetMovementControlFlag(LEFT_MOVE);
 			}
-		});
-		inputSystem->addControl(GLFW_KEY_D, 4, [](IAbstractInputSystem* inputSystem, int outputCode, bool set)
+		}));
+		inputSystem->addCommand(Command(4, [](IAbstractInputSystem* inputSystem, int outputCode, bool set)
 		{
 			if (set)
 			{
@@ -67,7 +68,13 @@ namespace ginkgo
 			{
 				inputSystem->getOwner()->resetMovementControlFlag(RIGHT_MOVE);
 			}
-		});
+		}));
+
+		inputSystem->bindInputCode(GLFW_KEY_W, 1);
+		inputSystem->bindInputCode(GLFW_KEY_S, 2);
+		inputSystem->bindInputCode(GLFW_KEY_A, 3);
+		inputSystem->bindInputCode(GLFW_KEY_D, 4);
+
 		registerInputSystem(inputSystem, this);
 	}
 
