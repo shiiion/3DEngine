@@ -21,6 +21,7 @@ namespace ginkgo
 		glm::vec3 rotation;
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
+		bool gravityEnabled;
 		float airSpeedFactor;
 
 		IRenderable* renderableComponent;
@@ -45,6 +46,7 @@ namespace ginkgo
 		const glm::vec3& getVelocity() const override { return velocity; }
 		const glm::vec3& getAcceleration() const override { return acceleration; }
 		const glm::vec3& getRotation() const override { return rotation; }
+		bool isGravityEnabled() const override { return gravityEnabled; }
 
 		long getEntityID() const override { return entityID; }
 		int getMovementState() const override { return this->movementState; }
@@ -58,6 +60,7 @@ namespace ginkgo
 		void addAcceleration(const glm::vec3& acc) override { acceleration += acc; }
 		void setRotation(const glm::vec3& ang) override { rotation = ang; }
 		void setEntityID(long ID) override { entityID = ID; }
+		void setGravityEnabled(bool enabled) override { gravityEnabled = enabled; }
 		void setMovementState(int newState) override { this->movementState = newState; }
 		void setRenderable(IRenderable* component) override { renderableComponent = component; }
 		void setPhysics(IPhysicsObject* component) override { physicsComponent = component; }

@@ -13,6 +13,7 @@ namespace ginkgo
 		velocity = vel;
 		acceleration = accel;
 		airSpeedFactor = 1;
+		gravityEnabled = true;
 
 		entityID = Core::generateID();
 		renderableComponent = nullptr;
@@ -93,7 +94,6 @@ namespace ginkgo
 			physicsComponent->onTick(elapsedTime);
 		}
 		position += velocity * elapsedTime;
-		//TODO: get rid of getGravity()
 		velocity += acceleration * elapsedTime + getWorld()->getGravity() * elapsedTime;
 	}
 

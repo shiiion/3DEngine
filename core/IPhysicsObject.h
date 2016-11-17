@@ -29,7 +29,6 @@ namespace ginkgo
 		virtual void setMaterial(const Material& mat) = 0;
 		virtual void setMass(float mass) = 0;
 		virtual void setCanCollide(bool collides) = 0;
-		virtual void setCanGravity(bool canGravity) = 0;
 		virtual void setCollisionMesh(ICollisionMesh* collision) = 0;
 		virtual void incrementCollision() = 0;
 		virtual void decrementCollision() = 0;
@@ -38,7 +37,6 @@ namespace ginkgo
 		virtual const Material& getMaterial() const = 0;
 		virtual float getMass() const = 0;
 		virtual bool doesCollide() const = 0;
-		virtual bool doesHaveGravity() const = 0;
 		virtual ICollisionMesh* getCollisionMesh() const = 0;
 		virtual UINT32 getNumCollisions() const = 0;
 		virtual UINT32 getCollisionType() const = 0;
@@ -56,5 +54,5 @@ namespace ginkgo
 		virtual glm::vec3 const& getPrimaryCollisionNormal() const = 0;
 	};
 
-	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canGravity = true, bool canCollide = true);
+	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide = true);
 }

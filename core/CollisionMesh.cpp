@@ -33,7 +33,8 @@ namespace ginkgo
 		lastMove.centerStart = owner->getParent()->getPosition();
 		lastMove.centerEnd = owner->getParent()->getPosition() + owner->getParent()->getVelocity() * deltaTime;
 		lastMove.velStart = owner->getParent()->getVelocity();
-		lastMove.velEnd = lastMove.velStart + (lastMove.accel * deltaTime);
+		lastMove.velEnd = lastMove.velStart + (lastMove.accel * deltaTime) +
+			(owner->getParent()->isGravityEnabled() ? (getWorld()->getGravity() * deltaTime) : glm::vec3(0, 0, 0));
 		lastMove.accel = owner->getParent()->getAcceleration();
 
 		cachedCenter = lastMove.centerEnd;

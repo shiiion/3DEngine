@@ -14,6 +14,7 @@ namespace ginkgo
 		rotation = rot;
 		velocity = vel;
 		acceleration = accel;
+		gravityEnabled = true;
 
 		entityID = Core::generateID();
 		renderableComponent = nullptr;
@@ -37,6 +38,11 @@ namespace ginkgo
 	const glm::vec3& Entity::getPosition() const
 	{
 		return position;
+	}
+
+	bool Entity::isGravityEnabled() const
+	{
+		return gravityEnabled;
 	}
 
 	void Entity::setAcceleration(const glm::vec3& accel)
@@ -81,7 +87,7 @@ namespace ginkgo
 			physicsComponent->onTick(elapsedTime);
 		}
 		position += velocity * elapsedTime;
-		velocity += acceleration * elapsedTime;
+		velocity += acceleration * elapsedTime + (gravityEnabled ? (getWorld()->getGravity() * elapsedTime) : glm::vec3(0, 0, 0));
 	}
 
 	void Entity::endTick(float elapsedTime)
@@ -119,6 +125,11 @@ namespace ginkgo
 	void Entity::setRenderable(IRenderable* component)
 	{
 		renderableComponent = component;
+	}
+	
+	void Entity::setGravityEnabled(bool enabled)
+	{
+		gravityEnabled = enabled;
 	}
 
 	IPhysicsObject* Entity::getPhysics() const

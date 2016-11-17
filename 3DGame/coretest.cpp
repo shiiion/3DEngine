@@ -42,12 +42,12 @@ int main()
 	super.reboundFraction = 0;
 	super.friction = 0;
 	ICharacter* newEnt1 = characterFactory(glm::vec3(0, 5, 0), glm::vec3(), glm::vec3(0, 0, 0));
-	newEnt1->setPhysics(physicsObjectFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true, true));
+	newEnt1->setPhysics(physicsObjectFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true));
 
 	getWorld()->addEntity(newEnt1);
 
 	IEntity* newEnt2 = entityFactory(glm::vec3(0, -4, 0), glm::vec3(), glm::vec3(0, 0, 0));
-	newEnt2->setPhysics(physicsObjectFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true, true));
+	newEnt2->setPhysics(physicsObjectFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true));
 
 //	getWorld()->addEntity(newEnt2);
 	//for (int a = -2; a < -1; a++)

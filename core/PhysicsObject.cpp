@@ -8,18 +8,13 @@
 namespace ginkgo
 {
 
-	PhysicsObject::PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canGravity, bool canCollide)
+	PhysicsObject::PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide)
 		: parent(parent)
 	{
 		this->mass = mass;
 		material = mat;
 		collisionMesh = collision;
 		this->canCollide = canCollide;
-		this->canGravity = canGravity;
-		if (canGravity && collisionType == CTYPE_WORLDDYNAMIC)
-		{
-			parent->addAcceleration(getWorld()->getGravity());
-		}
 		numCollisions = 0;
 		this->collisionType = collisionType;
 		collision->setOwner(this);
@@ -65,11 +60,6 @@ namespace ginkgo
 		return canCollide;
 	}
 
-	bool PhysicsObject::doesHaveGravity() const
-	{
-		return canGravity;
-	}
-
 	ICollisionMesh* PhysicsObject::getCollisionMesh() const
 	{
 		return collisionMesh;
@@ -108,11 +98,6 @@ namespace ginkgo
 	void PhysicsObject::setCanCollide(bool collides)
 	{
 		canCollide = collides;
-	}
-
-	void PhysicsObject::setCanGravity(bool canGravity)
-	{
-		this->canGravity = canGravity;
 	}
 
 	void PhysicsObject::setCollisionMesh(ICollisionMesh* collision)
@@ -154,9 +139,9 @@ namespace ginkgo
 		return finalMove;
 	}
 	
-	IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canGravity, bool canCollide)
+	IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide)
 	{
-		return new PhysicsObject(parent, collision, collisionType, mass, mat, canGravity, canCollide);
+		return new PhysicsObject(parent, collision, collisionType, mass, mat, canCollide);
 	}
 
 }

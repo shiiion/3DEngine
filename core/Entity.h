@@ -13,6 +13,7 @@ namespace ginkgo
 		glm::vec3 rotation;
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
+		bool gravityEnabled;//default true
 
 		IRenderable* renderableComponent;
 		IPhysicsObject* physicsComponent;
@@ -30,6 +31,7 @@ namespace ginkgo
 		const glm::vec3& getAcceleration() const override;
 		const glm::vec3& getRotation() const override;
 		long getEntityID() const override;
+		bool isGravityEnabled() const override;
 		IRenderable* getRenderable() const override;
 		IPhysicsObject* getPhysics() const override;
 
@@ -41,6 +43,7 @@ namespace ginkgo
 		void setEntityID(long ID) override;
 		void setRenderable(IRenderable* component) override;
 		void setPhysics(IPhysicsObject* component) override;
+		void setGravityEnabled(bool enabled) override;
 
 		EntityType getEntityType() const override;
 
