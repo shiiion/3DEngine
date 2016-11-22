@@ -33,8 +33,9 @@ namespace ginkgo
 		if (!collisionMesh->testCollision(*otherCollision, deltaTime, manifold))
 		{
 			getWorld()->addCollision(manifold, deltaTime);
-			primaryCollisionNormal = manifold.collisionNormal;
-			((PhysicsObject*)other)->primaryCollisionNormal = -manifold.collisionNormal;
+			normalList.emplace_front(SurfaceData(parent->getEntityID(), other->getParent()->getEntityID(), manifold.collisionNormal));
+			((PhysicsObject*)other)->normalList.emplace_front(SurfaceData(other->getParent()->getEntityID(),
+				parent->getEntityID(), -manifold.collisionNormal));
 			return true;
 		}
 		return false;
@@ -80,9 +81,23 @@ namespace ginkgo
 		return glm::length(parent->getVelocity()) > 0.f || glm::length(parent->getVelocity()) > 0.0f;
 	}
 
-	glm::vec3 const& PhysicsObject::getPrimaryCollisionNormal() const
+	std::forward_list<SurfaceData> const& PhysicsObject::getCollisionNormalList() const
 	{
-		return primaryCollisionNormal;
+		return normalList;
+	}
+
+	void PhysicsObject::removeNormal(SurfaceData const& data)
+	{
+		for (auto iter = normalList.before_begin(); iter != normalList.end();)
+		{
+			auto prevElem = iter;
+			iter++;
+			if ((iter)->compareSurface(data))
+			{
+				normalList.erase_after(prevElem);
+				break;
+			}
+		}
 	}
 
 	void PhysicsObject::setMaterial(const Material& mat)

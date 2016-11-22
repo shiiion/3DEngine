@@ -161,8 +161,13 @@ namespace ginkgo
 			if (!collisions[a].valid)
 			{
 				//collisions[a].manifold.thisMesh->getOwner()->setCollisionState(CSTATE_NO)
-				collisions[a].manifold.thisMesh->getOwner()->decrementCollision();
-				collisions[a].manifold.otherMesh->getOwner()->decrementCollision();
+				IPhysicsObject* t = collisions[a].manifold.thisMesh->getOwner();
+				IPhysicsObject* o = collisions[a].manifold.otherMesh->getOwner();
+				t->decrementCollision();
+				o->decrementCollision();
+				//TODO: give IDs to collisions for better stability
+				t->removeNormal(SurfaceData(t->getParent()->getEntityID(), o->getParent()->getEntityID(), collisions[a].manifold.normal));
+				o->removeNormal(SurfaceData(o->getParent()->getEntityID(), t->getParent()->getEntityID(), -collisions[a].manifold.normal));
 				collisions.erase(collisions.begin() + a);
 				a--;
 			}

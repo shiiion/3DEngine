@@ -20,7 +20,7 @@ namespace ginkgo
 
 		MoveResult finalMove;
 
-		glm::vec3 primaryCollisionNormal;
+		std::forward_list<SurfaceData> normalList;
 
 	public:
 		PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide = true);
@@ -52,6 +52,7 @@ namespace ginkgo
 
 		const MoveResult& getMoveResult() const override;
 		
-		glm::vec3 const& getPrimaryCollisionNormal() const override;
+		std::forward_list<SurfaceData> const& getCollisionNormalList() const override;
+		void removeNormal(SurfaceData const& data) override;
 	};
 }

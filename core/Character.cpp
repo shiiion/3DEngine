@@ -146,21 +146,6 @@ namespace ginkgo
 	}
 
 
-	void resolveWalking(ICharacter& character, float elapsedTime)
-	{
-		applyMovement(character, elapsedTime);
-		glm::vec3 collisionNormal = character.getPhysics()->getPrimaryCollisionNormal();//TODO: change this to most recent viable collision normal
-		glm::vec3 velocityProjectionOnNormal = (collisionNormal * glm::dot(character.getVelocity(), collisionNormal) / pow(length(collisionNormal), 2));//should work
-																																						//checks if slope is away or towards the player's movement, projects velocity on slope
-		if (glm::length(character.getVelocity() + collisionNormal) > glm::length(character.getVelocity()))
-		{
-			character.setVelocity(character.getVelocity() - velocityProjectionOnNormal);//TODO: only project movement velocity
-		}
-		else
-		{
-			character.setVelocity(character.getVelocity() + velocityProjectionOnNormal);
-		}
-	}
 
 	bool isWalkableNormal(glm::vec3 const& normal)
 	{
@@ -175,13 +160,48 @@ namespace ginkgo
 		return (angBetween <= 45);
 	}
 
+	glm::vec3 const* findBestWalkableNormal(std::forward_list<SurfaceData> const& normalList, bool& found)
+	{
+		auto listIter = normalList.begin();
+		while (listIter != normalList.end() && !(found = isWalkableNormal(listIter->surfaceNormal))) listIter++;
+
+		if (found)
+		{
+			return &listIter->surfaceNormal;
+		}
+		return nullptr;
+	}
+
+	void resolveWalking(ICharacter& character, float elapsedTime)
+	{
+		applyMovement(character, elapsedTime);
+		bool found;
+		glm::vec3 const* normalPtr = findBestWalkableNormal(character.getPhysics()->getCollisionNormalList(), found);//TODO: change this to most recent viable collision normal
+		if (normalPtr == nullptr)
+		{
+			return;
+		}
+		glm::vec3 const& collisionNormal = *normalPtr;
+		glm::vec3 velocityProjectionOnNormal = (collisionNormal * glm::dot(character.getVelocity(), collisionNormal) / pow(length(collisionNormal), 2));//should work
+																																						//checks if slope is away or towards the player's movement, projects velocity on slope
+		if (glm::length(character.getVelocity() + collisionNormal) > glm::length(character.getVelocity()))
+		{
+			character.setVelocity(character.getVelocity() - velocityProjectionOnNormal);//TODO: only project movement velocity
+		}
+		else
+		{
+			character.setVelocity(character.getVelocity() + velocityProjectionOnNormal);
+		}
+	}
+
 	bool checkWalking(ICharacter const& character, float elapsedTime)
 	{
 		if (character.getPhysics()->getNumCollisions())//some boolean for collision
 		{
 			//TODO: default to newest walkable normal!!
-			glm::vec3 const& collisionNormal = character.getPhysics()->getPrimaryCollisionNormal();//TODO find collision normal
-			return isWalkableNormal(collisionNormal);
+			bool found;
+			findBestWalkableNormal(character.getPhysics()->getCollisionNormalList(), found);//TODO find collision normal
+			return found;
 		}
 		return false;
 	} 

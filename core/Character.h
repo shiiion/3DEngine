@@ -63,7 +63,10 @@ namespace ginkgo
 		void setGravityEnabled(bool enabled) override { gravityEnabled = enabled; }
 		void setMovementState(int newState) override { this->movementState = newState; }
 		void setRenderable(IRenderable* component) override { renderableComponent = component; }
-		void setPhysics(IPhysicsObject* component) override { physicsComponent = component; }
+		void setPhysics(IPhysicsObject* component) override 
+		{ 
+			physicsComponent = component;
+		}
 
 		void addComponent(IComponent* component) override;
 

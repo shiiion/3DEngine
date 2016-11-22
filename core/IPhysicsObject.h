@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IRenderable.h"
+#include <forward_list>
 
 #define CSTATE_RESOLVE 1
 #define CSTATE_NOCOLLISION 0
@@ -50,8 +51,12 @@ namespace ginkgo
 		virtual IEntity* const getParent() const = 0;
 
 		virtual const MoveResult& getMoveResult() const = 0;
+		
+		//Returns a list of all collision normals for this object (updated per-tick)
+		//Most recent normal is at the beginning of the list
+		virtual std::forward_list<SurfaceData> const& getCollisionNormalList() const = 0;
 
-		virtual glm::vec3 const& getPrimaryCollisionNormal() const = 0;
+		virtual void removeNormal(SurfaceData const& data) = 0;
 	};
 
 	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide = true);

@@ -39,6 +39,11 @@ namespace ginkgo
 	typedef std::function<void(ICharacter&, float)> DoOnMovementState;
 	typedef void(__cdecl* OnInputFunc)(IAbstractInputSystem* inputSystem, int outputCode, bool set);
 
+	typedef unsigned __int8 UBYTE;
+	typedef signed __int32 INT32;
+	typedef unsigned __int32 UINT32;
+
+
 	struct Material
 	{
 		float friction;
@@ -105,6 +110,31 @@ namespace ginkgo
 
 		glm::vec3 collisionNormal;
 
+	};
+
+	struct SurfaceData
+	{
+		SurfaceData(UINT32 thisID, UINT32 otherID, glm::vec3 const& normal)
+		{
+			this->thisID = thisID;
+			this->otherID = otherID;
+			surfaceNormal = normal;
+		}
+
+		UINT32 thisID;
+		UINT32 otherID;
+		glm::vec3 surfaceNormal;
+
+		bool compareSurface(SurfaceData const& otherSurface)
+		{
+			if ((thisID == otherSurface.thisID) && (otherID == otherSurface.otherID))
+			{
+				return (surfaceNormal.x == otherSurface.surfaceNormal.x) &&
+					(surfaceNormal.y == otherSurface.surfaceNormal.y) &&
+					(surfaceNormal.z == otherSurface.surfaceNormal.z);
+			}
+			return false;
+		}
 	};
 
 	struct CollisionStationary
@@ -222,9 +252,4 @@ namespace ginkgo
 		bool prevSet;
 		Command command;
 	};
-
-	typedef unsigned __int8 UBYTE;
-	typedef signed __int32 INT32;
-	typedef unsigned __int32 UINT32;
-
 };

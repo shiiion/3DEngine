@@ -48,7 +48,8 @@ int main()
 
 	IEntity* newEnt2 = entityFactory(glm::vec3(0, -4, 0), glm::vec3(), glm::vec3(0, 0, 0));
 	newEnt2->setPhysics(physicsObjectFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true));
-
+	getWorld()->addEntity(newEnt2);
+	newEnt2->setGravityEnabled(false);
 //	getWorld()->addEntity(newEnt2);
 	//for (int a = -2; a < -1; a++)
 	//{
@@ -71,7 +72,7 @@ int main()
 	int iter = 0;
 	while (true)
 	{
-		glm::vec3 b = getWorld()->getEntity(1)->getPosition();
+		glm::vec3 b = getWorld()->getEntity(2)->getPosition();
 		unsigned int movementState = ((ICharacter*)getWorld()->getEntity(1))->getMovementState();
 		printf("position: %f, %f, %f, %d\n", b.x, b.y, b.z, movementState);
 		tickCore(1);
