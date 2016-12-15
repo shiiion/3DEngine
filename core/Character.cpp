@@ -205,4 +205,15 @@ namespace ginkgo
 		}
 		return false;
 	} 
+
+
+	void walkingEnabled(ICharacter& character, float elapsedTime)
+	{
+		character.setGravityEnabled(false);
+	}
+
+	void walkingDisabled(ICharacter& character, float elapsedTime)
+	{
+		character.setGravityEnabled(true);
+	}
 }

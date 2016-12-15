@@ -34,7 +34,7 @@ namespace ginkgo
 		//virtual CustomMovement* getCustomMovement(int movementValue) const = 0;
 		//virtual void registerCustomMovement(CustomMovement const& newMove) = 0;
 
-		virtual int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState) = 0;
+		virtual int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState, const OnMovementStateEnabled& OnStateEnabled, const OnMovementStateDisabled& OnStateDisabled) = 0;
 		virtual int getMovementState(const std::string& name) const = 0;
 		virtual void checkMovementStates(float elapsedTime) = 0;
 		virtual void doMovementStates(float elapsedTime) = 0;

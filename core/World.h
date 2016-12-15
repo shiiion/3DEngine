@@ -41,7 +41,7 @@ namespace ginkgo
 		//void registerCustomMovement(CustomMovement const& newMove) override;
 		//CustomMovement* getCustomMovement(int movementValue) const override;
 
-		virtual int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState) override;
+		virtual int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState, const OnMovementStateEnabled& OnStateEnabled, const OnMovementStateDisabled& OnStateDisabled) override;
 		virtual int getMovementState(const std::string& name) const override;
 		virtual void checkMovementStates(float elapsedTime) override;
 		virtual void doMovementStates(float elapsedTime) override;

@@ -37,6 +37,9 @@ namespace ginkgo
 	typedef bool(__cdecl* RaytraceFunc)(IPhysicsObject* hitObject);
 	typedef std::function<bool(const ICharacter&, float)> CheckIfMovementState;
 	typedef std::function<void(ICharacter&, float)> DoOnMovementState;
+	typedef std::function<void(ICharacter&, float)> OnMovementStateEnabled;
+	typedef std::function<void(ICharacter&, float)> OnMovementStateDisabled;
+
 	typedef void(__cdecl* OnInputFunc)(IAbstractInputSystem* inputSystem, int outputCode, bool set);
 
 	typedef unsigned __int8 UBYTE;
@@ -176,19 +179,24 @@ namespace ginkgo
 	};
 
 	struct RegisteredMovementState {
-		RegisteredMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState) :
+		RegisteredMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState, 
+			const OnMovementStateEnabled& onStateEnabled, const OnMovementStateDisabled& onStateDisabled) :
 			name(name),
 			CheckMovementState(CheckMovementState),
-			OnMovementState(OnMovementState)
+			OnMovementState(OnMovementState),
+			OnStateEnabled(onStateEnabled),
+			OnStateDisabled(onStateDisabled)
 		{}
 
 		std::string name;
 		CheckIfMovementState CheckMovementState;
 		DoOnMovementState OnMovementState;
+		OnMovementStateEnabled OnStateEnabled;
+		OnMovementStateDisabled OnStateDisabled;
 
 		static RegisteredMovementState GetNullMovementState()
 		{
-			return RegisteredMovementState("NullMovementState", [](const ICharacter&, float) {return false; }, [](const ICharacter&, float) {return; });
+			return RegisteredMovementState("NullMovementState", [](const ICharacter&, float) {return false; }, [](const ICharacter&, float) {return; }, [](const ICharacter&, float) { return; }, [](const ICharacter&, float) { return; });
 		}
 	};
 

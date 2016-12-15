@@ -72,8 +72,8 @@ int main()
 	int iter = 0;
 	while (true)
 	{
-		glm::vec3 b = getWorld()->getEntity(2)->getPosition();
-		unsigned int movementState = ((ICharacter*)getWorld()->getEntity(1))->getMovementState();
+		glm::vec3 b = getWorld()->getEntity(1)->getPosition();
+		unsigned int movementState = ((ICharacter*)getWorld()->getEntity(1))->isGravityEnabled();
 		printf("position: %f, %f, %f, %d\n", b.x, b.y, b.z, movementState);
 		tickCore(1);
 

@@ -108,4 +108,6 @@ namespace ginkgo
 	void resolveFreemove(ICharacter& character, float elapsedTime);
 	void resolveWalking(ICharacter& character, float elapsedTime);
 	bool checkWalking(ICharacter const& character, float elapsedTime);
+	void walkingEnabled(ICharacter& character, float elapsedTime);
+	void walkingDisabled(ICharacter& character, float elapsedTime);
 }

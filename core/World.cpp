@@ -126,9 +126,9 @@ namespace ginkgo
 		resultOut.collisionDist = -1;
 	}
 
-	int World::registerMovementState(const std::string & name, const CheckIfMovementState & CheckMovementState, const DoOnMovementState & OnMovementState)
+	int World::registerMovementState(const std::string & name, const CheckIfMovementState & CheckMovementState, const DoOnMovementState & OnMovementState, const OnMovementStateEnabled& OnStateEnabled, const OnMovementStateDisabled& OnStateDisabled)
 	{
-		RegisteredMovementState state(name, CheckMovementState, OnMovementState);
+		RegisteredMovementState state(name, CheckMovementState, OnMovementState, OnStateEnabled, OnStateDisabled);
 		return manager.RegisterMovementState(state);
 	}
 

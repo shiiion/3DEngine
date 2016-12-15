@@ -4,9 +4,9 @@
 namespace ginkgo {
 	MovementStateCallbackManager::MovementStateCallbackManager()
 	{
-		RegisteredMovementState fallingState("FallingMovementState", [](const ICharacter&, float) { return false; }, resolveFreemove);
+		RegisteredMovementState fallingState("FallingMovementState", [](const ICharacter&, float) { return false; }, resolveFreemove, [](ICharacter&, float) { return; }, [](ICharacter&, float) { return; });
 		this->RegisterMovementState(fallingState);
-		RegisteredMovementState walkingState("WalkingMovementState", checkWalking, resolveWalking);
+		RegisteredMovementState walkingState("WalkingMovementState", checkWalking, resolveWalking, walkingEnabled, walkingDisabled);
 		this->RegisterMovementState(walkingState);
 	}
 
@@ -46,14 +46,32 @@ namespace ginkgo {
 		for (IEntity* entity : entities) {
 			ICharacter* character = dynamic_cast<ICharacter*>(entity);
 			if (character == nullptr) continue;
+			bool stateFound = false;
 			//TODO: ignore world static objects
-			character->setMovementState(0);
+			//character->setMovementState(0); JASON?????
 			for (std::vector<int>::size_type i = 0; i < character->getMovementStates().size(); ++i) {
 				const RegisteredMovementState& state = this->states.at(i);
-				if (state.CheckMovementState(*character, elapsedTime)) {
+				if (state.CheckMovementState(*character, elapsedTime)) 
+				{
+					if (state.name.compare(states.at(character->getMovementState()).name) != 0)
+					{
+						states.at(character->getMovementState()).OnStateDisabled(*character, elapsedTime);
+						state.OnStateEnabled(*character, elapsedTime);
+					}
 					character->setMovementState(i);
+					stateFound = true;
 					break;
 				}
+			}
+
+			if (!stateFound)
+			{
+				if (states.at(0).name.compare(states.at(character->getMovementState()).name) != 0)
+				{
+					states.at(character->getMovementState()).OnStateDisabled(*character, elapsedTime);
+					states.at(0).OnStateEnabled(*character, elapsedTime);
+				}
+				character->setMovementState(0);
 			}
 		}
 	}
