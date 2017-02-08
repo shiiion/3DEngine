@@ -67,11 +67,12 @@ namespace ginkgo
 	{
 		if (running)
 		{
-			float elapsedTime = 0.016f * timeScale;//(getEngineTime() - lastTickTime) * timeScale;
+			float elapsedTime = 0.016f * timeScale;//(getEngineTime() - lastTickTime) * timeScale; 
 			lastTickTime = getEngineTime();
 
 			processInput();
 			physicsTick(elapsedTime);
+			//update(elapsedTime); + render
 		}
 	}
 
