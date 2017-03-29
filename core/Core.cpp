@@ -218,13 +218,13 @@ namespace ginkgo
 		return Core::core.getInputSystemList();
 	}
 
-	DECLSPEC_CORE int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState, const OnMovementStateEnabled& OnStateEnabled, const OnMovementStateDisabled& OnStateDisabled)
+	int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState, const OnMovementStateEnabled& OnStateEnabled, const OnMovementStateDisabled& OnStateDisabled)
 	{
 		IWorld* world = getWorld();
 		return world->registerMovementState(name, CheckMovementState, OnMovementState, OnStateEnabled, OnStateDisabled);
 	}
 
-	DECLSPEC_CORE int getMovementState(const std::string & name)
+	int getMovementState(const std::string & name)
 	{
 		IWorld* world = getWorld();
 		return world->getMovementState(name);

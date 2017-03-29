@@ -40,7 +40,7 @@ int main()
 		glm::vec3(0, 0, 1));
 	Material super;
 	super.reboundFraction = 0;
-	super.friction = 0;
+	super.friction = 1;
 	ICharacter* newEnt1 = characterFactory(glm::vec3(0, 5, 0), glm::vec3(), glm::vec3(0, 0, 0));
 	newEnt1->setPhysics(physicsObjectFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true));
 
