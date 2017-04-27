@@ -11,25 +11,39 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="buffers\Buffer.h" />
-    <ClInclude Include="buffers\IndexBuffer.h" />
-    <ClInclude Include="buffers\VertexArray.h" />
-    <ClInclude Include="IRenderEngine.h" />
-    <ClInclude Include="meshs\CubeMesh.h" />
-    <ClInclude Include="meshs\IRenderMesh.h" />
-    <ClInclude Include="meshs\SphereMesh.h" />
-    <ClInclude Include="RenderEngine.h" />
-    <ClInclude Include="meshs\RenderMesh.h" />
-    <ClInclude Include="RenderResource.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CubeMap.h" />
+    <ClInclude Include="Debugging.h" />
+    <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="Layer.h" />
+    <ClInclude Include="LightStructs.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="PhongShader.h" />
+    <ClInclude Include="Renderable.h" />
+    <ClInclude Include="ScreenBuffer.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="buffers\Buffer.cpp" />
-    <ClCompile Include="buffers\IndexBuffer.cpp" />
-    <ClCompile Include="buffers\VertexArray.cpp" />
-    <ClCompile Include="meshs\CubeMesh.cpp" />
-    <ClCompile Include="meshs\SphereMesh.cpp" />
-    <ClCompile Include="RenderEngine.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="Debugging.cpp" />
+    <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="PhongShader.cpp" />
+    <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="ScreenBuffer.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -72,7 +86,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLEW_STATIC;COMP_DLL_RENDER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMP_DLL_RENDER;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

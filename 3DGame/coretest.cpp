@@ -69,6 +69,8 @@ int main()
 	//		getWorld()->addEntity(newEnt);
 	//	}
 	//}
+
+
 	int iter = 0;
 	while (true)
 	{

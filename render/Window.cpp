@@ -1,53 +1,56 @@
-#include "Window.h"
 #include <iostream>
 
-namespace ginkgo
-{
-	Window::Window(const char* name, int w, int h)
-		:title(name), width(w), height(h)
+#include "Window.h"
+
+namespace ginkgo {
+	Window::Window(const char* name, int width, int height, const glm::vec4& clear_color, bool isFullScreen)
+		: title(name), width(width), height(height), clear_color(clear_color), isFullScreen(isFullScreen)
 	{
 		if (!init())
 			glfwTerminate();
 
-		for (unsigned int i = 0; i < MAX_KEYS; i++)
+		for (int i = 0; i < MAX_KEYS; i++)
 			keys[i] = false;
 
-		for (unsigned int i = 0; i < MAX_BUTTONS; i++)
+		for (int i = 0; i < MAX_BUTTONS; i++)
 			mouseButtons[i] = false;
 	}
 
 	Window::~Window()
 	{
+		//glfwDestroyWindow(window); //doesn't actually matter cuz glfwTerminate destroys any remaining windows
 		glfwTerminate();
 	}
 
 	bool Window::init()
 	{
-
 		if (!glfwInit())
 		{
 			std::cout << "Failed to initialize GLFW!" << std::endl;
 			return false;
 		}
 
-		//TODO: Might want to change so multiple screens, primary screen can change, fullscreen option, etc,
-		window = glfwCreateWindow(width, height, title, NULL, NULL);
+		//window resize
+		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+		window = (isFullScreen) ?
+			glfwCreateWindow(width, height, title, glfwGetPrimaryMonitor(), NULL) :
+			glfwCreateWindow(width, height, title, NULL, NULL);
 		if (!window)
 		{
 			glfwTerminate();
-			std::cout << "Failed to return GLFW window!" << std::endl;	
+			std::cout << "Failed to return a window!" << std::endl;
 			return false;
 		}
 
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, this);
-		glfwSetFramebufferSizeCallback(window, window_resize);
+		glfwSetFramebufferSizeCallback(window, window_resize_callback);
 		glfwSetKeyCallback(window, key_callback);
 		glfwSetMouseButtonCallback(window, mouse_button_callback);
 		glfwSetCursorPosCallback(window, cursor_position_callback);
 		glfwSetScrollCallback(window, scroll_callback);
-
-		glfwSwapInterval(0); //The VSync thing for more than 60 fps
+		//optimize for more than 60 fps
+		glfwSwapInterval(0);
 
 		//************************************************
 		//glew must be initialized AFTER glfw makes context 
@@ -58,7 +61,19 @@ namespace ginkgo
 			std::cout << "Could not initialize GLEW!" << std::endl;
 			return false;
 		}
+
 		std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
+
+		/**********Other Settings**********/
+		glFrontFace(GL_CW);	//Drawing front face in Clockwise //TBB //already
+		glCullFace(GL_BACK); //Not drawing back face	//TBB
+		//glEnable(GL_CULL_FACE);	//Not drawing unnecessary front and back stuff //TBB
+		//glEnable(GL_DEPTH_TEST); //Z component for depth //TBB //already
+		//glDepthFunc(GL_LESS); //already
+		glEnable(GL_DEPTH_CLAMP);//Depth clamp so camera won't be halfway inside or outside //TBB //already
+		//glEnable(GL_FRAMEBUFFER_SRGB); //More gamma correction, all other colors are already exponential, it does it for us
+		//Wireframe
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		
 		return true;
 	}
@@ -81,8 +96,8 @@ namespace ginkgo
 
 	void Window::getMousePosition(double& x, double& y) const
 	{
-		x = m_x;
-		y = m_y;
+		x = mx;
+		y = my;
 	}
 
 	void Window::getScrollOffset(double& xvalue, double& yvalue) const
@@ -92,21 +107,18 @@ namespace ginkgo
 	}
 
 
-	void Window::clear() const
+	/*void Window::clear() const //deprecated lol
 	{
-		//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
+		//TODO: change so specific for each framebuffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+	}*/
 
-	void Window::update()
+	void Window::update() const
 	{
-		GLenum error = glGetError();
 		glfwPollEvents();
 
-		if (error != GL_NO_ERROR)
-			std::cout << "OpenGL Error: " << error << std::endl;
-
-		//		glfwGetFramebufferSize(window, &width, &height);
+		//		glfwGetFramebufferSize(Window, &Width, &Height);
 		glfwSwapBuffers(window);
 	}
 
@@ -115,7 +127,7 @@ namespace ginkgo
 		return glfwWindowShouldClose(window) == 1;
 	}
 
-	void window_resize(GLFWwindow *window, int width, int height)
+	void window_resize_callback(GLFWwindow* window, int width, int height)
 	{
 		glViewport(0, 0, width, height);
 		Window* win = (Window *)glfwGetWindowUserPointer(window);
@@ -138,8 +150,8 @@ namespace ginkgo
 	void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	{
 		Window* win = (Window *)glfwGetWindowUserPointer(window);
-		win->m_x = xpos;
-		win->m_y = ypos;
+		win->mx = xpos;
+		win->my = ypos;
 	}
 
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -148,5 +160,6 @@ namespace ginkgo
 		win->s_xoffset = xoffset;
 		win->s_yoffset = yoffset;
 	}
+
 
 }
