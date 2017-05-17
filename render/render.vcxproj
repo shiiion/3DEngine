@@ -15,6 +15,13 @@
     <ClInclude Include="CubeMap.h" />
     <ClInclude Include="Debugging.h" />
     <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="ICamera.h" />
+    <ClInclude Include="ICubeMap.h" />
+    <ClInclude Include="ILayer.h" />
+    <ClInclude Include="IPhongShader.h" />
+    <ClInclude Include="IRenderable.h" />
+    <ClInclude Include="IText.h" />
+    <ClInclude Include="IWindow.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="LightStructs.h" />
     <ClInclude Include="Material.h" />

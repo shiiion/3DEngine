@@ -110,4 +110,9 @@ namespace ginkgo {
 		unbind();
 	}
 
+	ICubeMap* cubeMapFactory(std::map<unsigned int, std::string> faces, float scale = 500.0f)
+	{
+		return new CubeMap(faces, scale);
+	}
+
 }

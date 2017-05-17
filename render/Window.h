@@ -3,10 +3,11 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include "IWindow.h"
 
 namespace ginkgo {
 
-		class Window
+		class Window : public IWindow
 		{
 		public:
 			static const int MAX_KEYS = 1024;

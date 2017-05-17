@@ -2,12 +2,13 @@
 
 #include <GL/glew.h>
 #include <glm/gtc/quaternion.hpp>
+#include "ICamera.h"
 
 namespace ginkgo {
 
 	class Window;
 
-	class Camera
+	class Camera : public ICamera
 	{
 	private:
 		const Window* window;
@@ -17,29 +18,29 @@ namespace ginkgo {
 		glm::vec3 cameraPosition;
 		glm::quat cameraRotation;
 		GLfloat fov;
-		float cameraSpeedSensitivity;
+		/*float cameraSpeedSensitivity;
 		float mouseRotationSensitivity;
 		double xSave;
-		double ySave;
+		double ySave;*/
 	public:
 		Camera(const Window* window, const glm::vec3& camera_position);
 		
-		void setProjection(const glm::mat4& projection) { this->projection = projection; }
-		void setView(const glm::mat4& view) { this->view = view; }
-		void setCameraSpeedSensitivity(float cameraSpeedSensitivity) { this->cameraSpeedSensitivity = cameraSpeedSensitivity; }
-		void setMouseRotationSensitivity(float mouseSensitivity) { this->mouseRotationSensitivity = mouseSensitivity; }
-		void setFOV(float fov) { this->fov= fov; }
-		void setCameraPosition(const glm::vec3& cameraPosition) { this->cameraPosition = cameraPosition; }
+		void setProjection(const glm::mat4& projection) override { this->projection = projection; }
+		void setView(const glm::mat4& view) override { this->view = view; }
+		//void setCameraSpeedSensitivity(float cameraSpeedSensitivity) { this->cameraSpeedSensitivity = cameraSpeedSensitivity; }
+		//void setMouseRotationSensitivity(float mouseSensitivity) { this->mouseRotationSensitivity = mouseSensitivity; }
+		void setFOV(float fov) override { this->fov= fov; }
+		void setCameraPosition(const glm::vec3& cameraPosition) override { this->cameraPosition = cameraPosition; }
 
-		const glm::mat4& getProjection() const { return projection; }
-		const glm::mat4& getView() const { return view; }
-		const glm::vec3& getCameraPosition() const { return cameraPosition; }
-		const glm::mat4& getCameraPositionTranslation();
+		const glm::mat4& getProjection() const override { return projection; }
+		const glm::mat4& getView() const override { return view; }
+		const glm::vec3& getCameraPosition() const override { return cameraPosition; }
+		const glm::mat4& getCameraPositionTranslation() override;
 		
-		void input(bool& isGameOver, double dt);
-		void update(double dt);
+		//void input(bool& isGameOver, double dt);
+		void update(double dt) override;
 
-		void lensInput(bool& isGameOver, double dt);
+		//void lensInput(bool& isGameOver, double dt);
 	};
 
 }

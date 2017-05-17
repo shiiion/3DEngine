@@ -7,12 +7,13 @@
 
 #include "Shader.h"
 #include "Transform.h"
+#include "ICubeMap.h"
 
 namespace ginkgo {
 	
 	class Transform;
 
-	class CubeMap : public Shader
+	class CubeMap : public Shader, public ICubeMap
 	{
 	private:
 		unsigned int VAO;
@@ -28,9 +29,9 @@ namespace ginkgo {
 	public:
 		CubeMap(std::map<unsigned int, std::string> faces_filepaths, float scale = 500.0f);
 		~CubeMap();
-		void draw(const glm::mat4& transformProjectionView) const;
-		void bindCubeMapTexture() const;
-		void unbindCubeMapTexture() const;
+		void draw(const glm::mat4& transformProjectionView) const override;
+		void bindCubeMapTexture() const override;
+		void unbindCubeMapTexture() const override;
 	};
 	
 }

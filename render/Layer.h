@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <vector>
 
-#include <glm/glm.hpp>
-
+#include "ILayer.h"
 #include "Transform.h"
 
 namespace ginkgo {
@@ -14,31 +13,31 @@ namespace ginkgo {
 	class Camera;
 	class CubeMap;
 
-	class Layer
+	class Layer : public ILayer
 	{
 	private:
-		std::vector<Renderable*> renderables;
+		std::vector<IRenderable*> renderables;
 		std::vector<unsigned int> sizeTextureIDs;
 		Transform model;
 		static const unsigned int NO_TEXTURE = 0; //must be equal than 0 -> created textures will never have an id of 0
 
-		static bool compareRenderables(Renderable* r1, Renderable* r2);
-		static unsigned int determineTextureID(Renderable* r1);
+		static bool compareRenderables(IRenderable* r1, IRenderable* r2);
+		static unsigned int determineTextureID(IRenderable* r1);
 	public:
-		Layer(const std::vector<Renderable*>& renderables, const glm::mat4& model = glm::mat4());
+		Layer(const std::vector<IRenderable*>& renderables, const glm::mat4& model = glm::mat4());
 
 		unsigned int getSize() const { return renderables.size(); }
 
-		void addRenderable(Renderable* renderable);
-		Renderable* alterRenderable(unsigned int index) const;
-		const Renderable* getRenderable(unsigned int index) const;
+		void addRenderable(IRenderable* renderable) override;
+		IRenderable* alterRenderable(unsigned int index) const override;
+		const IRenderable* getRenderable(unsigned int index) const override;
 		
-		const glm::mat4& getModel() const;
-		Transform& alterModel() { return model; };
+		const glm::mat4& getModel() const override;
+		Transform& alterModel() override { return model; };
 
-		void draw(const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const;
-		void drawButOne(unsigned int indexNOTDRAWN, const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const;
-		void drawOne(unsigned int index, const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const;
+		void draw(const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const override;
+		//void drawButOne(unsigned int indexNOTDRAWN, const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const;
+		//void drawOne(unsigned int index, const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const;
 	};
 
 }

@@ -3,12 +3,12 @@
 #include <map>
 #include <string>
 
-#include <GL\glew.h>
 #include <glm\glm.hpp>
 #include <ft2build.h>
 #include <freetype\freetype.h>
 
 #include "Shader.h"
+#include "IText.h"
 
 namespace ginkgo {
 
@@ -19,7 +19,7 @@ namespace ginkgo {
 		GLuint Advance;    // Horizontal offset to advance to next glyph
 	};
 
-	class Text : public Shader
+	class Text : public Shader, public IText
 	{
 	private:
 		unsigned int VAO;
@@ -33,12 +33,12 @@ namespace ginkgo {
 		Text(float windowWidth, float windowHeight, const char* fontFilePath);
 		~Text();
 
-		void draw(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color);
+		void draw(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color) override;
 
-		float getMaxCharWidth() const { return maxWidth; }
-		float getMaxCharHeight() const { return maxHeight; }
-		float getMinCharWidth() const { return minWidth; }
-		float getMinCharHeight() const { return minHeight; }
+		float getMaxCharWidth() const override { return maxWidth; }
+		float getMaxCharHeight() const override { return maxHeight; }
+		float getMinCharWidth() const override { return minWidth; }
+		float getMinCharHeight() const override { return minHeight; }
 
 	};
 

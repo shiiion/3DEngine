@@ -10,7 +10,7 @@
 
 namespace ginkgo {
 
-	Layer::Layer(const std::vector<Renderable*>& renderablesL, const glm::mat4& model)
+	Layer::Layer(const std::vector<IRenderable*>& renderablesL, const glm::mat4& model)
 		: renderables(renderablesL), model(model)
 	{
 		std::sort(renderables.begin(), renderables.end(), compareRenderables);
@@ -30,19 +30,19 @@ namespace ginkgo {
 
 	}
 
-	GLuint Layer::determineTextureID(Renderable* r)
+	GLuint Layer::determineTextureID(IRenderable* r)
 	{
-		return (r->getMaterial().getTexture() != nullptr) ?
-			r->getMaterial().getTexture()->getID() :
+		return (r->getMaterial().texture != nullptr) ?
+			r->getMaterial().texture->getID() :
 			Layer::NO_TEXTURE;
 	}
 
-	bool Layer::compareRenderables(Renderable* r1, Renderable* r2)
+	bool Layer::compareRenderables(IRenderable* r1, IRenderable* r2)
 	{
 		return determineTextureID(r1) < determineTextureID(r2);
 	}
 
-	Renderable* Layer::alterRenderable(unsigned int index) const
+	IRenderable* Layer::alterRenderable(unsigned int index) const
 	{
 		if (index < 0 || index >= renderables.size())
 			return nullptr;
@@ -54,7 +54,7 @@ namespace ginkgo {
 		return nullptr;
 	}
 
-	const Renderable* Layer::getRenderable(unsigned int index) const
+	const IRenderable* Layer::getRenderable(unsigned int index) const
 	{
 		if (index < 0 || index >= renderables.size())
 			return nullptr;
@@ -71,7 +71,7 @@ namespace ginkgo {
 		return model.getMatrix();
 	}
 
-	void Layer::addRenderable(Renderable* renderable)
+	void Layer::addRenderable(IRenderable* renderable)
 	{
 		int left = 0;
 		int right = renderables.size() - 1;
@@ -157,9 +157,9 @@ namespace ginkgo {
 						transformProjectionView * model.getMatrix() * renderables[b]->getModel(),
 						renderables[b]->getMaterial(),
 						cameraPosition);
-					if (renderables[b]->getMaterial().getRefractiveIndex() >= 0) { glActiveTexture(GL_TEXTURE1); cubeMap.bindCubeMapTexture(); }
+					if (renderables[b]->getMaterial().refractiveIndex >= 0) { glActiveTexture(GL_TEXTURE1); cubeMap.bindCubeMapTexture(); }
 					renderables[b]->draw();
-					if (renderables[b]->getMaterial().getRefractiveIndex() >= 0) cubeMap.unbindCubeMapTexture();
+					if (renderables[b]->getMaterial().refractiveIndex >= 0) cubeMap.unbindCubeMapTexture();
 					b++;
 				}
 				glBindTexture(GL_TEXTURE_2D, 0);
@@ -168,105 +168,105 @@ namespace ginkgo {
 		phongShader.unbind();
 	}
 
-	void Layer::drawButOne(unsigned int index, const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const
-	{
-		phongShader.bind();
-		if (renderables.size() > 0)
-		{
-			unsigned int b = 0;
-			unsigned int i = 0;
-			if ((determineTextureID(renderables[0]) == Layer::NO_TEXTURE))
-			{
-				phongShader.setUniform1i("skybox", 0);		   //dependant on phongFragment.fs
-				phongShader.setUniform1i("diffuseTexture", 1); //dependant on phongFragment.fs
+	//void Layer::drawButOne(unsigned int index, const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const
+	//{
+	//	phongShader.bind();
+	//	if (renderables.size() > 0)
+	//	{
+	//		unsigned int b = 0;
+	//		unsigned int i = 0;
+	//		if ((determineTextureID(renderables[0]) == Layer::NO_TEXTURE))
+	//		{
+	//			phongShader.setUniform1i("skybox", 0);		   //dependant on phongFragment.fs
+	//			phongShader.setUniform1i("diffuseTexture", 1); //dependant on phongFragment.fs
 
-				glActiveTexture(GL_TEXTURE0);
-				cubeMap.bindCubeMapTexture();
-				for (int i = 0; i < sizeTextureIDs[0]; i++)
-				{
-					if (index != i)
-					{
-						phongShader.updateUniforms(
-							model.getMatrix() * renderables[i]->getModel(),
-							transformProjectionView * model.getMatrix() * renderables[i]->getModel(),
-							renderables[i]->getMaterial(),
-							cameraPosition);
-						renderables[i]->draw();
-					}
-				}
-				cubeMap.unbindCubeMapTexture();
+	//			glActiveTexture(GL_TEXTURE0);
+	//			cubeMap.bindCubeMapTexture();
+	//			for (int i = 0; i < sizeTextureIDs[0]; i++)
+	//			{
+	//				if (index != i)
+	//				{
+	//					phongShader.updateUniforms(
+	//						model.getMatrix() * renderables[i]->getModel(),
+	//						transformProjectionView * model.getMatrix() * renderables[i]->getModel(),
+	//						renderables[i]->getMaterial(),
+	//						cameraPosition);
+	//					renderables[i]->draw();
+	//				}
+	//			}
+	//			cubeMap.unbindCubeMapTexture();
 
-				b = sizeTextureIDs[0];
-				i = 1;
-			}
+	//			b = sizeTextureIDs[0];
+	//			i = 1;
+	//		}
 
-			phongShader.setUniform1i("diffuseTexture", 0); //dependant on phongFragment.fs
-			phongShader.setUniform1i("skybox", 1);		   //dependant on phongFragment.fs
-			for (; i < sizeTextureIDs.size(); i++)
-			{
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, determineTextureID(renderables[b]));
-				for (unsigned int a = 0; a < sizeTextureIDs[i]; a++)
-				{
-					if (index != b)
-					{
-						phongShader.updateUniforms(
-							model.getMatrix() * renderables[b]->getModel(),
-							transformProjectionView * model.getMatrix() * renderables[b]->getModel(),
-							renderables[b]->getMaterial(),
-							cameraPosition);
-						if (renderables[b]->getMaterial().getRefractiveIndex() >= 0) { glActiveTexture(GL_TEXTURE1); cubeMap.bindCubeMapTexture(); }
-						renderables[b]->draw();
-						if (renderables[b]->getMaterial().getRefractiveIndex() >= 0) cubeMap.unbindCubeMapTexture();
-					}
-					b++;
-				}
-				glBindTexture(GL_TEXTURE_2D, 0);
-			}
-		}
-		phongShader.unbind();
-	}
+	//		phongShader.setUniform1i("diffuseTexture", 0); //dependant on phongFragment.fs
+	//		phongShader.setUniform1i("skybox", 1);		   //dependant on phongFragment.fs
+	//		for (; i < sizeTextureIDs.size(); i++)
+	//		{
+	//			glActiveTexture(GL_TEXTURE0);
+	//			glBindTexture(GL_TEXTURE_2D, determineTextureID(renderables[b]));
+	//			for (unsigned int a = 0; a < sizeTextureIDs[i]; a++)
+	//			{
+	//				if (index != b)
+	//				{
+	//					phongShader.updateUniforms(
+	//						model.getMatrix() * renderables[b]->getModel(),
+	//						transformProjectionView * model.getMatrix() * renderables[b]->getModel(),
+	//						renderables[b]->getMaterial(),
+	//						cameraPosition);
+	//					if (renderables[b]->getMaterial().getRefractiveIndex() >= 0) { glActiveTexture(GL_TEXTURE1); cubeMap.bindCubeMapTexture(); }
+	//					renderables[b]->draw();
+	//					if (renderables[b]->getMaterial().getRefractiveIndex() >= 0) cubeMap.unbindCubeMapTexture();
+	//				}
+	//				b++;
+	//			}
+	//			glBindTexture(GL_TEXTURE_2D, 0);
+	//		}
+	//	}
+	//	phongShader.unbind();
+	//}
 
-	void Layer::drawOne(unsigned int index, const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const
-	{
-		phongShader.bind();
+	//void Layer::drawOne(unsigned int index, const glm::mat4& transformProjectionView, const glm::vec3& cameraPosition, const PhongShader& phongShader, const CubeMap& cubeMap) const
+	//{
+	//	phongShader.bind();
 
-		if ((determineTextureID(renderables[index]) == Layer::NO_TEXTURE))
-		{
-			phongShader.setUniform1i("skybox", 0);		   //dependant on phongFragment.fs
-			phongShader.setUniform1i("diffuseTexture", 1); //dependant on phongFragment.fs
+	//	if ((determineTextureID(renderables[index]) == Layer::NO_TEXTURE))
+	//	{
+	//		phongShader.setUniform1i("skybox", 0);		   //dependant on phongFragment.fs
+	//		phongShader.setUniform1i("diffuseTexture", 1); //dependant on phongFragment.fs
 
-			glActiveTexture(GL_TEXTURE0);
-			cubeMap.bindCubeMapTexture();
+	//		glActiveTexture(GL_TEXTURE0);
+	//		cubeMap.bindCubeMapTexture();
 
-			phongShader.updateUniforms(
-				model.getMatrix() * renderables[index]->getModel(),
-				transformProjectionView * model.getMatrix() * renderables[index]->getModel(),
-				renderables[index]->getMaterial(),
-				cameraPosition);
-			renderables[index]->draw();
-			cubeMap.unbindCubeMapTexture();
-		}
-		else
-		{
-			phongShader.setUniform1i("diffuseTexture", 0); //dependant on phongFragment.fs
-			phongShader.setUniform1i("skybox", 1);		   //dependant on phongFragment.fs
+	//		phongShader.updateUniforms(
+	//			model.getMatrix() * renderables[index]->getModel(),
+	//			transformProjectionView * model.getMatrix() * renderables[index]->getModel(),
+	//			renderables[index]->getMaterial(),
+	//			cameraPosition);
+	//		renderables[index]->draw();
+	//		cubeMap.unbindCubeMapTexture();
+	//	}
+	//	else
+	//	{
+	//		phongShader.setUniform1i("diffuseTexture", 0); //dependant on phongFragment.fs
+	//		phongShader.setUniform1i("skybox", 1);		   //dependant on phongFragment.fs
 
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, determineTextureID(renderables[index]));
-			phongShader.updateUniforms(
-				model.getMatrix() * renderables[index]->getModel(),
-				transformProjectionView * model.getMatrix() * renderables[index]->getModel(),
-				renderables[index]->getMaterial(),
-				cameraPosition);
-			if (renderables[index]->getMaterial().getRefractiveIndex() >= 0) { glActiveTexture(GL_TEXTURE1); cubeMap.bindCubeMapTexture(); }
-			renderables[index]->draw();
-			if (renderables[index]->getMaterial().getRefractiveIndex() >= 0) cubeMap.unbindCubeMapTexture();
-			
-			glBindTexture(GL_TEXTURE_2D, 0);
+	//		glActiveTexture(GL_TEXTURE0);
+	//		glBindTexture(GL_TEXTURE_2D, determineTextureID(renderables[index]));
+	//		phongShader.updateUniforms(
+	//			model.getMatrix() * renderables[index]->getModel(),
+	//			transformProjectionView * model.getMatrix() * renderables[index]->getModel(),
+	//			renderables[index]->getMaterial(),
+	//			cameraPosition);
+	//		if (renderables[index]->getMaterial().getRefractiveIndex() >= 0) { glActiveTexture(GL_TEXTURE1); cubeMap.bindCubeMapTexture(); }
+	//		renderables[index]->draw();
+	//		if (renderables[index]->getMaterial().getRefractiveIndex() >= 0) cubeMap.unbindCubeMapTexture();
+	//		
+	//		glBindTexture(GL_TEXTURE_2D, 0);
 
-		}
+	//	}
 
-		phongShader.unbind();
-	}
+	//	phongShader.unbind();
+	//}
 }
