@@ -17,6 +17,9 @@ namespace ginkgo
 		const float MIN_CORRECTDIST = 0.001f;
 
 		bool valid;
+		bool markedForDestruction;
+
+		bool overlapSkipFixRan;
 	private:
 		void positionalCorrectionInternal(float frameSegment);
 
@@ -35,6 +38,9 @@ namespace ginkgo
 		void postCorrection();
 
 		void updateValidity();
+
+		//This collision must be maintained through the current frame, it will be destroyed at the end of the frame(called in preCollisionCheck)
+		void preCollisionUpdate();
 
 		bool eq(IPhysicsObject* a, IPhysicsObject* b) const;
 

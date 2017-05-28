@@ -9,6 +9,8 @@ namespace ginkgo
 		: deltaTime(deltaTime), manifold(manifold.thisMesh, manifold.otherMesh)
 	{
 		valid = true;
+		markedForDestruction = false;
+		overlapSkipFixRan = false;
 		getUpdatedParams();
 		this->manifold.normal = manifold.collisionNormal;
 		this->manifold.overlapDist = manifold.thisMesh->getAxisOverlap(manifold.collisionNormal, *manifold.otherMesh);
@@ -286,6 +288,11 @@ namespace ginkgo
 	void Collision::updateValidity()
 	{
 		valid = !manifold.thisMesh->testCollisionStationary(*manifold.otherMesh, manifold);
+	}
+
+	void Collision::preCollisionUpdate()
+	{
+		markedForDestruction = !manifold.thisMesh->testCollisionStationary(*manifold.otherMesh, manifold);
 	}
 
 	bool Collision::eq(IPhysicsObject* a, IPhysicsObject* b) const
