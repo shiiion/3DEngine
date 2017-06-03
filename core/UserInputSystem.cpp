@@ -24,11 +24,11 @@ namespace ginkgo
 
 	Command const& UserInputSystem::findCommand(int outputCode) const
 	{
-		for (Command const& c : commandList)
+		for (Command const* c : commandList)
 		{
-			if (c.outputCode == outputCode)
+			if (c->outputCode == outputCode)
 			{
-				return c;
+				return *c;
 			}
 		}
 		return invalidCommand;
@@ -36,18 +36,37 @@ namespace ginkgo
 
 	void UserInputSystem::addCommand(Command const& command)
 	{
-		commandList.emplace_back(command);
+		//disallow this (TODO: log it too)
+		if (command.outputCode == -1 || findCommand(command.outputCode).outputCode != -1)
+		{
+			return;
+		}
+		
+		commandList.emplace_back(command.clone());
+	}
+
+	void UserInputSystem::removeCommand(int outputCode)
+	{
+		for (int a = 0; a < commandList.size(); a++)
+		{
+			if (commandList[a]->outputCode == outputCode)
+			{
+				delete commandList[a];
+				commandList.erase(commandList.begin() + a);
+				return;
+			}
+		}
 	}
 
 	void UserInputSystem::bindInputCode(int in, int out)
 	{
 		Command const& outputCommand = findCommand(out);
-		if (outputCommand.onCommand == nullptr && outputCommand.outputCode == -1)
+		if (outputCommand.outputCode == -1)
 		{
 			return;
 		}
-		bindings.push_back(Bind(INPUTTYPE_USER, in, out));
-		controlStates.push_back(CommandState(outputCommand));
+		bindings.emplace_back(Bind(INPUTTYPE_USER, in, out));
+		controlStates.emplace_back(new CommandState(outputCommand));
 	}
 
 	void UserInputSystem::unbindInputCode(int inputCode)
@@ -71,8 +90,9 @@ namespace ginkgo
 
 		for (UINT32 a = 0; a < controlStates.size(); a++)
 		{
-			if (controlStates[a].command.outputCode == outCode)
+			if (controlStates[a]->command->outputCode == outCode)
 			{
+				delete controlStates[a];
 				controlStates.erase(controlStates.begin() + a);
 				break;
 			}
@@ -91,28 +111,48 @@ namespace ginkgo
 
 	void UserInputSystem::runInput()
 	{
-		for (CommandState& state : controlStates)
+		for (CommandState* state : controlStates)
 		{
-			if (state.isSet ^ state.prevSet)
+			switch (state->command->type)
 			{
-				if (state.command.onCommand != nullptr)
+				case CommandParams::NO_PARAMS:
 				{
-					state.command.onCommand(this, state.command.outputCode, state.isSet);
+					CommandSetReset* param = (CommandSetReset*)state->command;
+
+					if (state->isSet ^ state->prevSet)
+					{
+						if (param->onInput != nullptr)
+						{
+							param->onInput(this, param->outputCode, state->isSet);
+						}
+						state->prevSet = state->isSet;
+					}
 				}
-				state.prevSet = state.isSet;
+				break;
+				case CommandParams::FLOAT_2:
+				{
+					Command2f* param = (Command2f*)state->command;
+					if (param->onInput == nullptr) break;
+					param->onInput(this, param->outputCode, param->a, param->b);
+					//mark that we have processed this command (UNUSED)
+					state->isSet = false;
+				}
+				break;
 			}
 		}
 	}
 
-	void UserInputSystem::onInputCode(Bind const& input, bool set)
+	Command* UserInputSystem::onInputCode(Bind const& input, bool set)
 	{
-		for (CommandState& state : controlStates)
+		for (CommandState* state : controlStates)
 		{
-			if (input.outputCode == state.command.outputCode)
+			if (input.outputCode == state->command->outputCode)
 			{
-				state.isSet = set;
+				state->isSet = set;
+				return state->command;
 			}
 		}
+		return nullptr;
 	}
 
 	Bind const& UserInputSystem::getControl(int inputCode)

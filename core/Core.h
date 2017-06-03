@@ -77,7 +77,7 @@ namespace ginkgo
 	DECLSPEC_CORE void registerInputSystem(IAbstractInputSystem* input, ICharacter* controller);
 	DECLSPEC_CORE vector<IAbstractInputSystem*> const& getAllInputSystems();
 
-	DECLSPEC_CORE int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState);
+	DECLSPEC_CORE int registerMovementState(const std::string& name, const CheckIfMovementState& CheckMovementState, const DoOnMovementState& OnMovementState, const OnMovementStateEnabled& OnStateEnabled, const OnMovementStateDisabled& OnStateDisabled);
 	DECLSPEC_CORE int getMovementState(const std::string& name);
 
 	DECLSPEC_CORE void setupInput(GLFWwindow* window);

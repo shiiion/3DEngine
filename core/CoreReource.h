@@ -14,6 +14,7 @@
 #include <vector>
 #include <functional>
 #include <condition_variable>
+#include <memory>
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 
@@ -28,6 +29,7 @@
 namespace ginkgo
 {
 	using std::vector;
+	using std::unique_ptr;
 
 	class IPhysicsObject;
 	class ICollisionMesh;
@@ -40,14 +42,18 @@ namespace ginkgo
 	typedef std::function<void(ICharacter&, float)> OnMovementStateEnabled;
 	typedef std::function<void(ICharacter&, float)> OnMovementStateDisabled;
 
+	//requires no extra parameters (used for things like button states)
 	typedef void(__cdecl* OnInputFunc)(IAbstractInputSystem* inputSystem, int outputCode, bool set);
+
+	//takes in two parameters
+	typedef void(__cdecl* OnInput2fFunc)(IAbstractInputSystem* inputSystem, int outputCode, float a, float b);
 
 	typedef unsigned __int8 UBYTE;
 	typedef signed __int32 INT32;
 	typedef unsigned __int32 UINT32;
 
 
-	struct Material
+	struct PhysMaterial
 	{
 		float friction;
 		//fraction of rebound velocity (restitution)
@@ -236,28 +242,76 @@ namespace ginkgo
 
 	};
 
+	//if needed, expand this
+	enum CommandParams
+	{
+		NO_PARAMS,
+		FLOAT_2,
+	};
+
+#define OUTCODE_INVALID -1
+#define INCODE_MOUSE -1
+
 	struct Command
 	{
-		Command(int out, OnInputFunc func)
+	protected:
+		Command(int out, CommandParams type)
+			: outputCode(out), type(type)
+		{}
+	public:
+
+		CommandParams type;
+		int outputCode;
+
+		virtual Command* clone() const = 0;
+	};
+
+	struct Command2f : Command
+	{
+		Command2f(int out,  OnInput2fFunc func)
+			: Command(out, FLOAT_2), onInput(func), a(0), b(0)
+		{}
+
+		Command* clone() const override
 		{
-			outputCode = out;
-			onCommand = func;
+			return new Command2f(outputCode, onInput);
 		}
 
-		int outputCode;
-		OnInputFunc onCommand;
+		OnInput2fFunc onInput;
+		float a, b;
+	};
+
+	struct CommandSetReset : Command
+	{
+		CommandSetReset(int out, OnInputFunc func)
+			: Command(out, NO_PARAMS), onInput(func)
+		{}
+
+		Command* clone() const override
+		{
+			return new CommandSetReset(outputCode, onInput);
+		}
+
+		OnInputFunc onInput;
 	};
 
 	struct CommandState
 	{
-		CommandState(Command const& command) : command(command)
+		CommandState(Command const& command)
 		{
+			this->command = command.clone();
+
 			isSet = false;
 			prevSet = false;
 		}
 
+		~CommandState()
+		{
+			delete command;
+		}
+
 		bool isSet;
 		bool prevSet;
-		Command command;
+		Command* command;
 	};
 };

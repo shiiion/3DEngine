@@ -9,7 +9,7 @@ namespace ginkgo
 	{
 	private:
 		ICollisionMesh* collisionMesh;
-		Material material;
+		PhysMaterial material;
 		float mass;
 		bool canCollide;
 		UINT32 numCollisions;
@@ -23,11 +23,11 @@ namespace ginkgo
 		std::forward_list<SurfaceData> normalList;
 
 	public:
-		PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide = true);
+		PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide = true);
 
 		bool checkCollision(float deltaTime, IPhysicsObject* other) override;
 
-		void setMaterial(const Material& mat) override;
+		void setMaterial(const PhysMaterial& mat) override;
 		void setMass(float mass) override;
 		void setCanCollide(bool collides) override;
 		void setCollisionMesh(ICollisionMesh* collision) override;
@@ -35,7 +35,7 @@ namespace ginkgo
 		void decrementCollision() override;
 		void setMovementState(UINT32 state) override;
 
-		const Material& getMaterial() const override;
+		const PhysMaterial& getMaterial() const override;
 		float getMass() const override;
 		bool doesCollide() const override;
 		ICollisionMesh* getCollisionMesh() const override;
