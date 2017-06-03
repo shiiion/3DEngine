@@ -31,11 +31,28 @@ namespace ginkgo
 		}
 	}
 
+	void setMouseMoveCallback(GLFWwindow* window, double x, double y)
+	{
+		for (IAbstractInputSystem* s : getAllInputSystems())
+		{
+			Bind const& ctl = s->getControl(INCODE_MOUSE);
+			if (ctl.inputType == INPUTTYPE_USER)
+			{
+				Command2f* cmd = (Command2f*)s->onInputCode(ctl, true);
+				if (cmd != nullptr)
+				{
+					cmd->a = x;
+					cmd->b = y;
+				}
+			}
+		}
+	}
+
 	void registerCallbacks(GLFWwindow* window)
 	{
-
 		glfwSetKeyCallback(window, setKeyCallback);
 		glfwSetMouseButtonCallback(window, setMouseButtonCallback);
+		glfwSetCursorPosCallback(window, setMouseMoveCallback);
 	}
 }
 #else

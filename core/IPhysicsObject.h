@@ -27,7 +27,7 @@ namespace ginkgo
 	public:
 		virtual bool checkCollision(float deltaTime, IPhysicsObject* other) = 0;
 		
-		virtual void setMaterial(const Material& mat) = 0;
+		virtual void setMaterial(const PhysMaterial& mat) = 0;
 		virtual void setMass(float mass) = 0;
 		virtual void setCanCollide(bool collides) = 0;
 		virtual void setCollisionMesh(ICollisionMesh* collision) = 0;
@@ -35,7 +35,7 @@ namespace ginkgo
 		virtual void decrementCollision() = 0;
 		virtual void setMovementState(UINT32 state) = 0;
 		
-		virtual const Material& getMaterial() const = 0;
+		virtual const PhysMaterial& getMaterial() const = 0;
 		virtual float getMass() const = 0;
 		virtual bool doesCollide() const = 0;
 		virtual ICollisionMesh* getCollisionMesh() const = 0;
@@ -59,5 +59,5 @@ namespace ginkgo
 		virtual void removeNormal(SurfaceData const& data) = 0;
 	};
 
-	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide = true);
+	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide = true);
 }

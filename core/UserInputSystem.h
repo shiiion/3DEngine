@@ -8,12 +8,12 @@ namespace ginkgo
 	{
 	private:
 		const Bind invalidControl = Bind(INPUTTYPE_INVALID, -1, -1);
-		const Command invalidCommand = Command(-1, nullptr);
+		const CommandSetReset invalidCommand = CommandSetReset(-1, nullptr);
 
 		ICharacter* owner;
 		vector<Bind> bindings;
-		vector<Command> commandList;
-		vector<CommandState> controlStates;
+		vector<Command*> commandList;
+		vector<CommandState*> controlStates;
 
 		IInputMapping* inputMapping;
 
@@ -25,6 +25,7 @@ namespace ginkgo
 		virtual void reloadInputMapping() override;
 
 		virtual void addCommand(Command const& command) override;
+		virtual void removeCommand(int outputCode) override;
 
 		virtual void bindInputCode(int in, int out) override;
 		virtual void unbindInputCode(int inputCode) override;
@@ -32,7 +33,7 @@ namespace ginkgo
 		virtual void setOwner(ICharacter* owner) override;
 		virtual ICharacter* getOwner() override;
 
-		virtual void onInputCode(Bind const& input, bool set) override;
+		virtual Command* onInputCode(Bind const& input, bool set) override;
 		virtual void runInput() override;
 
 		virtual Bind const& getControl(int inputState) override;

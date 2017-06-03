@@ -8,7 +8,7 @@
 namespace ginkgo
 {
 
-	PhysicsObject::PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide)
+	PhysicsObject::PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide)
 		: parent(parent)
 	{
 		this->mass = mass;
@@ -46,7 +46,7 @@ namespace ginkgo
 		finalMove = result;
 	}
 
-	const Material& PhysicsObject::getMaterial() const
+	const PhysMaterial& PhysicsObject::getMaterial() const
 	{
 		return material;
 	}
@@ -100,7 +100,7 @@ namespace ginkgo
 		}
 	}
 
-	void PhysicsObject::setMaterial(const Material& mat)
+	void PhysicsObject::setMaterial(const PhysMaterial& mat)
 	{
 		material = mat;
 	}
@@ -154,7 +154,7 @@ namespace ginkgo
 		return finalMove;
 	}
 	
-	IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, Material mat, bool canCollide)
+	IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide)
 	{
 		return new PhysicsObject(parent, collision, collisionType, mass, mat, canCollide);
 	}
