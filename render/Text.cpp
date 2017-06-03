@@ -6,14 +6,14 @@
 
 namespace ginkgo {
 
-	Text::Text(float windowWidth, float windowHeight, const char* fontFilePath)
+	Text::Text(float windowWidth, float windowHeight, const char* fontFilePath, unsigned int fontSize)
 	{
-		addVertexShader("Render/res/shaders/textVertex.vs");
-		addFragmentShader("Render/res/shaders/textFragment.fs");
+		addVertexShader("shaders/textVertex.vs");
+		addFragmentShader("shaders/textFragment.fs");
 		compileShader();
 
 		bind();
-		glm::mat4 projection = glm::ortho(0.0f, windowWidth, 0.0f, windowHeight);
+		mat4 projection = glm::ortho(0.0f, windowWidth, 0.0f, windowHeight);
 		setUniformMat4("projection", projection);
 		unbind();
 
@@ -28,7 +28,7 @@ namespace ginkgo {
 		if (FT_New_Face(ft, fontFilePath, 0, &face))
 			std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
-		FT_Set_Pixel_Sizes(face, 0, 48);
+		FT_Set_Pixel_Sizes(face, 0, fontSize);
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -83,7 +83,7 @@ namespace ginkgo {
 
 	}
 
-	void Text::draw(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color)
+	void Text::draw(const string& text, GLfloat x, GLfloat y, GLfloat scale, const vec3& color)
 	{
 		bind();
 
@@ -91,7 +91,7 @@ namespace ginkgo {
 		glActiveTexture(GL_TEXTURE0);
 		glBindVertexArray(VAO);
 
-		std::string::const_iterator c;
+		string::const_iterator c;
 		for (c = text.begin(); c != text.end(); c++)
 		{
 			Character ch = Characters.at(*c);
@@ -132,5 +132,10 @@ namespace ginkgo {
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		unbind();
+	}
+
+	IText* textRenderFactory(float windowWidth, float windowHeight, const char* fontFilePath, unsigned int fontSize)
+	{
+		return new Text(windowWidth, windowHeight, fontFilePath, fontSize);
 	}
 }

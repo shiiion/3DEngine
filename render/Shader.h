@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 
+#include "RenderResource.h"
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
@@ -11,7 +11,7 @@ namespace ginkgo {
 	{
 	private:
 		GLuint program;
-		std::vector<GLuint> shaders;
+		vector<GLuint> shaders;
 	public:
 		Shader();
 		~Shader();
@@ -27,10 +27,10 @@ namespace ginkgo {
 		void setUniform1fv(const GLchar* name, float* value, int count) const;
 		void setUniform1i(const GLchar* name, int value) const;
 		void setUniform1iv(const GLchar* name, int* value, int count) const;
-		void setUniform2f(const GLchar* name, const glm::vec2& vector) const;
-		void setUniform3f(const GLchar* name, const glm::vec3& vector) const;
-		void setUniform4f(const GLchar* name, const glm::vec4& vector) const;
-		void setUniformMat4(const GLchar* name, const glm::mat4& matrix) const;
+		void setUniform2f(const GLchar* name, const vec2& vector) const;
+		void setUniform3f(const GLchar* name, const vec3& vector) const;
+		void setUniform4f(const GLchar* name, const vec4& vector) const;
+		void setUniformMat4(const GLchar* name, const mat4& matrix) const;
 		
 		void bind() const;
 		void unbind() const;

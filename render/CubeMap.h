@@ -1,13 +1,10 @@
 #pragma once
 
-#include <map>
-#include <string>
 
-#include <glm/glm.hpp>
-
+#include "ICubeMap.h"
 #include "Shader.h"
 #include "Transform.h"
-#include "ICubeMap.h"
+#include <glm/glm.hpp>
 
 namespace ginkgo {
 	
@@ -20,16 +17,9 @@ namespace ginkgo {
 		unsigned int VBO;
 		unsigned int textureID;
 	public:
-		static const unsigned int RIGHT = 0;
-		static const unsigned int LEFT = 1;
-		static const unsigned int TOP = 2;
-		static const unsigned int BOTTOM = 3;
-		static const unsigned int FRONT = 4;
-		static const unsigned int BACK = 5;
-	public:
-		CubeMap(std::map<unsigned int, std::string> faces_filepaths, float scale = 500.0f);
+		CubeMap(map<unsigned int, string> faces, float scale);
 		~CubeMap();
-		void draw(const glm::mat4& transformProjectionView) const override;
+		void draw(const mat4& transformProjectionView) const override;
 		void bindCubeMapTexture() const override;
 		void unbindCubeMapTexture() const override;
 	};

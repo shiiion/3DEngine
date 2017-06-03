@@ -6,18 +6,18 @@ namespace ginkgo {
 
 	struct BaseLight 
 	{
-		glm::vec4 color;
+		vec4 color;
 		float intensity;
 		BaseLight() {}
-		BaseLight(glm::vec4& colorBL, float intensityBL) : color(colorBL), intensity(intensityBL) {}
+		BaseLight(vec4& colorBL, float intensityBL) : color(colorBL), intensity(intensityBL) {}
 	};
 
 	struct DirectionalLight 
 	{
 		BaseLight base;
-		glm::vec3 direction;
+		vec3 direction;
 		DirectionalLight() {}
-		DirectionalLight(BaseLight& baseDL, glm::vec3& directionDL) : base(baseDL), direction(directionDL) {}
+		DirectionalLight(BaseLight& baseDL, vec3& directionDL) : base(baseDL), direction(directionDL) {}
 	};
 
 	struct Attenuation 
@@ -33,9 +33,9 @@ namespace ginkgo {
 	{
 		BaseLight base;
 		Attenuation attenuation;
-		glm::vec3 position;
+		vec3 position;
 		PointLight() {}
-		PointLight(BaseLight& basePL, Attenuation& attenuationPL, glm::vec3& positionPL) : base(basePL), attenuation(attenuationPL), position(positionPL) {}
+		PointLight(BaseLight& basePL, Attenuation& attenuationPL, vec3& positionPL) : base(basePL), attenuation(attenuationPL), position(positionPL) {}
 	};
 
 }

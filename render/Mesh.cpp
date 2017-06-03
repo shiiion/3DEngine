@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Mesh.h"
+#include "ObjLoader.h"
 
 namespace ginkgo {
 
@@ -20,33 +21,33 @@ namespace ginkgo {
 		glDeleteVertexArrays(1, &VAO);
 	}
 
-	void Mesh::addData(const std::vector<glm::vec3>& positions, const std::vector<GLuint>& indices, const std::vector<glm::vec2>& uvs, const std::vector<glm::vec3>& normalsM)
+	void Mesh::addData(const vector<vec3>& positions, const vector<GLuint>& indices, const vector<vec2>& uvs, const vector<vec3>& normalsM)
 	{
 		//Generating Normals
-		std::vector<glm::vec3> normals = normalsM;
+		vector<vec3> normals = normalsM;
 		if (normals.size() == 0)
 		{
-			for (int i = 0; i < positions.size(); i++)
-				normals.emplace_back(glm::vec3(0.0f, 0.0f, 0.0f));
+			for (unsigned int i = 0; i < positions.size(); i++)
+				normals.emplace_back(vec3(0.0f, 0.0f, 0.0f));
 
-			for (int i = 0; i < indices.size(); i += 3)
+			for (unsigned int i = 0; i < indices.size(); i += 3)
 			{
 				int i0 = indices[i];
 				int i1 = indices[i + 1];
 				int i2 = indices[i + 2];
 
-				glm::vec3 v1 = positions[i1] - positions[i0];
-				glm::vec3 v2 = positions[i2] - positions[i0];
+				vec3 v1 = positions[i1] - positions[i0];
+				vec3 v2 = positions[i2] - positions[i0];
 
-				glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
+				vec3 normal = normalize(cross(v1, v2));
 
-				//		std::cout << normal.x << " " << normal.y << " " << normal.z << std::endl;
+				//		cout << normal.x << " " << normal.y << " " << normal.z << endl;
 				normals[i0] += normal;
 				normals[i1] += normal;
 				normals[i2] += normal;
 			}
-			for (int i = 0; i < normals.size(); i++)
-				normals[i] = glm::normalize(normals[i]);
+			for (unsigned int i = 0; i < normals.size(); i++)
+				normals[i] = normalize(normals[i]);
 		}
 
 		//Loading Data

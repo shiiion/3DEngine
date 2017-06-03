@@ -1,46 +1,47 @@
 #pragma once
 
+#include "ICamera.h"
 #include <GL/glew.h>
 #include <glm/gtc/quaternion.hpp>
-#include "ICamera.h"
 
 namespace ginkgo {
 
-	class Window;
+	class IWindow;
 
 	class Camera : public ICamera
 	{
 	private:
-		const Window* window;
-		glm::mat4 projection;
-		glm::mat4 view;
-		glm::mat4 position_translation;
-		glm::vec3 cameraPosition;
-		glm::quat cameraRotation;
+		const IWindow* window;
+		mat4 projection;
+		mutable mat4 view;
+		mat4 position_translation;
+		vec3 cameraPosition;
+		quat cameraRotation;
 		GLfloat fov;
-		/*float cameraSpeedSensitivity;
-		float mouseRotationSensitivity;
-		double xSave;
-		double ySave;*/
+		mutable bool viewOOD;
 	public:
-		Camera(const Window* window, const glm::vec3& camera_position);
+		Camera(const IWindow* window);
 		
-		void setProjection(const glm::mat4& projection) override { this->projection = projection; }
-		void setView(const glm::mat4& view) override { this->view = view; }
-		//void setCameraSpeedSensitivity(float cameraSpeedSensitivity) { this->cameraSpeedSensitivity = cameraSpeedSensitivity; }
-		//void setMouseRotationSensitivity(float mouseSensitivity) { this->mouseRotationSensitivity = mouseSensitivity; }
+		void setProjection(const mat4& projection) override { this->projection = projection; }
+		void setView(const mat4& view) override { this->view = view; }
 		void setFOV(float fov) override { this->fov= fov; }
-		void setCameraPosition(const glm::vec3& cameraPosition) override { this->cameraPosition = cameraPosition; }
+		void setCameraPosition(const vec3& cameraPosition) override { this->cameraPosition = cameraPosition; }
+		void setCameraRotation(const quat& rot) override { this->cameraRotation = rot; viewOOD = true; }
 
-		const glm::mat4& getProjection() const override { return projection; }
-		const glm::mat4& getView() const override { return view; }
-		const glm::vec3& getCameraPosition() const override { return cameraPosition; }
-		const glm::mat4& getCameraPositionTranslation() override;
+		const mat4& getProjection() const override { return projection; }
+		const mat4& getView() const override 
+		{
+			if(viewOOD)	
+			{
+				viewOOD = false; update();
+			}
+			return view;
+		}
+		const vec3& getCameraPosition() const override { return cameraPosition; }
+		const mat4& getCameraPositionTranslation() override;
 		
-		//void input(bool& isGameOver, double dt);
-		void update(double dt) override;
+		void update() const override;
 
-		//void lensInput(bool& isGameOver, double dt);
 	};
 
 }

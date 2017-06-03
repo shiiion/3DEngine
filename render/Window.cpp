@@ -3,7 +3,7 @@
 #include "Window.h"
 
 namespace ginkgo {
-	Window::Window(const char* name, int width, int height, const glm::vec4& clear_color, bool isFullScreen)
+	Window::Window(const char* name, int width, int height, const vec4& clear_color, bool isFullScreen)
 		: title(name), width(width), height(height), clear_color(clear_color), isFullScreen(isFullScreen)
 	{
 		if (!init())
@@ -116,8 +116,6 @@ namespace ginkgo {
 
 	void Window::update() const
 	{
-		glfwPollEvents();
-
 		//		glfwGetFramebufferSize(Window, &Width, &Height);
 		glfwSwapBuffers(window);
 	}
@@ -161,5 +159,8 @@ namespace ginkgo {
 		win->s_yoffset = yoffset;
 	}
 
-
+	IWindow* windowFactory(const char* name, int width, int height, const vec4& clear_color, bool isFullScreen)
+	{
+		return new Window(name, width, height, clear_color, isFullScreen);
+	}
 }

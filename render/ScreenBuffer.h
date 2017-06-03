@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Shader.h"
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include "Shader.h"
 
 namespace ginkgo {
 
@@ -15,19 +15,19 @@ namespace ginkgo {
 		GLuint textureID; //texture color buffer
 		GLuint quadVAO; //rectangle
 		GLuint quadVBO; //rectangle
-		glm::vec4 clear_color;
+		vec4 clear_color;
 	public:
-		ScreenBuffer(unsigned int screenWidth, unsigned int screenHeight, glm::vec4 clear_color, bool depth, bool stencil);
+		ScreenBuffer(unsigned int screenWidth, unsigned int screenHeight, vec4 clear_color, bool depth, bool stencil);
 		~ScreenBuffer();
 
 		void drawToTexture() const;
 		void drawToScreen() const;
-		static void initalize(const glm::vec4& clearColor = glm::vec4());
+		static void initalize(const vec4& clearColor = vec4(0, 0, 0, 0));
 
 		void bindBuffer() const;
 		static void bindDefaultBuffer();
 
-		static void clearColor(const glm::vec4& clear_color);
+		static void clearColor(const vec4& clear_color);
 		static void clearBuffer(bool colorBuffer, bool depthBuffer, bool stencilBuffer);
 		
 		static void enableDepthTest() { glEnable(GL_DEPTH_TEST); }

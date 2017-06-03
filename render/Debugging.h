@@ -4,11 +4,11 @@
 
 namespace ginkgo {
 
-	class Debugging
-	{
-	public:
-		static void print(const glm::vec3& vector);
-		static void print(const glm::mat4& matrix);
-	};
+	//class Debugging
+	//{
+	//public:
+	//	static void print(const vec3& vector);
+	//	static void print(const mat4& matrix);
+	//};
 
 }

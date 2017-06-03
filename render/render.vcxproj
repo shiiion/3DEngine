@@ -20,7 +20,9 @@
     <ClInclude Include="ILayer.h" />
     <ClInclude Include="IPhongShader.h" />
     <ClInclude Include="IRenderable.h" />
+    <ClInclude Include="IRenderer.h" />
     <ClInclude Include="IText.h" />
+    <ClInclude Include="ITransform.h" />
     <ClInclude Include="IWindow.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="LightStructs.h" />
@@ -29,6 +31,9 @@
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="PhongShader.h" />
     <ClInclude Include="Renderable.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderResource.h" />
+    <ClInclude Include="ResourceManagement.h" />
     <ClInclude Include="ScreenBuffer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Text.h" />
@@ -47,10 +52,12 @@
     <ClCompile Include="ObjLoader.cpp" />
     <ClCompile Include="PhongShader.cpp" />
     <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ResourceManagement.cpp" />
     <ClCompile Include="ScreenBuffer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Text.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -94,10 +101,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>COMP_DLL_RENDER;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>freetype271MT.lib;FreeImage.lib;glew32.lib;glew32s.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype271MT.lib;FreeImage.lib;glew32.lib;opengl32.lib;glfw3dll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>
       </SubSystem>
     </Link>

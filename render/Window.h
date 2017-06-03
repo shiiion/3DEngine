@@ -1,9 +1,9 @@
 #pragma once
 
+#include "IWindow.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include "IWindow.h"
 
 namespace ginkgo {
 
@@ -22,10 +22,10 @@ namespace ginkgo {
 			double my;
 			double s_xoffset;
 			double s_yoffset;
-			glm::vec4 clear_color;
+			vec4 clear_color;
 			bool isFullScreen;
 		public:
-			Window(const char* name, int width, int height, const glm::vec4& clear_color, bool isFullScreen = false);
+			Window(const char* name, int width, int height, const vec4& clear_color, bool isFullScreen = false);
 			~Window();
 			void update() const;
 			bool closed() const;
@@ -34,9 +34,9 @@ namespace ginkgo {
 			unsigned int getWidth() const { return width; }
 			unsigned int getHeight() const { return height; }
 			float getAspectRatio() const{ return (float)width / (float)height; }
-			const glm::vec4& getClearColor() const { return clear_color; }
+			const vec4& getClearColor() const { return clear_color; }
 
-			void setClearColor(const glm::vec4& color) { clear_color = color; }
+			void setClearColor(const vec4& color) { clear_color = color; }
 
 			bool isKeyPressed(unsigned int keycode) const;
 			bool isMouseButtonPressed(unsigned int button) const;
@@ -46,6 +46,9 @@ namespace ginkgo {
 			void disableMouseCursor() const { glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); }
 			void enableMouseCursor() const { glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); }
 			void setMousePosition(double x, double y) const { glfwSetCursorPos(window, x, y); };
+
+
+			GLFWwindow* getInternalWindow() override { return window; }
 		private:
 			bool init();
 

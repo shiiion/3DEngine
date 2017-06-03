@@ -36,7 +36,7 @@ namespace ginkgo {
 	{
 		GLuint shaderID = glCreateShader(type);
 
-		std::string shaderSourceString = FileUtils::read_file(file);
+		string shaderSourceString = FileUtils::read_file(file);
 		const char* shaderSource = shaderSourceString.c_str();
 
 		if (shaderID == 0)
@@ -55,7 +55,7 @@ namespace ginkgo {
 		{
 			GLint length;
 			glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &length);
-			std::vector<char> error(length);
+			vector<char> error(length);
 			glGetShaderInfoLog(shaderID, length, &length, &error[0]);
 			std::cout << "Failed to compile shader!/tType of Shader: " << type << std::endl << &error[0] << std::endl;
 			glDeleteShader(shaderID);
@@ -122,21 +122,21 @@ namespace ginkgo {
 		glUniform1i(getUniformLocation(name), value);
 	}
 
-	void Shader::setUniform2f(const GLchar* name, const glm::vec2& vector) const
+	void Shader::setUniform2f(const GLchar* name, const vec2& vector) const
 	{
 		glUniform2f(getUniformLocation(name), vector.x, vector.y);
 	}
-	void Shader::setUniform3f(const GLchar* name, const glm::vec3& vector) const
+	void Shader::setUniform3f(const GLchar* name, const vec3& vector) const
 	{
 		glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
 	}
 
-	void Shader::setUniform4f(const GLchar* name, const glm::vec4& vector) const
+	void Shader::setUniform4f(const GLchar* name, const vec4& vector) const
 	{
 		glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
 	}
 
-	void Shader::setUniformMat4(const GLchar* name, const glm::mat4& matrix) const
+	void Shader::setUniformMat4(const GLchar* name, const mat4& matrix) const
 	{
 		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
 	}

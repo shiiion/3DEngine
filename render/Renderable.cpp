@@ -8,16 +8,16 @@
 
 namespace ginkgo {
 	
-	unsigned int Renderable::index = 0;
+	int Renderable::index = 0;
 
-	Renderable::Renderable(const Mesh* mesh, Material* material, const glm::mat4& model)
+	Renderable::Renderable(const Mesh* mesh, Material* material, const mat4& model)
 		: mesh(mesh), material(material), model(model)
 	{
 		r_index = index;
 		index++;
 	}
 
-	const glm::mat4& Renderable::getModel() const 
+	const mat4& Renderable::getModel() const 
 	{ 
 		return model.getMatrix(); 
 	}
@@ -28,4 +28,8 @@ namespace ginkgo {
 		mesh->draw(); 
 	}
 
+	IRenderable* renderableFactory(const Mesh* mesh, Material* material, const mat4& model)
+	{
+		return new Renderable(mesh, material, model);
+	}
 }

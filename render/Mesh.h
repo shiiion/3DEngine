@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
+#include "RenderResource.h"
 #include <gl/glew.h>
 #include <glm/glm.hpp>
 
-namespace ginkgo {
-
+namespace ginkgo 
+{
 	class Mesh
 	{
 	private:
@@ -17,9 +17,7 @@ namespace ginkgo {
 	public:
 		Mesh();
 		~Mesh();
-		void addData(const std::vector<glm::vec3>& positions, const std::vector<GLuint>& indices, const std::vector<glm::vec2>& uvs, const std::vector<glm::vec3>& normals = std::vector<glm::vec3>());
+		void addData(const vector<vec3>& positions, const vector<GLuint>& indices, const vector<vec2>& uvs, const vector<vec3>& normals = vector<vec3>());
 		virtual void draw() const;
 	};
-
-
 }

@@ -6,11 +6,11 @@
 
 namespace ginkgo {
 
-	ScreenBuffer::ScreenBuffer(unsigned int width, unsigned int height, glm::vec4 clear_color, bool depth, bool stencil)
+	ScreenBuffer::ScreenBuffer(unsigned int width, unsigned int height, vec4 clear_color, bool depth, bool stencil)
 		: clear_color(clear_color)
 	{
-		addVertexShader("Render/res/shaders/screenVertex.vs");
-		addFragmentShader("Render/res/shaders/screenFragment.fs");
+		addVertexShader("shaders/screenVertex.vs");
+		addFragmentShader("shaders/screenFragment.fs");
 		compileShader();
 
 		GLfloat quadVertices[] = {
@@ -91,7 +91,7 @@ namespace ginkgo {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void ScreenBuffer::clearColor(const glm::vec4& clear_color)
+	void ScreenBuffer::clearColor(const vec4& clear_color)
 	{
 		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	}
@@ -109,7 +109,7 @@ namespace ginkgo {
 		glClear(option);
 	}
 	
-	void ScreenBuffer::initalize(const glm::vec4& clear)
+	void ScreenBuffer::initalize(const vec4& clear)
 	{
 		ScreenBuffer::clearColor(clear);
 		ScreenBuffer::clearBuffer(true, true, true);
@@ -120,6 +120,7 @@ namespace ginkgo {
 	{
 		bindBuffer();
 		ScreenBuffer::initalize(clear_color);
+		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	void ScreenBuffer::drawToScreen() const

@@ -7,10 +7,10 @@
 
 namespace ginkgo {
 
-	CubeMap::CubeMap(std::map<unsigned int, std::string> faces, float scale)
+	CubeMap::CubeMap(map<unsigned int, string> faces, float scale)
 	{
-		addVertexShader("Render/res/shaders/cubemapVertex.vs");
-		addFragmentShader("Render/res/shaders/cubemapFragment.fs");
+		addVertexShader("shaders/cubemapVertex.vs");
+		addFragmentShader("shaders/cubemapFragment.fs");
 		compileShader();
 
 		glGenTextures(1, &textureID);
@@ -22,33 +22,33 @@ namespace ginkgo {
 		glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
 		//RIGHT FACE
-		image = FileUtils::loadImage(faces[CubeMap::RIGHT].c_str(), &width, &height, 180.0f);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CubeMap::LEFT, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
+		image = FileUtils::loadImage(faces[CM_RIGHT].c_str(), &width, &height, 180.0f);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CM_LEFT, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
 		delete[] image;
 
 		//LEFT FACE
-		image = FileUtils::loadImage(faces[CubeMap::LEFT].c_str(), &width, &height, 180.0f);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CubeMap::RIGHT, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
+		image = FileUtils::loadImage(faces[CM_LEFT].c_str(), &width, &height, 180.0f);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CM_RIGHT, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
 		delete[] image;
 
 		//TOP FACE
-		image = FileUtils::loadImage(faces[CubeMap::TOP].c_str(), &width, &height, 180.0f);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CubeMap::TOP, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
+		image = FileUtils::loadImage(faces[CM_TOP].c_str(), &width, &height, 180.0f);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CM_TOP, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
 		delete[] image;
 
 		//BOTTOM FACE
-		image = FileUtils::loadImage(faces[CubeMap::BOTTOM].c_str(), &width, &height, 180.0f);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CubeMap::BOTTOM, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
+		image = FileUtils::loadImage(faces[CM_BOTTOM].c_str(), &width, &height, 180.0f);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CM_BOTTOM, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
 		delete[] image;
 
 		//FRONT FACE
-		image = FileUtils::loadImage(faces[CubeMap::FRONT].c_str(), &width, &height, 180.0f);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CubeMap::BACK, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
+		image = FileUtils::loadImage(faces[CM_FRONT].c_str(), &width, &height, 180.0f);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CM_BACK, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
 		delete[] image;
 
 		//BACK FACE
-		image = FileUtils::loadImage(faces[CubeMap::BACK].c_str(), &width, &height, 180.0f);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CubeMap::FRONT, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
+		image = FileUtils::loadImage(faces[CM_BACK].c_str(), &width, &height, 180.0f);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + CM_FRONT, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, image);
 		delete[] image;
 
 
@@ -61,8 +61,10 @@ namespace ginkgo {
 
 		GLfloat vertices[] = { -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f };
 
-		for (unsigned int i = 0; i < 108; i++)
-			vertices[i] *= scale;
+		for (int a = 0; a < 108; a++)
+		{
+			vertices[a] *= scale;
+		}
 
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
@@ -91,7 +93,7 @@ namespace ginkgo {
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}
 
-	void CubeMap::draw(const glm::mat4& transformProjectionView) const
+	void CubeMap::draw(const mat4& transformProjectionView) const
 	{
 		bind();
 
@@ -110,9 +112,8 @@ namespace ginkgo {
 		unbind();
 	}
 
-	ICubeMap* cubeMapFactory(std::map<unsigned int, std::string> faces, float scale = 500.0f)
+	ICubeMap* cubeMapFactory(map<unsigned int, string>& faces, float scale)
 	{
 		return new CubeMap(faces, scale);
 	}
-
 }

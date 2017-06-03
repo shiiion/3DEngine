@@ -1,8 +1,6 @@
 #pragma once
 
-#include <vector>
-#include <string>
-
+#include "RenderResource.h"
 #include <glm/glm.hpp>
 
 namespace ginkgo {
@@ -10,17 +8,17 @@ namespace ginkgo {
 	class ObjLoader
 	{
 	private:
-		std::vector<glm::vec3> positions;
-		std::vector<glm::vec2> uvs;
-		std::vector<glm::vec3> normals;
-		std::vector<unsigned int> indices;
+		vector<vec3> positions;
+		vector<vec2> uvs;
+		vector<vec3> normals;
+		vector<unsigned int> indices;
 	public:
-		ObjLoader(const std::string& path);
+		ObjLoader(const string& path);
 		
-		const std::vector<glm::vec3>& getPositionList() const { return positions; }
-		const std::vector<glm::vec2>& getUVList() const { return uvs; }
-		const std::vector<glm::vec3>& getNormalList() const { return normals; }
-		const std::vector<unsigned int>& getIndexList() const { return indices; }
+		const vector<vec3>& getPositionList() const { return positions; }
+		const vector<vec2>& getUVList() const { return uvs; }
+		const vector<vec3>& getNormalList() const { return normals; }
+		const vector<unsigned int>& getIndexList() const { return indices; }
 
 	};
 

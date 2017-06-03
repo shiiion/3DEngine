@@ -13,7 +13,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Interface">
+    <Filter Include="Header Files\Export">
       <UniqueIdentifier>{b91e2cf8-a04a-4d5e-a14e-737d35acc960}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -25,15 +25,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LightStructs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PhongShader.h">
@@ -49,9 +40,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Text.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
@@ -70,25 +58,52 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IRenderable.h">
-      <Filter>Header Files\Interface</Filter>
+      <Filter>Header Files\Export</Filter>
     </ClInclude>
     <ClInclude Include="ILayer.h">
-      <Filter>Header Files\Interface</Filter>
+      <Filter>Header Files\Export</Filter>
     </ClInclude>
     <ClInclude Include="ICamera.h">
-      <Filter>Header Files\Interface</Filter>
+      <Filter>Header Files\Export</Filter>
     </ClInclude>
     <ClInclude Include="IPhongShader.h">
-      <Filter>Header Files\Interface</Filter>
+      <Filter>Header Files\Export</Filter>
     </ClInclude>
     <ClInclude Include="ICubeMap.h">
-      <Filter>Header Files\Interface</Filter>
+      <Filter>Header Files\Export</Filter>
     </ClInclude>
     <ClInclude Include="IText.h">
-      <Filter>Header Files\Interface</Filter>
+      <Filter>Header Files\Export</Filter>
     </ClInclude>
     <ClInclude Include="IWindow.h">
-      <Filter>Header Files\Interface</Filter>
+      <Filter>Header Files\Export</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderResource.h">
+      <Filter>Header Files\Export</Filter>
+    </ClInclude>
+    <ClInclude Include="ITransform.h">
+      <Filter>Header Files\Export</Filter>
+    </ClInclude>
+    <ClInclude Include="LightStructs.h">
+      <Filter>Header Files\Export</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files\Export</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Export</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderer.h">
+      <Filter>Header Files\Export</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagement.h">
+      <Filter>Header Files\Export</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +137,6 @@
     <ClCompile Include="Text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -135,6 +147,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ObjLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

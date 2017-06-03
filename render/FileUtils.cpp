@@ -12,7 +12,7 @@
 
 namespace ginkgo {
 
-	std::string FileUtils::read_file(const char* filepath)
+	string FileUtils::read_file(const char* filepath)
 	{
 		FILE* file = fopen(filepath, "rt");	//we read as t -> textfile bc if b -> bytes then it would all be in one line like in bytes
 		fseek(file, 0, SEEK_END);
@@ -24,7 +24,7 @@ namespace ginkgo {
 		fread(data, 1, length, file);
 		fclose(file);
 
-		std::string result(data);
+		string result(data);
 		delete[] data;
 
 		return result;
