@@ -33,9 +33,6 @@
     <ClInclude Include="IPhysicsObject.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="IRenderable.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="ISurface.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
@@ -49,9 +46,6 @@
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsObject.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderable.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="Surface.h">
@@ -99,12 +93,15 @@
     <ClInclude Include="IComponent.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="IRenderComponent.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>Header Files\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsObject.cpp">
@@ -144,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -67,10 +67,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)dependencies\include;$(SolutionDir)render;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\core\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\core\$(Configuration)\Intermediates\</IntDir>
-    <LibraryPath>$(SolutionDir)dependencies\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)dependencies\lib;$(SolutionDir)bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>$(SolutionDir)dependencies\lib;$(LibraryPath)</LibraryPath>
@@ -98,7 +98,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3dll.lib;render\$(Configuration)\render.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)bin\core\$(Configuration)\$(ProjectName).dll" "$(SolutionDir)bin\3DGame\$(Configuration)\$(ProjectName).dll"</Command>
@@ -178,9 +178,9 @@
     <ClInclude Include="IEntity.h" />
     <ClInclude Include="ISurface.h" />
     <ClInclude Include="IPhysicsObject.h" />
-    <ClInclude Include="IRenderable.h" />
+    <ClInclude Include="IRenderComponent.h" />
     <ClInclude Include="PhysicsObject.h" />
-    <ClInclude Include="Renderable.h" />
+    <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="IWorld.h" />
     <ClInclude Include="SurfaceCollisionMesh.h" />
     <ClInclude Include="UserInputSystem.h" />
@@ -198,7 +198,7 @@
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="Surface.cpp" />
-    <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="SurfaceCollisionMesh.cpp" />
     <ClCompile Include="UserInputSystem.cpp" />
     <ClCompile Include="World.cpp" />

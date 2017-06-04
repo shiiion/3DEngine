@@ -13,6 +13,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "render", "render\render.vcxproj", "{E9E1277C-FE53-4A5C-866E-C5CAB512C15D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "core\core.vcxproj", "{525DAF7A-182D-40D6-B2F0-5F8B5D754224}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E9E1277C-FE53-4A5C-866E-C5CAB512C15D} = {E9E1277C-FE53-4A5C-866E-C5CAB512C15D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameUI", "gameUI\gameUI.vcxproj", "{535B3BE0-B9E1-42BD-ABB7-F7ED9DD62AB7}"
 EndProject
