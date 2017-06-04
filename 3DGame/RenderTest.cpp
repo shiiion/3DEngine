@@ -69,20 +69,20 @@ int main()
 	sys1->bindInputCode(GLFW_MOUSE_BUTTON_1, 4);
 	IRenderer* renderer = initRenderer(w);
 	
-	Mesh* plane = loadMesh("D:\\aa\\plane.obj", "plane");
-	Material* pretty = new Material(createTexture("D:\\aa\\EPIC.png", false, "epic"));
+	Mesh* plane = loadMesh("test_resources/models/plane.obj", "plane");
+	Material* pretty = new Material(createTexture("test/resources/textures/EPIC.png", false, "epic"));
 	pretty->refractiveIndex = 0.02f;
 	pretty->rIntensity = 0.2f;
 	IRenderable* drawme = renderableFactory(plane, pretty);
 	
 
 	std::map<unsigned int, std::string> skyboxImages;
-	skyboxImages[CM_LEFT] = "D:\\aa\\skybox\\left.jpg";
-	skyboxImages[CM_RIGHT] = "D:\\aa\\skybox\\right.jpg";
-	skyboxImages[CM_FRONT] = "D:\\aa\\skybox\\front.jpg";
-	skyboxImages[CM_BACK] = "D:\\aa\\skybox\\back.jpg";
-	skyboxImages[CM_TOP] = "D:\\aa\\skybox\\top.jpg";
-	skyboxImages[CM_BOTTOM] = "D:\\aa\\skybox\\bottom.jpg";
+	skyboxImages[CM_LEFT] = "test_resources/skybox/left.jpg";
+	skyboxImages[CM_RIGHT] = "test_resources/skybox/right.jpg";
+	skyboxImages[CM_FRONT] = "test_resources/skybox/front.jpg";
+	skyboxImages[CM_BACK] = "test_resources/skybox/back.jpg";
+	skyboxImages[CM_TOP] = "test_resources/skybox/top.jpg";
+	skyboxImages[CM_BOTTOM] = "test_resources/skybox/bottom.jpg";
 	renderer->loadSkybox(skyboxImages, 50000);
 	renderer->addRenderable(drawme);
 

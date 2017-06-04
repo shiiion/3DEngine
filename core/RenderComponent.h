@@ -22,7 +22,5 @@ namespace ginkgo
 
 		void onTick(float elapsedTime) override;
 		void onTickEnd(float elapsedTime) override;
-
-		~RenderComponent() override;
 	};
 }

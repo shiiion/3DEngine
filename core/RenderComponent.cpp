@@ -3,10 +3,10 @@
 
 namespace ginkgo
 {
-	RenderComponent::RenderComponent(IEntity* parent, IRenderMesh const* mesh, const glm::vec3& scl) 
+	RenderComponent::RenderComponent(IEntity* parent, IRenderable* mesh) 
 		: parent(parent)
 	{
-		scale = scl;
+		scale = glm::vec3(1, 1, 1);
 		this->mesh = mesh;
 	}
 
@@ -20,8 +20,14 @@ namespace ginkgo
 		scale = scl;
 	}
 
-	RenderComponent::~RenderComponent()
+	void RenderComponent::onTick(float elapsedTime)
 	{
+
+	}
+
+	void RenderComponent::onTickEnd(float elapsedTime)
+	{
+
 	}
 
 	IEntity* RenderComponent::getParent() 
@@ -29,9 +35,9 @@ namespace ginkgo
 		return parent;
 	}
 
-	IRenderComponent* RenderComponentFactory(IEntity* parent, IRenderMesh const* mesh, const glm::vec3& scl)
+	IRenderComponent* renderComponentFactory(IEntity* parent, IRenderable* mesh)
 	{
-		return new RenderComponent(parent, mesh, scl);
+		return new RenderComponent(parent, mesh);
 	}
 }
 

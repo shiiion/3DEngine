@@ -2,6 +2,7 @@
 #include "Octree.h"
 #include "IPhysicsObject.h"
 #include "CollisionMesh.h"
+#include "IEntity.h"
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define max(a, b) ((a) < (b) ? (b) : (a))

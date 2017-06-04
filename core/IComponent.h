@@ -12,7 +12,5 @@ namespace ginkgo
 		virtual void onTickEnd(float elapsedTime) = 0;
 
 		virtual IEntity* getParent() = 0;
-
-		virtual ~IComponent() = 0;
 	};
 }

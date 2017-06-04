@@ -2,6 +2,7 @@
 #include "ICollisionMesh.h"
 #include "IPhysicsObject.h"
 #include "Core.h"
+#include "IEntity.h"
 
 namespace ginkgo
 {

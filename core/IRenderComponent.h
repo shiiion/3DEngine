@@ -14,5 +14,5 @@ namespace ginkgo
 		virtual void setScale(const glm::vec3& scl) = 0;
 	};
 
-	DECLSPEC_CORE IRenderComponent* renderableFactory(IEntity* parent, IRenderable const* renderable);
+	DECLSPEC_CORE IRenderComponent* renderComponentFactory(IEntity* parent, IRenderable const* renderable);
 }

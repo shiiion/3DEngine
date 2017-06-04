@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IRenderable.h"
+#include "CoreReource.h"
 #include <forward_list>
 
 #define CSTATE_RESOLVE 1
@@ -20,6 +20,7 @@
 namespace ginkgo
 {
 	class ICollisionMesh;
+	class IEntity;
 	struct Collision;
 
 	class IPhysicsObject

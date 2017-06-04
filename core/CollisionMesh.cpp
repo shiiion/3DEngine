@@ -5,6 +5,7 @@
 #include "Core.h"
 #include "IWorld.h"
 #include "SurfaceCollisionMesh.h"
+#include "IEntity.h"
 
 namespace ginkgo
 {
