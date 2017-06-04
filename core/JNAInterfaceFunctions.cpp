@@ -12,13 +12,13 @@ namespace ginkgo
 {
 	IEntity* createAddEntity(float x, float y, float z, float xr, float yr, float zr, float xv, float yv, float zv, float xe, float ye, float ze, float rebound, int dynamic, float mass, float friction)
 	{
-		glm::vec3 xAxis = glm::rotateX(glm::rotateY(glm::rotateZ(glm::vec3(1, 0, 0), xr), yr), zr);
-		glm::vec3 yAxis = glm::rotateX(glm::rotateY(glm::rotateZ(glm::vec3(0, 1, 0), xr), yr), zr);
-		glm::vec3 zAxis = glm::rotateX(glm::rotateY(glm::rotateZ(glm::vec3(0, 0, 1), xr), yr), zr);
+		vec3 xAxis = glm::rotateX(glm::rotateY(glm::rotateZ(vec3(1, 0, 0), xr), yr), zr);
+		vec3 yAxis = glm::rotateX(glm::rotateY(glm::rotateZ(vec3(0, 1, 0), xr), yr), zr);
+		vec3 zAxis = glm::rotateX(glm::rotateY(glm::rotateZ(vec3(0, 0, 1), xr), yr), zr);
 
 		ICollisionMesh* pcm = createCollisionMesh(xe, ye, ze, xAxis, yAxis, zAxis);
 
-		IEntity* newEnt = entityFactory(glm::vec3(x, y, z), glm::vec3(xr, yr, zr), glm::vec3(xv, yv, zv));
+		IEntity* newEnt = entityFactory(vec3(x, y, z), vec3(xr, yr, zr), vec3(xv, yv, zv));
 
 		int dyn = (dynamic ? CTYPE_WORLDDYNAMIC : CTYPE_WORLDSTATIC);
 
@@ -48,7 +48,7 @@ namespace ginkgo
 
 	float getAxis(IEntity* entity, int ind, int ind2)
 	{
-		glm::vec3 axis;
+		vec3 axis;
 
 		switch (ind)
 		{
@@ -80,7 +80,7 @@ namespace ginkgo
 
 	void setVel(IEntity* entity, float x, float y, float z)
 	{
-		entity->setVelocity(glm::vec3(x, y, z));
+		entity->setVelocity(vec3(x, y, z));
 	}
 }
 

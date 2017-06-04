@@ -8,15 +8,22 @@ namespace ginkgo
 	class RenderComponent : public IRenderComponent
 	{
 	private:
-		glm::vec3 scale;
 		IRenderable* mesh;
 
 		IEntity* parent;
 
 	public:
 		RenderComponent(IEntity* parent, IRenderable* mesh);
-		const glm::vec3& getScale() const override;
-		void setScale(const glm::vec3& scl) override;
+		const vec3& getScale() const override;
+		void setScale(const vec3& scl) override;
+		const vec3& getPosition() const override;
+		void setPosition(const vec3& pos) override;
+
+		void setRotation(const vec3& axis, float angle) override;
+		float getRotation() const override;
+		const vec3& getAxis() const override;
+		
+
 
 		IEntity* getParent() override;
 

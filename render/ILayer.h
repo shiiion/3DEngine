@@ -26,6 +26,6 @@ namespace ginkgo
 
 	};
 
-	DECLSPEC_RENDER ILayer* layerFactory(const vector<IRenderable*>& renderables = vector<IRenderable*>(), const mat4& model = mat4());
+	DECLSPEC_RENDER ILayer* layerFactory(const vector<IRenderable*>& renderables = vector<IRenderable*>());
 
 }

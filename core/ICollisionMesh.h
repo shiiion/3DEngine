@@ -26,18 +26,18 @@ namespace ginkgo
 		virtual bool testRay(RaytraceParams& params, RaytraceResult& resultOut) const = 0;
 
 		virtual void generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut) = 0;
-		virtual float getAxisOverlap(glm::vec3 const& axisNorm, ICollisionMesh const& other) const = 0;
+		virtual float getAxisOverlap(vec3 const& axisNorm, ICollisionMesh const& other) const = 0;
 
 		virtual IPhysicsObject* getOwner() const = 0;
 
-		virtual void setCachedCenter(glm::vec3 const& center) = 0;
-		virtual glm::vec3 const& getCachedCenter() const = 0;
+		virtual void setCachedCenter(vec3 const& center) = 0;
+		virtual vec3 const& getCachedCenter() const = 0;
 
-		virtual void setCachedVelocity(glm::vec3 const& vel) = 0;
-		virtual glm::vec3 const& getCachedVelocity() const = 0;
+		virtual void setCachedVelocity(vec3 const& vel) = 0;
+		virtual vec3 const& getCachedVelocity() const = 0;
 
 		virtual int getCollisionShape() const = 0;
 	};
 
-	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);
+	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l, vec3 const& wAxis, vec3 const& hAxis, vec3 const& lAxis);
 }

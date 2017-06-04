@@ -5,10 +5,10 @@ namespace ginkgo
 {
 	void SurfaceCollisionMesh::createSurfacesFromMesh()
 	{
-		glm::vec3 p0, p1, p2, p3, p4, p5, p6, p7;
-		glm::vec3 const& xAxis = mesh->getAxis(0);
-		glm::vec3 const& yAxis = mesh->getAxis(1);
-		glm::vec3 const& zAxis = mesh->getAxis(2);
+		vec3 p0, p1, p2, p3, p4, p5, p6, p7;
+		vec3 const& xAxis = mesh->getAxis(0);
+		vec3 const& yAxis = mesh->getAxis(1);
+		vec3 const& zAxis = mesh->getAxis(2);
 		float xExt = mesh->getExtent(0);
 		float yExt = mesh->getExtent(1);
 		float zExt = mesh->getExtent(2);

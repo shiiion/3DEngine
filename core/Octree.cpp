@@ -158,7 +158,7 @@ namespace ginkgo
 		float hfHeight = bounds.y + bounds.h / 2.f;
 		float hfLength = bounds.z + bounds.l / 2.f;
 
-		glm::vec3 endpt = ray.point + (ray.direction * dist);
+		vec3 endpt = ray.point + (ray.direction * dist);
 
 		float top = max(endpt.y, ray.point.y);
 		float bot = min(endpt.y, ray.point.y);
@@ -428,9 +428,9 @@ namespace ginkgo
 	//y+
 	float getTop(CollisionMesh const& mesh)
 	{
-		glm::vec3 const& xAxis = mesh.getAxis(0);
-		glm::vec3 const& yAxis = mesh.getAxis(1);
-		glm::vec3 const& zAxis = mesh.getAxis(2);
+		vec3 const& xAxis = mesh.getAxis(0);
+		vec3 const& yAxis = mesh.getAxis(1);
+		vec3 const& zAxis = mesh.getAxis(2);
 		float xY, yY, zY;
 		xY = max(xAxis.y * mesh.getExtent(0), xAxis.y * -mesh.getExtent(0)) + mesh.getCachedCenter().y;
 		yY = max(yAxis.y * mesh.getExtent(1), yAxis.y * -mesh.getExtent(1)) + mesh.getCachedCenter().y;
@@ -442,9 +442,9 @@ namespace ginkgo
 	//y-
 	float getBot(CollisionMesh const& mesh)
 	{
-		glm::vec3 const& xAxis = mesh.getAxis(0);
-		glm::vec3 const& yAxis = mesh.getAxis(1);
-		glm::vec3 const& zAxis = mesh.getAxis(2);
+		vec3 const& xAxis = mesh.getAxis(0);
+		vec3 const& yAxis = mesh.getAxis(1);
+		vec3 const& zAxis = mesh.getAxis(2);
 		float xY, yY, zY;
 		xY = min(xAxis.y * mesh.getExtent(0), xAxis.y * -mesh.getExtent(0)) + mesh.getCachedCenter().y;
 		yY = min(yAxis.y * mesh.getExtent(1), yAxis.y * -mesh.getExtent(1)) + mesh.getCachedCenter().y;
@@ -456,9 +456,9 @@ namespace ginkgo
 	//x-
 	float getLeft(CollisionMesh const& mesh)
 	{
-		glm::vec3 const& xAxis = mesh.getAxis(0);
-		glm::vec3 const& yAxis = mesh.getAxis(1);
-		glm::vec3 const& zAxis = mesh.getAxis(2);
+		vec3 const& xAxis = mesh.getAxis(0);
+		vec3 const& yAxis = mesh.getAxis(1);
+		vec3 const& zAxis = mesh.getAxis(2);
 		float xX, yX, zX;
 		xX = min(xAxis.x * mesh.getExtent(0), xAxis.x * -mesh.getExtent(0)) + mesh.getCachedCenter().x;
 		yX = min(yAxis.x * mesh.getExtent(1), yAxis.x * -mesh.getExtent(1)) + mesh.getCachedCenter().x;
@@ -470,9 +470,9 @@ namespace ginkgo
 	//x+
 	float getRight(CollisionMesh const& mesh)
 	{
-		glm::vec3 const& xAxis = mesh.getAxis(0);
-		glm::vec3 const& yAxis = mesh.getAxis(1);
-		glm::vec3 const& zAxis = mesh.getAxis(2);
+		vec3 const& xAxis = mesh.getAxis(0);
+		vec3 const& yAxis = mesh.getAxis(1);
+		vec3 const& zAxis = mesh.getAxis(2);
 		float xX, yX, zX;
 		xX = max(xAxis.x * mesh.getExtent(0), xAxis.x * -mesh.getExtent(0)) + mesh.getCachedCenter().x;
 		yX = max(yAxis.x * mesh.getExtent(1), yAxis.x * -mesh.getExtent(1)) + mesh.getCachedCenter().x;
@@ -484,9 +484,9 @@ namespace ginkgo
 	//z+
 	float getFront(CollisionMesh const& mesh)
 	{
-		glm::vec3 const& xAxis = mesh.getAxis(0);
-		glm::vec3 const& yAxis = mesh.getAxis(1);
-		glm::vec3 const& zAxis = mesh.getAxis(2);
+		vec3 const& xAxis = mesh.getAxis(0);
+		vec3 const& yAxis = mesh.getAxis(1);
+		vec3 const& zAxis = mesh.getAxis(2);
 		float xZ, yZ, zZ;
 		xZ = max(xAxis.z * mesh.getExtent(0), xAxis.z * -mesh.getExtent(0)) + mesh.getCachedCenter().z;
 		yZ = max(yAxis.z * mesh.getExtent(1), yAxis.z * -mesh.getExtent(1)) + mesh.getCachedCenter().z;
@@ -498,9 +498,9 @@ namespace ginkgo
 	//z-
 	float getBack(CollisionMesh const& mesh)
 	{
-		glm::vec3 const& xAxis = mesh.getAxis(0);
-		glm::vec3 const& yAxis = mesh.getAxis(1);
-		glm::vec3 const& zAxis = mesh.getAxis(2);
+		vec3 const& xAxis = mesh.getAxis(0);
+		vec3 const& yAxis = mesh.getAxis(1);
+		vec3 const& zAxis = mesh.getAxis(2);
 		float xZ, yZ, zZ;
 		xZ = min(xAxis.z * mesh.getExtent(0), xAxis.z * -mesh.getExtent(0)) + mesh.getCachedCenter().z;
 		yZ = min(yAxis.z * mesh.getExtent(1), yAxis.z * -mesh.getExtent(1)) + mesh.getCachedCenter().z;

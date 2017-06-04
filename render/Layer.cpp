@@ -10,8 +10,8 @@
 
 namespace ginkgo {
 
-	Layer::Layer(const vector<IRenderable*>& renderablesL, const mat4& model)
-		: renderables(renderablesL), model(model)
+	Layer::Layer(const vector<IRenderable*>& renderablesL)
+		: renderables(renderablesL)
 	{
 		if (renderablesL.size())
 		{
@@ -109,6 +109,7 @@ namespace ginkgo {
 				{
 					glActiveTexture(GL_TEXTURE0);
 					glBindTexture(GL_TEXTURE_2D, determineTextureID(renderables[i]));
+					currentTextureID = determineTextureID(renderables[i]);
 				}
 
 				phongShader.updateUniforms(
@@ -119,19 +120,16 @@ namespace ginkgo {
 				if (renderables[i]->getMaterial().refractiveIndex >= 0) { glActiveTexture(GL_TEXTURE1); cubeMap.bindCubeMapTexture(); }
 				renderables[i]->draw();
 				if (renderables[i]->getMaterial().refractiveIndex >= 0) cubeMap.unbindCubeMapTexture();
-				
-				if (determineTextureID(renderables[i]) != currentTextureID)
-				{
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, 0);
-				}
+
+				//glActiveTexture(GL_TEXTURE0);
 			}
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		phongShader.unbind();
 	}
 
-	ILayer* layerFactory(const vector<IRenderable*>& renderables, const mat4& model)
+	ILayer* layerFactory(const vector<IRenderable*>& renderables)
 	{
-		return new Layer(renderables, model);
+		return new Layer(renderables);
 	}
 }

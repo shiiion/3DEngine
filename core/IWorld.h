@@ -21,7 +21,7 @@ namespace ginkgo
 		virtual void setGravity(float gravity) = 0;
 		//virtual void setEntity(long ID, IEntity* entity) = 0;
 
-		virtual glm::vec3 const& getGravity() const = 0;
+		virtual vec3 const& getGravity() const = 0;
 		virtual IEntity* getEntity(long ID) const = 0;
 
 		virtual void addEntity(IEntity* entity) = 0;

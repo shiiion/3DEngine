@@ -19,14 +19,15 @@ namespace ginkgo {
 		static int index;
 		int r_index;
 	public:
-		Renderable(const Mesh* mesh, Material* material, const mat4& model = mat4());
+		Renderable(const Mesh* mesh, Material* material);
 
 		void setMesh(const Mesh* mesh) override { this->mesh = mesh; }
 		void setMaterial(Material* material) override { this->material = material; }
-		Material* alterMaterial() const override { return material; }
+		Material& getMaterial() override { return *material; }
 		
 		const mat4& getModel() const override;
-		Transform& alterModel() override { return model; }
+		Transform& getTransform() override { return const_cast<Transform&>(static_cast<const Renderable*>(this)->getTransform()); }
+		Transform const& getTransform() const override { return model; }
 
 		const Mesh& getMesh() const override { return *mesh; }
 		const Material& getMaterial() const override { return *material; }

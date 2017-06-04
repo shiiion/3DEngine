@@ -9,39 +9,53 @@ namespace ginkgo
 		long entityID;
 
 	protected:
-		glm::vec3 position;
-		glm::vec3 rotation;
-		glm::vec3 velocity;
-		glm::vec3 acceleration;
+		vec3 position;
+		vec3 rotation;
+		vec3 velocity;
+		vec3 acceleration;
 		bool gravityEnabled;//default true
 
-		IRenderable* renderableComponent;
 		IPhysicsObject* physicsComponent;
+		IRenderComponent* renderComponent;
 
 		vector<IComponent*> componentList;
 
 	public:
-		Entity(const glm::vec3& pos, const glm::vec3& rot = glm::vec3(), const glm::vec3& vel = glm::vec3(), const glm::vec3& accel = glm::vec3());
+		Entity(const vec3& pos, const vec3& rot = vec3(), const vec3& vel = vec3(), const vec3& accel = vec3());
 
 		virtual void beginTick(float elapsedTime) override;
 		virtual void endTick(float elapsedTime) override;
 
-		const glm::vec3& getPosition() const override;
-		const glm::vec3& getVelocity() const override;
-		const glm::vec3& getAcceleration() const override;
-		const glm::vec3& getRotation() const override;
+		const vec3& getPosition() const override;
+		const vec3& getVelocity() const override;
+		const vec3& getAcceleration() const override;
+		const vec3& getRotation() const override;
 		long getEntityID() const override;
 		bool isGravityEnabled() const override;
-		IRenderable* getRenderable() const override;
-		IPhysicsObject* getPhysics() const override;
+		IRenderComponent* getRenderable() override
+		{
+			return const_cast<IRenderComponent*>(static_cast<Entity const*>(this)->getRenderable());
+		}
+		IRenderComponent const* getRenderable() const override
+		{
+			return renderComponent;
+		}
+		IPhysicsObject* getPhysics() override
+		{
+			return const_cast<IPhysicsObject*>(static_cast<Entity const*>(this)->getPhysics());
+		}
+		IPhysicsObject const* getPhysics() const override
+		{
+			return physicsComponent;
+		}
 
-		void setPosition(const glm::vec3& pos) override;
-		void setVelocity(const glm::vec3& vel) override;
-		void setAcceleration(const glm::vec3& acc) override;
-		void addAcceleration(const glm::vec3& acc) override { acceleration += acc; }
-		void setRotation(const glm::vec3& ang) override;
+		void setPosition(const vec3& pos) override;
+		void setVelocity(const vec3& vel) override;
+		void setAcceleration(const vec3& acc) override;
+		void addAcceleration(const vec3& acc) override { acceleration += acc; }
+		void setRotation(const vec3& ang) override;
 		void setEntityID(long ID) override;
-		void setRenderable(IRenderable* component) override;
+		void setRenderable(IRenderComponent* component) override;
 		void setPhysics(IPhysicsObject* component) override;
 		void setGravityEnabled(bool enabled) override;
 

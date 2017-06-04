@@ -22,7 +22,7 @@ namespace ginkgo {
 		static bool compareRenderables(IRenderable* r1, IRenderable* r2);
 		static unsigned int determineTextureID(IRenderable* r1);
 	public:
-		Layer(const vector<IRenderable*>& renderables, const mat4& model = mat4());
+		Layer(const vector<IRenderable*>& renderables);
 
 		unsigned int getSize() const { return renderables.size(); }
 

@@ -46,9 +46,9 @@ namespace ginkgo
 	private:
 		//width (x), height(y), length(z)
 		float extents[3];
-		glm::vec3 axes[3];
-		glm::vec3 cachedCenter;
-		glm::vec3 cachedVel;
+		vec3 axes[3];
+		vec3 cachedCenter;
+		vec3 cachedVel;
 
 		IPhysicsObject* owner;
 
@@ -68,7 +68,7 @@ namespace ginkgo
 		void A2xB2_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
 
 	public:
-		CollisionMesh(float w, float h, float l, glm::vec3 const& wAxis, glm::vec3 const& hAxis, glm::vec3 const& lAxis);
+		CollisionMesh(float w, float h, float l, vec3 const& wAxis, vec3 const& hAxis, vec3 const& lAxis);
 		MoveInfo const& getLastMove() const override;
 		void generateVertexPath(float deltaTime) override;
 
@@ -78,23 +78,23 @@ namespace ginkgo
 		bool testCollisionStationary(ICollisionMesh const& other, CollisionStationary& collisionOut) override;
 		bool testRay(RaytraceParams& params, RaytraceResult& resultOut) const override;
 
-		glm::vec3 const& getAxis(int axis) const;
+		vec3 const& getAxis(int axis) const;
 		float getExtent(int extent) const;
 
 		void generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut) override;
 		//TRUE if not intersecting, FALSE if intersecting
-		bool testAxis(glm::vec3 const& axisNorm, CollisionMesh const& other, float deltaTime) const;
-		bool testAxisStationary(glm::vec3 const& axisNorm, CollisionMesh const& other) const;
-		float getCollisionTime(glm::vec3 const& axisNorm, CollisionMesh const& other, float deltaTime) const;
-		float getAxisOverlap(glm::vec3 const& axisNorm, ICollisionMesh const& other) const override;
+		bool testAxis(vec3 const& axisNorm, CollisionMesh const& other, float deltaTime) const;
+		bool testAxisStationary(vec3 const& axisNorm, CollisionMesh const& other) const;
+		float getCollisionTime(vec3 const& axisNorm, CollisionMesh const& other, float deltaTime) const;
+		float getAxisOverlap(vec3 const& axisNorm, ICollisionMesh const& other) const override;
 
 		virtual IPhysicsObject* getOwner() const override;
 
-		void setCachedCenter(glm::vec3 const& center) override;
-		glm::vec3 const& getCachedCenter() const override;
+		void setCachedCenter(vec3 const& center) override;
+		vec3 const& getCachedCenter() const override;
 
-		void setCachedVelocity(glm::vec3 const& vel) override;
-		glm::vec3 const& getCachedVelocity() const override;
+		void setCachedVelocity(vec3 const& vel) override;
+		vec3 const& getCachedVelocity() const override;
 
 		int getCollisionShape() const override
 		{

@@ -14,7 +14,7 @@ namespace ginkgo
 	class World : public IWorld
 	{
 	private:
-		glm::vec3 gravity;
+		vec3 gravity;
 		vector<IEntity*> entityList;
 		Octree worldTree;
 		vector<Collision> collisions;
@@ -30,7 +30,7 @@ namespace ginkgo
 		void setGravity(float gravity) override;
 		//virtual void setEntity(long ID, IEntity* entity) override;
 
-		glm::vec3 const& getGravity() const override;
+		vec3 const& getGravity() const override;
 		IEntity* getEntity(long ID) const override;
 
 		void addEntity(IEntity* entity) override;

@@ -6,7 +6,7 @@
 
 namespace ginkgo
 {
-	Character::Character(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	Character::Character(const vec3& pos, const vec3& rot, const vec3& vel, const vec3& accel)
 	{
 		position = pos;
 		rotation = rot;
@@ -16,7 +16,7 @@ namespace ginkgo
 		gravityEnabled = true;
 
 		entityID = Core::generateID();
-		renderableComponent = nullptr;
+		renderComponent = nullptr;
 
 		//freemove
 		movementStateList.emplace_back(0);
@@ -115,28 +115,31 @@ namespace ginkgo
 		componentList.emplace_back(component);
 	}
 
-	ICharacter* characterFactory(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	ICharacter* characterFactory(const vec3& pos, const vec3& rot, const vec3& vel, const vec3& accel)
 	{
 		return new Character(pos, rot, vel, accel);
 	}
 
 	void applyMovement(ICharacter& character, float elapsedTime)
 	{
+		//TODO: CHANGE THIS!! MOVE IN ROTATION DIRECTION (project character direction vector onto XZ plane)
+		//TODO: walking velocity
+		//TODO: maket all of these functions private member functions
 		if (character.getMovementControlFlags() & FWD_MOVE)
 		{
-			character.setVelocity(character.getVelocity() + glm::vec3(0, 0, 1) * elapsedTime);
+			character.setVelocity(character.getVelocity() + vec3(0, 0, 1) * elapsedTime);
 		}
 		if (character.getMovementControlFlags() & BACK_MOVE)
 		{
-			character.setVelocity(character.getVelocity() + glm::vec3(0, 0, -1) * elapsedTime);
+			character.setVelocity(character.getVelocity() + vec3(0, 0, -1) * elapsedTime);
 		}
 		if (character.getMovementControlFlags() & LEFT_MOVE)
 		{
-			character.setVelocity(character.getVelocity() + glm::vec3(-1, 0, 0) * elapsedTime);
+			character.setVelocity(character.getVelocity() + vec3(-1, 0, 0) * elapsedTime);
 		}
 		if (character.getMovementControlFlags() & RIGHT_MOVE)
 		{
-			character.setVelocity(character.getVelocity() + glm::vec3(1, 0, 0) * elapsedTime);
+			character.setVelocity(character.getVelocity() + vec3(1, 0, 0) * elapsedTime);
 		}
 	}
 
@@ -145,22 +148,20 @@ namespace ginkgo
 		applyMovement(character, elapsedTime);
 	}
 
-
-
-	bool isWalkableNormal(glm::vec3 const& normal)
+	bool isWalkableNormal(vec3 const& normal)
 	{
 		if (normal.y <= 0)
 		{
 			return false;
 		}
-		glm::vec3 normalized = glm::normalize(normal);
-		glm::vec3 vertical(0, -1, 0);
+		vec3 normalized = glm::normalize(normal);
+		vec3 vertical(0, -1, 0);
 
 		float angBetween = glm::acos(glm::dot(-normalized, vertical));
 		return (angBetween <= 45);
 	}
 
-	glm::vec3 const* findBestWalkableNormal(std::forward_list<SurfaceData> const& normalList, bool& found)
+	vec3 const* findBestWalkableNormal(std::forward_list<SurfaceData> const& normalList, bool& found)
 	{
 		auto listIter = normalList.begin();
 		while (listIter != normalList.end() && !(found = isWalkableNormal(listIter->surfaceNormal))) listIter++;
@@ -176,13 +177,13 @@ namespace ginkgo
 	{
 		applyMovement(character, elapsedTime);
 		bool found;
-		glm::vec3 const* normalPtr = findBestWalkableNormal(character.getPhysics()->getCollisionNormalList(), found);//TODO: change this to most recent viable collision normal
+		vec3 const* normalPtr = findBestWalkableNormal(character.getPhysics()->getCollisionNormalList(), found);//TODO: change this to most recent viable collision normal
 		if (normalPtr == nullptr)
 		{
 			return;
 		}
-		glm::vec3 const& collisionNormal = *normalPtr;
-		glm::vec3 velocityProjectionOnNormal = (collisionNormal * glm::dot(character.getVelocity(), collisionNormal) / pow(length(collisionNormal), 2));//should work
+		vec3 const& collisionNormal = *normalPtr;
+		vec3 velocityProjectionOnNormal = (collisionNormal * glm::dot(character.getVelocity(), collisionNormal) / pow(length(collisionNormal), 2));//should work
 																																						//checks if slope is away or towards the player's movement, projects velocity on slope
 		if (glm::length(character.getVelocity() + collisionNormal) > glm::length(character.getVelocity()))
 		{

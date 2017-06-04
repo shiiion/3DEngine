@@ -4,7 +4,7 @@
 
 namespace ginkgo
 {
-	Surface::Surface(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4)
+	Surface::Surface(const vec3& v1, const vec3& v2, const vec3& v3, const vec3& v4)
 	{
 		makeTwoTriangles(v1, v2, v3, v4);
 	}
@@ -14,12 +14,12 @@ namespace ginkgo
 
 	}
 
-	void Surface::makeTwoTriangles(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4)
+	void Surface::makeTwoTriangles(const vec3& v1, const vec3& v2, const vec3& v3, const vec3& v4)
 	{
 		
 		//TODO: check if points are in clockwise order
 		//possible solution: if normal direction (based on P2-P1 X P3-P2) pl projected onto P2 is , swap P2 and P3
-		glm::vec3 diagonalPoint, nonDiag1, nonDiag2;
+		vec3 diagonalPoint, nonDiag1, nonDiag2;
 
 		float l1 = glm::length(v2 - v1);
 		float l2 = glm::length(v3 - v1);
@@ -57,7 +57,7 @@ namespace ginkgo
 		}
 		t1.P1 = v1; t1.P2 = nonDiag1; t1.P3 = diagonalPoint;
 		t2.P1 = v1; t2.P2 = nonDiag2; t2.P3 = diagonalPoint;
-		glm::vec3 v, proj;
+		vec3 v, proj;
 		getNormal(t1, v);
 		proj = glm::proj(v, t1.P2);
 		if (glm::length(proj + t1.P2) < glm::length(t1.P2))
@@ -75,7 +75,7 @@ namespace ginkgo
 		}
 	}
 	
-	void Surface::getNormal(const Triangle& t, glm::vec3& normOut) const
+	void Surface::getNormal(const Triangle& t, vec3& normOut) const
 	{
 		normOut = glm::normalize(glm::cross((t.P2 - t.P1), (t.P3 - t.P2)));
 	}
@@ -84,7 +84,7 @@ namespace ginkgo
 	{
 		UINT32 posI;
 		UINT32 posF;
-		glm::vec3 normal, intersectPoint, ip1, ip2, ip3;
+		vec3 normal, intersectPoint, ip1, ip2, ip3;
 		float d, p, intersectionDistance, tsum;
 
 		getNormal(t, normal);
@@ -136,7 +136,7 @@ namespace ginkgo
 	{
 		Ray normRay = ray;
 		normRay.direction = glm::normalize(normRay.direction);
-		glm::vec3 normal, intersect;
+		vec3 normal, intersect;
 		float d;
 		getNormal(t1, normal);
 
@@ -145,7 +145,7 @@ namespace ginkgo
 		return -(d + glm::dot(normal, normRay.point)) / glm::dot(normal, normRay.direction);
 	}
 
-	void Surface::translateSurface(const glm::vec3& translation)
+	void Surface::translateSurface(const vec3& translation)
 	{
 		t1.P1 += translation;
 		t1.P2 += translation;
@@ -156,7 +156,7 @@ namespace ginkgo
 		t2.P3 += translation;
 	}
 
-	ISurface* createSurface(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4)
+	ISurface* createSurface(const vec3& v1, const vec3& v2, const vec3& v3, const vec3& v4)
 	{
 		return new Surface(v1, v2, v3, v4);
 	}

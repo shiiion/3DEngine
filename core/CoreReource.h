@@ -30,6 +30,8 @@ namespace ginkgo
 {
 	using std::vector;
 	using std::unique_ptr;
+	using glm::vec3;
+	using glm::vec4;
 
 	class IPhysicsObject;
 	class ICollisionMesh;
@@ -69,32 +71,32 @@ namespace ginkgo
 
 	struct Triangle
 	{
-		glm::vec3 P1;
-		glm::vec3 P2;
-		glm::vec3 P3;
+		vec3 P1;
+		vec3 P2;
+		vec3 P3;
 	};
 
 	struct Ray
 	{
-		glm::vec3 point;
-		glm::vec3 direction;
+		vec3 point;
+		vec3 direction;
 	};
 
 	struct Segment
 	{
-		glm::vec3 start;
-		glm::vec3 end;
+		vec3 start;
+		vec3 end;
 	};
 
 	struct MoveInfo
 	{
-		glm::vec3 centerStart;
-		glm::vec3 centerEnd;
+		vec3 centerStart;
+		vec3 centerEnd;
 
-		glm::vec3 velStart;
-		glm::vec3 velEnd;
+		vec3 velStart;
+		vec3 velEnd;
 
-		glm::vec3 accel;
+		vec3 accel;
 
 		float deltaTime;
 	};
@@ -113,17 +115,17 @@ namespace ginkgo
 
 		int lastSeparatingAxisType;
 		int intersectSide;
-		glm::vec3 lastSeparatingAxis;
+		vec3 lastSeparatingAxis;
 
-		glm::vec3 intersectionPoint;
+		vec3 intersectionPoint;
 
-		glm::vec3 collisionNormal;
+		vec3 collisionNormal;
 
 	};
 
 	struct SurfaceData
 	{
-		SurfaceData(UINT32 thisID, UINT32 otherID, glm::vec3 const& normal)
+		SurfaceData(UINT32 thisID, UINT32 otherID, vec3 const& normal)
 		{
 			this->thisID = thisID;
 			this->otherID = otherID;
@@ -132,7 +134,7 @@ namespace ginkgo
 
 		UINT32 thisID;
 		UINT32 otherID;
-		glm::vec3 surfaceNormal;
+		vec3 surfaceNormal;
 
 		bool compareSurface(SurfaceData const& otherSurface)
 		{
@@ -153,18 +155,18 @@ namespace ginkgo
 		ICollisionMesh* otherMesh;
 		ICollisionMesh* thisMesh;
 
-		glm::vec3 normal;
+		vec3 normal;
 
 		float overlapDist;
 	};
 
 	struct MoveResult
 	{
-		MoveResult(glm::vec3 finalPos = glm::vec3(), glm::vec3 finalVel = glm::vec3())
+		MoveResult(vec3 finalPos = vec3(), vec3 finalVel = vec3())
 			: finalPos(finalPos), finalVel(finalVel)
 		{}
-		glm::vec3 finalPos;
-		glm::vec3 finalVel;
+		vec3 finalPos;
+		vec3 finalVel;
 	};
 
 	struct RaytraceResult

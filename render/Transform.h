@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ITransform.h"
+#include <glm/gtx/quaternion.hpp>
 
 namespace ginkgo {
 
@@ -8,44 +9,72 @@ namespace ginkgo {
 	{
 	private:
 		mutable mat4 matrix;
-		mat4 dilation;
-		mat4 translation;
-		mat4 rotation;
+		vec3 dilation;
+		vec3 translation;
+			vec3 axis;
+			float angle;
 		mat4 identity;
 		mutable bool matrixOOD;
 	public:
-		Transform() : Transform(mat4()) { }
-		Transform(const mat4& matrix) { this->matrix = matrix; matrixOOD = true; identity = mat4(); }
+		Transform()
+		{
+			axis = vec3(0, 1, 0);
+			dilation = vec3(1, 1, 1);
+			translation = vec3();
+			angle = 0;
+			matrixOOD = true;
+			getMatrix();
+		}
+
 		const mat4& getMatrix() const override 
 		{
 			if (matrixOOD)
 			{
 				matrixOOD = false;
-				matrix = rotation * translation * dilation;
+				matrix = rotate(identity, angle, axis) * translate(identity, translation) * glm::scale(identity, dilation);
 			}
 			return matrix; 
 		}
+
 		void setMatrix(const mat4& matrix) override { this->matrix = matrix; }
 		
-		const mat4& scaleMatrix(const vec3& scale) override
+		void scaleMatrix(const vec3& scale) override
 		{ 
-			dilation = glm::scale(identity, scale);
+			dilation = scale;
 			matrixOOD = true;
-			return matrix;
 		}
 
-		const mat4& translateMatrix(const vec3& translation) override
+		void translateMatrix(const vec3& translation) override
 		{ 
-			this->translation = translate(identity, translation);
+			this->translation = translation;
 			matrixOOD = true;
-			return matrix; 
 		}
 
-		const mat4& rotateMatrix(float angleInRadians, const vec3& rotation) override 
+		void rotateMatrix(float angleInRadians, const vec3& rotation) override 
 		{ 
-			this->rotation = rotate(identity, angleInRadians, rotation);
+			this->axis = rotation;
+			this->angle = angleInRadians;
 			matrixOOD = true;
-			return matrix; 
+		}
+
+		vec3 const& getScale() const override
+		{
+			return dilation;
+		}
+		
+		vec3 const& getTranslation() const override
+		{
+			return translation;
+		}
+
+		vec3 const& getAxis() const override
+		{
+			return axis;
+		}
+
+		float const& getAngle() const override
+		{
+			return angle;
 		}
 	};
 

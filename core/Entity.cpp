@@ -3,12 +3,13 @@
 #include "Core.h"
 #include "IPhysicsObject.h"
 #include "IWorld.h"
+#include "IRenderComponent.h"
 
 //	Created by the master and nobody else + loser nerd
 
 namespace ginkgo 
 {
-	Entity::Entity(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	Entity::Entity(const vec3& pos, const vec3& rot, const vec3& vel, const vec3& accel)
 	{
 		position = pos;
 		rotation = rot;
@@ -17,25 +18,25 @@ namespace ginkgo
 		gravityEnabled = true;
 
 		entityID = Core::generateID();
-		renderableComponent = nullptr;
+		renderComponent = nullptr;
 	}
 
-	const glm::vec3& Entity::getAcceleration() const
+	const vec3& Entity::getAcceleration() const
 	{
 		return acceleration;
 	}
 
-	const glm::vec3& Entity::getVelocity() const
+	const vec3& Entity::getVelocity() const
 	{
 		return velocity;
 	}
 
-	const glm::vec3& Entity::getRotation() const
+	const vec3& Entity::getRotation() const
 	{
 		return rotation;
 	}
 
-	const glm::vec3& Entity::getPosition() const
+	const vec3& Entity::getPosition() const
 	{
 		return position;
 	}
@@ -45,22 +46,22 @@ namespace ginkgo
 		return gravityEnabled;
 	}
 
-	void Entity::setAcceleration(const glm::vec3& accel)
+	void Entity::setAcceleration(const vec3& accel)
 	{
 		acceleration = accel;
 	}
 
-	void Entity::setVelocity(const glm::vec3& vel)
+	void Entity::setVelocity(const vec3& vel)
 	{
 		velocity = vel;
 	}
 
-	void Entity::setRotation(const glm::vec3& rot)
+	void Entity::setRotation(const vec3& rot)
 	{
 		rotation = rot;
 	}
 
-	void Entity::setPosition(const glm::vec3& pos)
+	void Entity::setPosition(const vec3& pos)
 	{
 		position = pos;
 	}
@@ -76,7 +77,6 @@ namespace ginkgo
 		{
 			component->onTick(elapsedTime);
 		}
-
 		if (physicsComponent != nullptr)
 		{
 			//THE COST OF PREMATURE OPTIMIZATION IS EXPENSIVE
@@ -87,19 +87,19 @@ namespace ginkgo
 			physicsComponent->onTick(elapsedTime);
 		}
 		position += velocity * elapsedTime;
-		velocity += acceleration * elapsedTime + (gravityEnabled ? (getWorld()->getGravity() * elapsedTime) : glm::vec3(0, 0, 0));
+		velocity += acceleration * elapsedTime + (gravityEnabled ? (getWorld()->getGravity() * elapsedTime) : vec3(0, 0, 0));
 	}
 
 	void Entity::endTick(float elapsedTime)
 	{
-		for (IComponent* component : componentList)
-		{
-			component->onTickEnd(elapsedTime);
-		}
 		if (physicsComponent != nullptr)
 		{
 			position = physicsComponent->getMoveResult().finalPos;
 			velocity = physicsComponent->getMoveResult().finalVel;
+		}
+		for (IComponent* component : componentList)
+		{
+			component->onTickEnd(elapsedTime);
 		}
 	}
 
@@ -116,25 +116,10 @@ namespace ginkgo
 		}
 		return physicsObject;
 	}
-
-	IRenderable* Entity::getRenderable() const
-	{
-		return renderableComponent;
-	}
-
-	void Entity::setRenderable(IRenderable* component)
-	{
-		renderableComponent = component;
-	}
 	
 	void Entity::setGravityEnabled(bool enabled)
 	{
 		gravityEnabled = enabled;
-	}
-
-	IPhysicsObject* Entity::getPhysics() const
-	{
-		return physicsComponent;
 	}
 
 	void Entity::setPhysics(IPhysicsObject* component)
@@ -142,12 +127,26 @@ namespace ginkgo
 		physicsComponent = component;
 	}
 
+	void Entity::setRenderable(IRenderComponent* component)
+	{
+		//remove existing render component from component list
+		for (int a = 0; a < componentList.size(); a++)
+		{
+			if (componentList[a] == static_cast<IComponent*>(renderComponent))
+			{
+				componentList.erase(componentList.begin() + a);
+			}
+		}
+		renderComponent = component;
+		componentList.emplace_back(renderComponent);
+	}
+
 	void Entity::addComponent(IComponent* component)
 	{
 		componentList.emplace_back(component);
 	}
 
-	IEntity* entityFactory(const glm::vec3& pos, const glm::vec3& rot, const glm::vec3& vel, const glm::vec3& accel)
+	IEntity* entityFactory(const vec3& pos, const vec3& rot, const vec3& vel, const vec3& accel)
 	{
 		return new Entity(pos, rot, vel, accel);
 	}

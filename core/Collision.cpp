@@ -21,23 +21,23 @@ namespace ginkgo
 	{
 		float COF = glm::min(manifold.thisMesh->getOwner()->getMaterial().friction, manifold.otherMesh->getOwner()->getMaterial().friction);
 		
-		glm::vec3 normal = glm::normalize(manifold.normal);
-		glm::vec3 invNormal = -normal;
+		vec3 normal = glm::normalize(manifold.normal);
+		vec3 invNormal = -normal;
 
 		float angle = glm::min(glm::acos(glm::dot(-glm::normalize(getWorld()->getGravity()), normal)), glm::acos(glm::dot(glm::normalize(getWorld()->getGravity()), normal)));
 
 		float normalScalar = glm::abs(glm::length(getWorld()->getGravity()) * glm::cos(angle));
 
-		glm::vec3 refRVel = referenceResult.finalVel - otherResult.finalVel;
-		glm::vec3 invRVel = -refRVel;
+		vec3 refRVel = referenceResult.finalVel - otherResult.finalVel;
+		vec3 invRVel = -refRVel;
 
 		//PERPENDICULAR FORMULA: (N dot N / Vel dot N) * vel - N
 		//resist motion along velocity direction
 		float vDotNormal = glm::dot(refRVel, normal);
 		float vDotInvNormal = glm::dot(invRVel, invNormal);
 
-		glm::vec3 frictVector;
-		glm::vec3 invFrictVector;
+		vec3 frictVector;
+		vec3 invFrictVector;
 
 		if (vDotNormal == 0.f)
 		{
@@ -49,7 +49,7 @@ namespace ginkgo
 		}
 		else
 		{
-			glm::vec3 pVec = (1.f / vDotNormal) * refRVel - normal;
+			vec3 pVec = (1.f / vDotNormal) * refRVel - normal;
 
 			float pLen = glm::length(pVec);
 
@@ -76,7 +76,7 @@ namespace ginkgo
 			}
 			else
 			{
-				glm::vec3 pVec = (1.f / vDotInvNormal) * invRVel - invNormal;
+				vec3 pVec = (1.f / vDotInvNormal) * invRVel - invNormal;
 
 				float pLen = glm::length(pVec);
 
@@ -106,10 +106,10 @@ namespace ginkgo
 
 
 		//PERPENDICULAR FORMULA: (N dot N / Vel dot N) * vel - N
-		glm::vec3 normal = glm::normalize(manifold.normal);
+		vec3 normal = glm::normalize(manifold.normal);
 		float vDotNormal = glm::dot(referenceResult.finalVel, normal);
 
-		glm::vec3 pVecRef;
+		vec3 pVecRef;
 
 		if (vDotNormal == 0.f)
 		{
@@ -126,11 +126,11 @@ namespace ginkgo
 		pVecRef = (glm::dot(referenceResult.finalVel, pVecRef) / (pLen * pLen)) * pVecRef;
 		}
 		}
-		glm::vec3 nVecRef = vDotNormal * normal;
+		vec3 nVecRef = vDotNormal * normal;
 
-		glm::vec3 invNormal = -normal;
+		vec3 invNormal = -normal;
 		float vDotInvNormal = glm::dot(otherResult.finalVel, invNormal);
-		glm::vec3 pVecOther;
+		vec3 pVecOther;
 		if (vDotInvNormal == 0.f)
 		{
 		pVecOther = otherResult.finalVel;
@@ -147,19 +147,19 @@ namespace ginkgo
 		}
 		}
 
-		glm::vec3 nVecOther = vDotInvNormal * invNormal;
+		vec3 nVecOther = vDotInvNormal * invNormal;
 
 		pVecRef *= glm::pow(COF, deltaTime);
 		pVecOther *= glm::pow(COF, deltaTime);
 
 		if (glm::length(pVecRef) < 0.0001f)
 		{
-		pVecRef = glm::vec3();
+		pVecRef = vec3();
 		}
 
 		if (glm::length(pVecOther) < 0.0001f)
 		{
-		pVecOther = glm::vec3();
+		pVecOther = vec3();
 		}
 
 		referenceResult.finalVel = pVecRef + nVecRef;
@@ -176,8 +176,8 @@ namespace ginkgo
 		IPhysicsObject* refObj = manifold.thisMesh->getOwner(), *otherObj = manifold.otherMesh->getOwner();
 		float mass = refObj->getMass(), otherMass = otherObj->getMass();
 
-		glm::vec3 const& vel = referenceResult.finalVel;
-		glm::vec3 const& otherVel = otherResult.finalVel;
+		vec3 const& vel = referenceResult.finalVel;
+		vec3 const& otherVel = otherResult.finalVel;
 
 		//Contact velocity
 		float contactVel = glm::dot(otherVel - vel, manifold.normal);
@@ -213,7 +213,7 @@ namespace ginkgo
 			IS = (-contactVel) / (invMassThis + invMassOther);
 		}
 
-		glm::vec3 impulse = manifold.normal * IS;
+		vec3 impulse = manifold.normal * IS;
 
 		referenceResult.finalVel -= (invMassThis * impulse);
 		otherResult.finalVel += (invMassOther * impulse);
@@ -250,7 +250,7 @@ namespace ginkgo
 			correctionScalar = manifold.overlapDist;
 		}
 
-		glm::vec3 correction = (correctionScalar / (invMassRef + invMassOther)) * frameSegment * manifold.normal;
+		vec3 correction = (correctionScalar / (invMassRef + invMassOther)) * frameSegment * manifold.normal;
 		referenceResult.finalPos += invMassRef * correction;
 		otherResult.finalPos -= invMassOther * correction;
 

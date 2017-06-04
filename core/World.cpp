@@ -10,7 +10,7 @@ namespace ginkgo
 	World::World(float gravity)
 		: worldTree(0, Prism(WORLD_DIMENSIONS), nullptr)
 	{
-		this->gravity = glm::vec3(0, gravity, 0);
+		this->gravity = vec3(0, gravity, 0);
 	}
 
 	const vector<IEntity*>& World::getEntityList() const
@@ -57,10 +57,10 @@ namespace ginkgo
 
 	void World::setGravity(float gravity)
 	{
-		this->gravity = glm::vec3(0, gravity, 0);
+		this->gravity = vec3(0, gravity, 0);
 	}
 
-	glm::vec3 const& World::getGravity() const
+	vec3 const& World::getGravity() const
 	{
 		return gravity;
 	}
@@ -176,8 +176,8 @@ namespace ginkgo
 
 	void World::resolveCollisions(INT32 iterations)
 	{
-		glm::vec3 pos, pos2;
-		glm::vec3 v, v2; float t;
+		vec3 pos, pos2;
+		vec3 v, v2; float t;
 		for (Collision& c : collisions)
 		{
 			if (c.overlapSkipFixRan || !c.manifold.thisMesh->testCollisionStationary(*c.manifold.otherMesh, c.manifold))
@@ -201,9 +201,9 @@ namespace ginkgo
 			t = magn2 == 0 || magn > magn2 ? (-v.z * pos.z - v.y * pos.y - v.x * pos.x + v.x * pos2.x + v.y * pos2.y + v.z * pos2.z) / (glm::pow(v.x, 2) + glm::pow(v.y, 2) + glm::pow(v.z, 2))
 				: (-v2.z * pos2.z - v2.y * pos2.y - v2.x * pos2.x + v2.x * pos.x + v2.y * pos.y + v2.z * pos.z) / (glm::pow(v2.x, 2) + glm::pow(v2.y, 2) + glm::pow(v2.z, 2));
 			if (magn == 0 || magn > magn2)
-				c.manifold.thisMesh->setCachedCenter(glm::vec3(pos.x + v.x * t, pos.y + v.y * t, pos.z + v.z * t));
+				c.manifold.thisMesh->setCachedCenter(vec3(pos.x + v.x * t, pos.y + v.y * t, pos.z + v.z * t));
 			else
-				c.manifold.otherMesh->setCachedCenter(glm::vec3(pos2.x + v2.x * t, pos2.y + v2.y * t, pos2.z + v2.z * t));
+				c.manifold.otherMesh->setCachedCenter(vec3(pos2.x + v2.x * t, pos2.y + v2.y * t, pos2.z + v2.z * t));
 			//equation: t = (-vz * z0 - vy * y0 - vx * x0 + vx * x1 + vy * y1 + vz * z1) / (vx^2 + vy^2 + vz^2)
 			//solve for t where x1y1z1 is the still object and x0y0z0 is the moving object
 			//if both are moving then make x1y1z1 be the slower moving object of the two objects and pick x1y1z1 as the initial position
