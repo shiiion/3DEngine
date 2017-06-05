@@ -178,17 +178,16 @@ namespace ginkgo
 
 		vec3 const& vel = referenceResult.finalVel;
 		vec3 const& otherVel = otherResult.finalVel;
-
+		
 		//Contact velocity
 		float contactVel = glm::dot(otherVel - vel, manifold.normal);
-
+		//printf("%f\n", contactVel);
 		if (contactVel < 0)
 		{
 			return;
 		}
-
-		//select minimum restitution
-		float restitution = glm::min(otherObj->getMaterial().reboundFraction, refObj->getMaterial().reboundFraction);
+		//restitutionA * restitutionB = total restitution
+		float restitution = (otherObj->getMaterial().reboundFraction * refObj->getMaterial().reboundFraction);
 
 		//impulse scalar
 		//if type is worldstatic, mass is infinite (1/mass = 0)
@@ -208,7 +207,10 @@ namespace ginkgo
 
 		IS /= (invMassThis + invMassOther);
 
-		if (glm::abs(IS) < glm::length(getWorld()->getGravity()) * deltaTime)
+		//if we reset position in 4 ticks, stick
+		float gravity4Ticks = (glm::length(getWorld()->getGravity()) * deltaTime * 4);
+
+		if (glm::abs(-IS + glm::dot(manifold.normal, vel)) < (glm::length(getWorld()->getGravity()) * deltaTime * 4))
 		{
 			IS = (-contactVel) / (invMassThis + invMassOther);
 		}

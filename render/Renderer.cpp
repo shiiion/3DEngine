@@ -113,6 +113,16 @@ namespace ginkgo
 		textLabels.erase(index);
 	}
 
+	void Renderer::editText(int index, string const& text)
+	{
+		if (textLabels.find(index) == textLabels.end())
+		{
+			return;
+		}
+
+		textLabels[index].text = text;
+	}
+
 	void Renderer::loadSkybox(map<unsigned int, string> paths, float scale)
 	{
 		skybox = cubeMapFactory(paths, scale);

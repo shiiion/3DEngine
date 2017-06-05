@@ -38,6 +38,7 @@ namespace ginkgo
 		virtual int addText(string const& text, float x, float y, float scale, vec3 const& color) = 0;
 		virtual void setTextPosition(int index, float x, float y) = 0;
 		virtual void removeText(int index) = 0;
+		virtual void editText(int index, string const& text) = 0;
 
 		///Skybox management
 		virtual void loadSkybox(map<unsigned int, string> paths, float scale) = 0;

@@ -75,6 +75,7 @@ namespace ginkgo
 		int addText(string const& text, float x, float y, float scale, vec3 const& color) override;
 		void setTextPosition(int index, float x, float y) override;
 		void removeText(int index) override;
+		void editText(int index, string const& text) override;
 
 		///Skybox management
 		void loadSkybox(map<unsigned int, string> paths, float scale) override;
