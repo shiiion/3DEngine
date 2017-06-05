@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(SolutionDir)dependencies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)dependencies\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)dependencies\include;$(SolutionDir)render;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)dependencies\lib;$(SolutionDir)bin;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\core\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\core\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
