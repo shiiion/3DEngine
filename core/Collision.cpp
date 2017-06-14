@@ -178,6 +178,8 @@ namespace ginkgo
 
 		vec3 const& vel = referenceResult.finalVel;
 		vec3 const& otherVel = otherResult.finalVel;
+
+		vec3 const& gravity = getWorld()->getGravity();
 		
 		//Contact velocity
 		float contactVel = glm::dot(otherVel - vel, manifold.normal);
@@ -187,7 +189,7 @@ namespace ginkgo
 			return;
 		}
 		//restitutionA * restitutionB = total restitution
-		float restitution = (otherObj->getMaterial().reboundFraction * refObj->getMaterial().reboundFraction);
+		float restitution = /*glm::max(otherObj->getMaterial().reboundFraction , */(refObj->getMaterial().reboundFraction);
 
 		//impulse scalar
 		//if type is worldstatic, mass is infinite (1/mass = 0)
@@ -208,14 +210,18 @@ namespace ginkgo
 		IS /= (invMassThis + invMassOther);
 
 		//if we reset position in 4 ticks, stick
-		float gravity4Ticks = (glm::length(getWorld()->getGravity()) * deltaTime * 4);
+		vec3 impulse = manifold.normal * IS;
+		vec3 alongNormal = glm::dot(manifold.normal, vel - impulse) * manifold.normal;
+		vec3 gravDirection = (refObj->getParent()->isGravityEnabled() ? glm::normalize(gravity) : vec3());
+		float amountInGrav = glm::dot(alongNormal, gravDirection);
+		float gravScale = glm::length(gravity);
+		float gravFloor = -(gravScale * deltaTime * 8);
 
-		if (glm::abs(-IS + glm::dot(manifold.normal, vel)) < (glm::length(getWorld()->getGravity()) * deltaTime * 4))
+		if (amountInGrav < 0 && amountInGrav > gravFloor)
 		{
 			IS = (-contactVel) / (invMassThis + invMassOther);
+			impulse = manifold.normal * IS;
 		}
-
-		vec3 impulse = manifold.normal * IS;
 
 		referenceResult.finalVel -= (invMassThis * impulse);
 		otherResult.finalVel += (invMassOther * impulse);

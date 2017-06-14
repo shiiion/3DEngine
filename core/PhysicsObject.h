@@ -21,6 +21,7 @@ namespace ginkgo
 		MoveResult finalMove;
 
 		std::forward_list<SurfaceData> normalList;
+		quat rotationBuffer;
 
 	public:
 		PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide = true);
@@ -34,6 +35,7 @@ namespace ginkgo
 		void incrementCollision() override;
 		void decrementCollision() override;
 		void setMovementState(UINT32 state) override;
+		void setRotation(const quat& rotation) override;
 
 		const PhysMaterial& getMaterial() const override;
 		float getMass() const override;

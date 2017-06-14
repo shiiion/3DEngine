@@ -18,6 +18,7 @@ namespace ginkgo
 		numCollisions = 0;
 		this->collisionType = collisionType;
 		collision->setOwner(this);
+		collision->setRotation(parent->getRotation());
 	}
 
 	bool PhysicsObject::checkCollision(float deltaTime, IPhysicsObject* other)
@@ -136,6 +137,15 @@ namespace ginkgo
 	void PhysicsObject::setMovementState(UINT32 state)
 	{
 		movementState = state;
+	}
+
+	void PhysicsObject::setRotation(const quat& rotation)
+	{
+		rotationBuffer = rotation;
+		if (collisionMesh != nullptr)
+		{
+			collisionMesh->setRotation(rotation);
+		}
 	}
 
 	void PhysicsObject::onTick(float elapsedTime)

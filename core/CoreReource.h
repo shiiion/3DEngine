@@ -17,6 +17,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #define SETFLAG(r, f) ((r) |= (f))
 #define RESFLAG(r, f) ((r) &= (~(f)))
@@ -32,6 +33,7 @@ namespace ginkgo
 	using std::unique_ptr;
 	using glm::vec3;
 	using glm::vec4;
+	using glm::quat;
 
 	class IPhysicsObject;
 	class ICollisionMesh;
@@ -57,6 +59,10 @@ namespace ginkgo
 
 	struct PhysMaterial
 	{
+		PhysMaterial()
+			: friction(0), reboundFraction(0)
+		{}
+
 		float friction;
 		//fraction of rebound velocity (restitution)
 		//minimum restitution is chosen in calculations

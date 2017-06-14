@@ -35,6 +35,8 @@ namespace ginkgo {
 		const int getIndex() const override { return r_index; }
 
 		void draw() const override;
+
+		virtual ~Renderable();
 	};
 
 }

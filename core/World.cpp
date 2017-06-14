@@ -103,7 +103,18 @@ namespace ginkgo
 		{
 			worldTree.remove(ID);
 		}
+		IEntity* e = entityList[a];
+		for (int a = 0; a < collisions.size(); a++)
+		{
+			if (collisions[a].manifold.thisMesh->getOwner()->getParent() == e ||
+				collisions[a].manifold.otherMesh->getOwner()->getParent() == e)
+			{
+				collisions.erase(collisions.begin() + a);
+				a--;
+			}
+		}
 		delete entityList.at(a);
+		entityList.erase(entityList.begin() + a);
 	}
 
 	void World::traceRayThroughWorld(Ray const& ray, float dist, RaytraceParams& params, RaytraceResult& resultOut)

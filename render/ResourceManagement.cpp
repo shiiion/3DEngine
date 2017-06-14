@@ -67,7 +67,15 @@ namespace ginkgo
 		GLenum option = (pixelate) ? GL_NEAREST : GL_LINEAR;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, option);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, option);
+		GLint alignment;
+		
+		glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
+		if (t->width != t->height)
+		{
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		}
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t->width, t->height, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		err = glGetError();
 		glBindTexture(GL_TEXTURE_2D, 0);
 		if (err != GL_NO_ERROR)

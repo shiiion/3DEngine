@@ -13,12 +13,11 @@ namespace ginkgo
 
 		virtual void scaleMatrix(const vec3& scale) = 0;
 		virtual void translateMatrix(const vec3& translation) = 0;
-		virtual void rotateMatrix(float angleInRadians, const vec3& rotation) = 0;
+		virtual void rotateMatrix(quat const& rotation) = 0;
 		
 		virtual vec3 const& getScale() const = 0;
 		virtual vec3 const& getTranslation() const = 0;
-		virtual vec3 const& getAxis() const = 0;
-		virtual float const& getAngle() const = 0;
+		virtual quat const& getRotation() const = 0;
 	};
 
 	DECLSPEC_RENDER ITransform* transformFactory();

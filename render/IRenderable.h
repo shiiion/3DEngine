@@ -26,6 +26,8 @@ namespace ginkgo
 		virtual const int getIndex() const = 0;
 
 		virtual void draw() const = 0;
+
+		virtual ~IRenderable() = 0;
 	};
 
 	DECLSPEC_RENDER IRenderable* renderableFactory(const Mesh* mesh, Material* material);

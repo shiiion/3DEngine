@@ -9,16 +9,12 @@
 
 namespace ginkgo
 {
-	CollisionMesh::CollisionMesh(float w, float h, float l, vec3 const& wAxis, vec3 const& hAxis, vec3 const& lAxis)
+	CollisionMesh::CollisionMesh(float w, float h, float l)
 	{
 		owner = nullptr;
 		extents[0] = w;
 		extents[1] = h;
 		extents[2] = l;
-
-		axes[0] = wAxis;
-		axes[1] = hAxis;
-		axes[2] = lAxis;
 	}
 
 	MoveInfo const& CollisionMesh::getLastMove() const
@@ -742,9 +738,9 @@ namespace ginkgo
 		return cachedVel;
 	}
 
-	ICollisionMesh* createCollisionMesh(float w, float h, float l, vec3 const& wAxis, vec3 const& hAxis, vec3 const& lAxis)
+	ICollisionMesh* createCollisionMesh(float w, float h, float l)
 	{
-		return new CollisionMesh(w, h, l, wAxis, hAxis, lAxis);
+		return new CollisionMesh(w, h, l);
 	}
 
 	bool CollisionMesh::testRay(RaytraceParams& params, RaytraceResult& resultOut) const

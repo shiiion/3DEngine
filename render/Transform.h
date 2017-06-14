@@ -11,17 +11,15 @@ namespace ginkgo {
 		mutable mat4 matrix;
 		vec3 dilation;
 		vec3 translation;
-			vec3 axis;
-			float angle;
+		quat rot;
 		mat4 identity;
 		mutable bool matrixOOD;
 	public:
 		Transform()
 		{
-			axis = vec3(0, 1, 0);
+			rot = glm::angleAxis(0.f, vec3(0, 1, 0));
 			dilation = vec3(1, 1, 1);
 			translation = vec3();
-			angle = 0;
 			matrixOOD = true;
 			getMatrix();
 		}
@@ -31,7 +29,7 @@ namespace ginkgo {
 			if (matrixOOD)
 			{
 				matrixOOD = false;
-				matrix = rotate(identity, angle, axis) * translate(identity, translation) * glm::scale(identity, dilation);
+				matrix = translate(identity, translation) * rotate(identity, glm::angle(rot), glm::axis(rot)) * glm::scale(identity, dilation);
 			}
 			return matrix; 
 		}
@@ -50,10 +48,10 @@ namespace ginkgo {
 			matrixOOD = true;
 		}
 
-		void rotateMatrix(float angleInRadians, const vec3& rotation) override 
-		{ 
-			this->axis = rotation;
-			this->angle = angleInRadians;
+		void rotateMatrix(quat const& rotation) override 
+		{
+			rot = rotation;
+			rot.z = -rot.z;
 			matrixOOD = true;
 		}
 
@@ -67,14 +65,9 @@ namespace ginkgo {
 			return translation;
 		}
 
-		vec3 const& getAxis() const override
+		quat const& getRotation() const override
 		{
-			return axis;
-		}
-
-		float const& getAngle() const override
-		{
-			return angle;
+			return rot;
 		}
 	};
 

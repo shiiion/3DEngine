@@ -68,7 +68,7 @@ namespace ginkgo
 		void A2xB2_lastSeparatingAxis(CollisionMesh const& other, CollisionInfo& collisionOut);
 
 	public:
-		CollisionMesh(float w, float h, float l, vec3 const& wAxis, vec3 const& hAxis, vec3 const& lAxis);
+		CollisionMesh(float w, float h, float l);
 		MoveInfo const& getLastMove() const override;
 		void generateVertexPath(float deltaTime) override;
 
@@ -99,6 +99,17 @@ namespace ginkgo
 		int getCollisionShape() const override
 		{
 			return CMESH_SHAPE_OBB;
+		}
+
+		void setRotation(quat const& rotation) override
+		{
+			//l = z, w = x -> 
+			vec3 l = glm::normalize(vec3(0, 0, 1) * rotation);
+			vec3 h = glm::normalize(vec3(0, 1, 0) * rotation);
+			vec3 w = glm::normalize(vec3(1, 0, 0) * rotation); 
+			axes[0] = w;
+			axes[1] = h;
+			axes[2] = l;
 		}
 	};
 }

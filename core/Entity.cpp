@@ -9,7 +9,7 @@
 
 namespace ginkgo 
 {
-	Entity::Entity(const vec3& pos, const vec3& rot, const vec3& vel, const vec3& accel)
+	Entity::Entity(const vec3& pos, const quat& rot, const vec3& vel, const vec3& accel)
 	{
 		position = pos;
 		rotation = rot;
@@ -31,7 +31,7 @@ namespace ginkgo
 		return velocity;
 	}
 
-	const vec3& Entity::getRotation() const
+	const quat& Entity::getRotation() const
 	{
 		return rotation;
 	}
@@ -56,8 +56,16 @@ namespace ginkgo
 		velocity = vel;
 	}
 
-	void Entity::setRotation(const vec3& rot)
+	void Entity::setRotation(const quat& rot)
 	{
+		if (physicsComponent != nullptr)
+		{
+			physicsComponent->setRotation(rot);
+		}
+		if (renderComponent != nullptr)
+		{
+			renderComponent->setRotation(rot);
+		}
 		rotation = rot;
 	}
 
@@ -146,8 +154,23 @@ namespace ginkgo
 		componentList.emplace_back(component);
 	}
 
-	IEntity* entityFactory(const vec3& pos, const vec3& rot, const vec3& vel, const vec3& accel)
+	Entity::~Entity()
+	{
+		for (IComponent* c : componentList)
+		{
+			c->onDetach();
+		}
+	}
+
+	IEntity* entityFactory(const vec3& pos, const quat& rot, const vec3& vel, const vec3& accel)
 	{
 		return new Entity(pos, rot, vel, accel);
 	}
+
+
+
+
+	//--
+
+	IEntity::~IEntity() {}
 }

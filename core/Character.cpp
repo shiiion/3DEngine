@@ -6,7 +6,7 @@
 
 namespace ginkgo
 {
-	Character::Character(const vec3& pos, const vec3& rot, const vec3& vel, const vec3& accel)
+	Character::Character(const vec3& pos, const quat& rot, const vec3& vel, const vec3& accel)
 	{
 		position = pos;
 		rotation = rot;
@@ -115,7 +115,15 @@ namespace ginkgo
 		componentList.emplace_back(component);
 	}
 
-	ICharacter* characterFactory(const vec3& pos, const vec3& rot, const vec3& vel, const vec3& accel)
+	Character::~Character()
+	{
+		for (IComponent* c : componentList)
+		{
+			c->onDetach();
+		}
+	}
+
+	ICharacter* characterFactory(const vec3& pos, const quat& rot, const vec3& vel, const vec3& accel)
 	{
 		return new Character(pos, rot, vel, accel);
 	}

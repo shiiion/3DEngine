@@ -19,15 +19,14 @@ namespace ginkgo
 		const vec3& getPosition() const override;
 		void setPosition(const vec3& pos) override;
 
-		void setRotation(const vec3& axis, float angle) override;
-		float getRotation() const override;
-		const vec3& getAxis() const override;
+		void setRotation(quat const& rotation) override;
+		quat const& getRotation() const override;
 		
-
-
 		IEntity* getParent() override;
 
 		void onTick(float elapsedTime) override;
 		void onTickEnd(float elapsedTime) override;
+
+		void onDetach() override;
 	};
 }

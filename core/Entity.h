@@ -10,7 +10,7 @@ namespace ginkgo
 
 	protected:
 		vec3 position;
-		vec3 rotation;
+		quat rotation;
 		vec3 velocity;
 		vec3 acceleration;
 		bool gravityEnabled;//default true
@@ -21,7 +21,7 @@ namespace ginkgo
 		vector<IComponent*> componentList;
 
 	public:
-		Entity(const vec3& pos, const vec3& rot = vec3(), const vec3& vel = vec3(), const vec3& accel = vec3());
+		Entity(const vec3& pos, const quat& rot = quat(), const vec3& vel = vec3(), const vec3& accel = vec3());
 
 		virtual void beginTick(float elapsedTime) override;
 		virtual void endTick(float elapsedTime) override;
@@ -29,7 +29,7 @@ namespace ginkgo
 		const vec3& getPosition() const override;
 		const vec3& getVelocity() const override;
 		const vec3& getAcceleration() const override;
-		const vec3& getRotation() const override;
+		const quat& getRotation() const override;
 		long getEntityID() const override;
 		bool isGravityEnabled() const override;
 		IRenderComponent* getRenderable() override
@@ -53,7 +53,7 @@ namespace ginkgo
 		void setVelocity(const vec3& vel) override;
 		void setAcceleration(const vec3& acc) override;
 		void addAcceleration(const vec3& acc) override { acceleration += acc; }
-		void setRotation(const vec3& ang) override;
+		void setRotation(const quat& ang) override;
 		void setEntityID(long ID) override;
 		void setRenderable(IRenderComponent* component) override;
 		void setPhysics(IPhysicsObject* component) override;
@@ -62,5 +62,7 @@ namespace ginkgo
 		EntityType getEntityType() const override;
 
 		void addComponent(IComponent* component) override;
+
+		virtual ~Entity();
 	};
 }

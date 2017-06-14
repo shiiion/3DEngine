@@ -37,7 +37,9 @@ namespace ginkgo
 		virtual vec3 const& getCachedVelocity() const = 0;
 
 		virtual int getCollisionShape() const = 0;
+
+		virtual void setRotation(quat const& rotation) = 0;
 	};
 
-	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l, vec3 const& wAxis, vec3 const& hAxis, vec3 const& lAxis);
+	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l);
 }

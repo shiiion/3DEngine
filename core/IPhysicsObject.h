@@ -35,7 +35,8 @@ namespace ginkgo
 		virtual void incrementCollision() = 0;
 		virtual void decrementCollision() = 0;
 		virtual void setMovementState(UINT32 state) = 0;
-		
+		virtual void setRotation(const quat& rotation) = 0;
+
 		virtual const PhysMaterial& getMaterial() const = 0;
 		virtual float getMass() const = 0;
 		virtual bool doesCollide() const = 0;

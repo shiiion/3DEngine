@@ -29,6 +29,7 @@ using namespace ginkgo;
 bool pressf, pressb, pressl, pressr, mouselol;
 
 float prevX = 0, prevY = 0, dx = 0, dy = 0;
+float up = 15;
 
 void move(IAbstractInputSystem* sys, int oc, bool set)
 {
@@ -91,25 +92,26 @@ IRenderable* six;
 
 void setupRendering(IRenderer* renderer)
 {
-	createTexture("test_resources/textures/EPIC.png", false, "epic");
+	createTexture("test_resources/textures/road.png", false, "road");
+	createTexture("test_resources/textures/car1.png", false, "car1");
+	createTexture("test_resources/textures/car2.png", false, "car2");
+	createTexture("test_resources/textures/car3.png", false, "car3");
+	createTexture("test_resources/textures/car4.png", false, "car4");
+	createTexture("test_resources/textures/car5.png", false, "car5");
 	Mesh* plane = loadMesh("test_resources/models/plane.ob", "plane");
-	Material* pretty = new Material(retrieveTexture("epic"));
-	Material* pretty2 = new Material(retrieveTexture("epic"));
-	Material* pretty3 = new Material(retrieveTexture("epic"));
-	Material* pretty4 = new Material(retrieveTexture("epic"));
-	Material* pretty5 = new Material(retrieveTexture("epic"));
-	Material* pretty6 = new Material(retrieveTexture("epic"));
+	Mesh* addhash = loadMesh("test_resources/models/monkey.obj", "monkey");
+	Material* pretty = new Material(retrieveTexture("car1"));
+	Material* pretty2 = new Material(retrieveTexture("road"));
+	Material* pretty3 = new Material(retrieveTexture("car2"));
+	Material* pretty4 = new Material(retrieveTexture("car3"));
+	Material* pretty5 = new Material(retrieveTexture("car4"));
+	Material* pretty6 = new Material(retrieveTexture("car5"));
 
-	pretty->refractiveIndex = pretty2->refractiveIndex = pretty3->refractiveIndex = pretty4->refractiveIndex = pretty5->refractiveIndex = pretty6->refractiveIndex = 0;
-	pretty2->rIntensity = 0.15f;
-	pretty->rIntensity = 0.30f;
-	pretty3->rIntensity = 0.45f;
-	pretty4->rIntensity = 0.60f;
-	pretty5->rIntensity = 0.75f;
-	pretty6->rIntensity = 0.90f;
+	//pretty->refractiveIndex = pretty2->refractiveIndex = pretty3->refractiveIndex = pretty4->refractiveIndex = pretty5->refractiveIndex = pretty6->refractiveIndex = 0;
 
 
-	one = renderableFactory(plane, pretty);
+
+	one = renderableFactory(addhash, pretty);
 	two = renderableFactory(plane, pretty2);
 	three = renderableFactory(plane, pretty3);
 	four = renderableFactory(plane, pretty4);
@@ -126,14 +128,14 @@ void setupRendering(IRenderer* renderer)
 	renderer->addRenderable(one);
 	renderer->addRenderable(two);
 	renderer->addRenderable(three);
-	//renderer->addRenderable(four);
-	//renderer->addRenderable(five);
-	//renderer->addRenderable(six);
+	renderer->addRenderable(four);
+	renderer->addRenderable(five);
+	renderer->addRenderable(six);
 
 	renderer->setAmbientLight(vec4(0.2f, 0.2f, 0.2f, 1));
 
 	renderer->setDirectionalLight(DirectionalLight(BaseLight(vec4(1, 1, 1, 1), 0.1f), normalize(vec3(1, 1, 0))));
-	//int ind = renderer->addPointLight(PointLight(BaseLight(vec4(1, 1, 1, 1), 1), Attenuation(0, 5, 25), vec3(0, 1.5f, -5)));
+	int ind = renderer->addPointLight(PointLight(BaseLight(vec4(1, 1, 1, 1), 1), Attenuation(0, 0, 0.5f), vec3(-12, 3, -16)));
 	//int ind2 = renderer->addPointLight(PointLight(BaseLight(vec4(1, 1, 1, 1), 1), Attenuation(0, 5, 25), vec3(0, 1.5f, -5)));
 	//int ind3 = renderer->addPointLight(PointLight(BaseLight(vec4(1, 1, 1, 1), 1), Attenuation(0, 5, 25), vec3(0, 1.5f, -5)));
 	//int ind4 = renderer->addPointLight(PointLight(BaseLight(vec4(1, 1, 1, 1), 1), Attenuation(0, 5, 25), vec3(0, 1.5f, -5)));
@@ -142,74 +144,71 @@ void setupRendering(IRenderer* renderer)
 	//int ind7 = renderer->addPointLight(PointLight(BaseLight(vec4(1, 1, 1, 1), 1), Attenuation(0, 5, 25), vec3(0, 1.5f, -5)));
 	//int ind8 = renderer->addPointLight(PointLight(BaseLight(vec4(1, 1, 1, 1), 1), Attenuation(0, 5, 25), vec3(0, 1.5f, -5)));
 	//int ind9 = renderer->addPointLight(PointLight(BaseLight(vec4(1, 1, 1, 1), 1), Attenuation(0, 5, 25), vec3(0, 1.5f, -5)));
-	renderer->getCamera()->setCameraPosition(vec3(0.8f, 1, 2));
-	renderer->createTextComponent("C:\\Windows\\Fonts\\arial.ttf", 12);
+	renderer->getCamera()->setCameraPosition(vec3(0, 15, 18));
+	renderer->createTextComponent("C:\\Windows\\Fonts\\arial.ttf", 48);
 }
 
 void setupEntity()
 {
 	setTickTime(1.f / 60.f);
 
-	ICollisionMesh* moving = createCollisionMesh(1, 1, 1, glm::vec3(1, 0, 0),
-		glm::vec3(0, 1, 0),
-		glm::vec3(0, 0, 1));
-	ICollisionMesh* moving2 = createCollisionMesh(1, 1, 1, glm::vec3(1, 0, 0),
-		glm::vec3(0, 1, 0),
-		glm::vec3(0, 0, 1));
-	ICollisionMesh* moving3 = createCollisionMesh(1, 1, 1, glm::vec3(1, 0, 0),
-		glm::vec3(0, 1, 0),
-		glm::vec3(0, 0, 1));
-	ICollisionMesh* moving4 = createCollisionMesh(1, 1, 1, glm::vec3(1, 0, 0),
-		glm::vec3(0, 1, 0),
-		glm::vec3(0, 0, 1));
-	ICollisionMesh* moving5 = createCollisionMesh(1, 1, 1, glm::vec3(1, 0, 0),
-		glm::vec3(0, 1, 0),
-		glm::vec3(0, 0, 1));
+	ICollisionMesh* moving = createCollisionMesh(6, 1.8f, 2);
+	ICollisionMesh* moving2 = createCollisionMesh(6, 1.8f, 2);
+	ICollisionMesh* moving3 = createCollisionMesh(6, 1.8f, 2);
+	ICollisionMesh* moving4 = createCollisionMesh(6, 1.8f, 2);
+	ICollisionMesh* moving5 = createCollisionMesh(6, 1.8f, 2);
 
-
-	ICollisionMesh* still = createCollisionMesh(1, 1, 1, glm::vec3(1, 0, 0),
-		glm::vec3(0, 1, 0),
-		glm::vec3(0, 0, 1));
+	ICollisionMesh* still = createCollisionMesh(40000, 1, 100);
 
 	PhysMaterial super;
-	super.reboundFraction = 0.8f;
-	super.friction = 0;
-	IEntity* newEnt1 = entityFactory(glm::vec3(0, 3, 0), glm::vec3(), glm::vec3(0, 55, 0));
-	IEntity* newEnt2 = entityFactory(glm::vec3(0, 0, 0), glm::vec3(), glm::vec3(0, 0, 0));
-	IEntity* newEnt3 = entityFactory(glm::vec3(0, 6, 0), glm::vec3(), glm::vec3(0, 0, 0));
-	//IEntity* newEnt4 = entityFactory(glm::vec3(0, 9, 0), glm::vec3(), glm::vec3(0, 0, 0));
-	//IEntity* newEnt5 = entityFactory(glm::vec3(0, 12, 0), glm::vec3(), glm::vec3(0, 0, 0));
-	//IEntity* newEnt6 = entityFactory(glm::vec3(0, 15, 0), glm::vec3(), glm::vec3(0, 0, 0));
+	PhysMaterial super2;
+	PhysMaterial super3;
+	PhysMaterial super4;
+	PhysMaterial super5;
+	super.reboundFraction = 0.7f;
+	super2.reboundFraction = 0.7f;
+	super3.reboundFraction = 0.7f;
+	super4.reboundFraction = 0.7f;
+	super5.reboundFraction = 0.7f;
+	IEntity* newEnt1 = entityFactory(glm::vec3(0, 5, 0));
+	IEntity* newEnt2 = entityFactory(glm::vec3(0, 0, 0));
+	IEntity* newEnt3 = entityFactory(glm::vec3(0, 5, -8));
+	IEntity* newEnt4 = entityFactory(glm::vec3(0, 5, -16));
+	IEntity* newEnt5 = entityFactory(glm::vec3(0, 5, -24));
+	IEntity* newEnt6 = entityFactory(glm::vec3(0, 5, -32));
 	newEnt1->setPhysics(physicsObjectFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true));
 	newEnt2->setPhysics(physicsObjectFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true));
-	newEnt3->setPhysics(physicsObjectFactory(newEnt3, moving2, CTYPE_WORLDSTATIC, 1, super, true));
-	//newEnt4->setPhysics(physicsObjectFactory(newEnt4, moving3, CTYPE_WORLDDYNAMIC, 1, super, true));
-	//newEnt5->setPhysics(physicsObjectFactory(newEnt5, moving4, CTYPE_WORLDDYNAMIC, 1, super, true));
-	//newEnt6->setPhysics(physicsObjectFactory(newEnt6, moving5, CTYPE_WORLDDYNAMIC, 1, super, true));
+	newEnt3->setPhysics(physicsObjectFactory(newEnt3, moving2, CTYPE_WORLDDYNAMIC, 1, super2, true));
+	newEnt4->setPhysics(physicsObjectFactory(newEnt4, moving3, CTYPE_WORLDDYNAMIC, 1, super3, true));
+	newEnt5->setPhysics(physicsObjectFactory(newEnt5, moving4, CTYPE_WORLDDYNAMIC, 1, super4, true));
+	newEnt6->setPhysics(physicsObjectFactory(newEnt6, moving5, CTYPE_WORLDDYNAMIC, 1, super5, true));
 
 	newEnt1->setGravityEnabled(true);
 	newEnt2->setGravityEnabled(false);
-	newEnt3->setGravityEnabled(false);
-	//newEnt3->setGravityEnabled(false);
-	//newEnt5->setGravityEnabled(false);
-	//newEnt4->setGravityEnabled(false);
-	//newEnt6->setGravityEnabled(false);
+
 	
 	IRenderComponent* rc = renderComponentFactory(newEnt1, one);
 	IRenderComponent* rc2 = renderComponentFactory(newEnt2, two);
 	IRenderComponent* rc3 = renderComponentFactory(newEnt3, three);
-	//IRenderComponent* rc4 = renderComponentFactory(newEnt4, four);
-	//IRenderComponent* rc5 = renderComponentFactory(newEnt5, five);
-	//IRenderComponent* rc6 = renderComponentFactory(newEnt6, six);
+	IRenderComponent* rc4 = renderComponentFactory(newEnt4, four);
+	IRenderComponent* rc5 = renderComponentFactory(newEnt5, five);
+	IRenderComponent* rc6 = renderComponentFactory(newEnt6, six);
+
+	rc2->setScale(vec3(40000, 1, 100));
+	rc->setScale(vec3(1, 1, 1));
+	rc3->setScale(vec3(6, 1.8f, 2));
+	rc4->setScale(vec3(6, 1.8f, 2));
+	rc5->setScale(vec3(6, 1.8f, 2));
+	rc6->setScale(vec3(6, 1.8f, 2));
 
 	newEnt1->setRenderable(rc);
 	newEnt2->setRenderable(rc2);
 	newEnt3->setRenderable(rc3);
-	//newEnt4->setRenderable(rc4);
-	//newEnt5->setRenderable(rc5);
-	//newEnt6->setRenderable(rc6);
+	newEnt4->setRenderable(rc4);
+	newEnt5->setRenderable(rc5);
+	newEnt6->setRenderable(rc6);
 
-	getWorld()->addEntity(newEnt1);
+	//getWorld()->addEntity(newEnt1);
 	getWorld()->addEntity(newEnt2);
 	getWorld()->addEntity(newEnt3);
 	//getWorld()->addEntity(newEnt4);
@@ -228,29 +227,17 @@ int main()
 	setupEntity();
 
 	//enables the text shader and loads given font
-	float angle = 0.0f;
 	float pitch = 0, yaw = 0;
 	long long pt = 0;
 
-	int textID = renderer->addText("cool", 15, 15, 1, vec3(1, 1, 1));
+	int textID = renderer->addText("cool", 300, 650, 1, vec3(0, 0.2f, 0));
+	//vec3 v = getWorld()->getEntity(1)->getPosition();
+	vec3 rotup(0, 1, 0);
+	bool whenToGo = false;
+	srand(time(NULL));
+	float strt = getEngineTime();
 	while (true)
 	{
-		//drawme->alterModel().rotateMatrix(angle, (vec3(0, 0, 1)));
-		//c->setCameraRotation(glm::angleAxis(angle, glm::vec3(0, 1, 0)));
-		angle += 0.05f;
-
-		//renderer->setPointLightPosition(ind, vec3(cos(angle) * 2, 1, -5 + sin(angle) * 2));
-		//renderer->setPointLightPosition(ind2, vec3(cos(angle - 1) * 2, 1, -5 + sin(angle - 1) * 2));
-		//renderer->setPointLightPosition(ind3, vec3(cos(angle - 2) * 2, 1, -5 + sin(angle - 2) * 2));
-		//renderer->setPointLightPosition(ind4, vec3(cos(angle - 3) * 2, 1, -5 + sin(angle - 3) * 2));
-		//renderer->setPointLightPosition(ind5, vec3(cos(angle - 4) * 2, 1, -5 + sin(angle - 4) * 2));
-		//renderer->setPointLightPosition(ind6, vec3(cos(angle - 5) * 2, 1, -5 + sin(angle - 5) * 2));
-		//renderer->setPointLightPosition(ind7, vec3(cos(angle - 6) * 2, 1, -5 + sin(angle - 6) * 2));
-		//renderer->setPointLightPosition(ind8, vec3(cos(angle - 7) * 2, 1, -5 + sin(angle - 7) * 2));
-		//renderer->setPointLightPosition(ind9, vec3(cos(angle - 8) * 2, 1, -5 + sin(angle - 8) * 2));
-
-		//c->update(0.016);
-		//reallyDrawMe->alterModel().rotateMatrix(angle, glm::normalize(glm::vec3(1, 1, 1)));
 		mat4 const& view = renderer->getCamera()->getView();
 		glm::vec3 right;
 		glm::vec3 forward;
@@ -258,18 +245,19 @@ int main()
 		right.x = view[0][0];
 		right.y = view[1][0];
 		right.z = view[2][0];
-
 		forward.x = -view[0][2];
 		forward.y = -view[1][2];
 		forward.z = -view[2][2];
-		right *= 0.02f;
-		forward *= 0.02f;
+		right *= 0.2f;
+		forward *= 0.2f;
 		if (pressf)
 		{
+			//up += 0.1f;
 			renderer->getCamera()->setCameraPosition(renderer->getCamera()->getCameraPosition() + forward);
 		}
 		if (pressb)
 		{
+			//up -= 0.1f;
 			renderer->getCamera()->setCameraPosition(renderer->getCamera()->getCameraPosition() - forward);
 		}
 		if (pressl)
@@ -279,6 +267,7 @@ int main()
 		if (pressr)
 		{
 			renderer->getCamera()->setCameraPosition(renderer->getCamera()->getCameraPosition() + right);
+			//whenToGo = true;
 		}
 		if (mouselol)
 		{
@@ -287,12 +276,30 @@ int main()
 			renderer->getCamera()->setCameraRotation(glm::normalize(glm::angleAxis(pitch, vec3(1, 0, 0)) * glm::angleAxis(yaw, vec3(0, 1, 0))));
 		}
 		auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-		printf("Zz");
 		tickCore(1);
 		renderer->renderAndSwap();
-		renderer->editText(textID, std::to_string(millis - pt));
+		//renderer->editText(textID, std::to_string(millis - pt));
+		//vec3 v = getWorld()->getEntity(1)->getPosition();
+		renderer->editText(textID, !whenToGo ? "Ready" : "GO!!");
 		pt = millis;
 
 		sleepTickTime();
+		vec3 max;
+		if (whenToGo)
+		{
+			for (int a = 1; a <= 6; a++)
+			{
+				IEntity* e = getWorld()->getEntity(a);
+				if (e->getPhysics()->getCollisionType() == CTYPE_WORLDSTATIC) continue;
+				e->setVelocity(e->getVelocity() + vec3((float)rand() / 100000.f, 0, 0));
+				if (max.x < e->getPosition().x) max = e->getPosition();
+
+			}
+		}
+		max.z = 18;
+		max.x += 8;
+		max += up * rotup;
+
+		//renderer->getCamera()->setCameraPosition(max);
 	}
 }

@@ -2,6 +2,7 @@
 #include "Core.h"
 #include <IRenderable.h>
 #include <ITransform.h>
+#include <IRenderer.h>
 
 namespace ginkgo
 {
@@ -9,6 +10,7 @@ namespace ginkgo
 		: parent(parent)
 	{
 		this->mesh = mesh;
+		setRotation(parent->getRotation());
 	}
 
 	const vec3& RenderComponent::getScale() const
@@ -31,19 +33,14 @@ namespace ginkgo
 		mesh->getTransform().translateMatrix(pos);
 	}
 
-	void RenderComponent::setRotation(const vec3& axis, float angle) 
+	void RenderComponent::setRotation(quat const& rotation) 
 	{
-		mesh->getTransform().rotateMatrix(angle, axis);
+		mesh->getTransform().rotateMatrix(rotation);
 	}
 
-	float RenderComponent::getRotation() const 
+	quat const& RenderComponent::getRotation() const 
 	{
-		return mesh->getTransform().getAngle();
-	}
-
-	const vec3& RenderComponent::getAxis() const 
-	{
-		return mesh->getTransform().getAxis();
+		return mesh->getTransform().getRotation();
 	}
 
 	void RenderComponent::onTick(float elapsedTime)
@@ -64,6 +61,12 @@ namespace ginkgo
 	IRenderComponent* renderComponentFactory(IEntity* parent, IRenderable* mesh)
 	{
 		return new RenderComponent(parent, mesh);
+	}
+
+	void RenderComponent::onDetach()
+	{
+		getRendererInstance()->removeRenderable(mesh->getIndex());
+		delete mesh;
 	}
 }
 

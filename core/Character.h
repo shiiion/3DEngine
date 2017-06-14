@@ -3,6 +3,7 @@
 #include "ICharacter.h"
 #include "IPhysicsObject.h"
 #include "Core.h"
+#include "IRenderComponent.h"
 
 #define FWD_MOVE 0x01
 #define LEFT_MOVE 0x02
@@ -18,7 +19,7 @@ namespace ginkgo
 
 	protected:
 		vec3 position;
-		vec3 rotation;
+		quat rotation;
 		vec3 velocity;
 		vec3 acceleration;
 		bool gravityEnabled;
@@ -37,15 +38,15 @@ namespace ginkgo
 		int movementCtlFlags;
 
 	public:
-		Character(const vec3& pos, const vec3& rot = vec3(), const vec3& vel = vec3(), const vec3& accel = vec3());
-
+		Character(const vec3& pos, const quat& rot = quat(), const vec3& vel = vec3(), const vec3& accel = vec3());
+		virtual ~Character();
 		void beginTick(float elapsedTime) override;
 		void endTick(float elapsedTime) override;
 
 		const vec3& getPosition() const override { return position; }
 		const vec3& getVelocity() const override { return velocity; }
 		const vec3& getAcceleration() const override { return acceleration; }
-		const vec3& getRotation() const override { return rotation; }
+		const quat& getRotation() const override { return rotation; }
 		bool isGravityEnabled() const override { return gravityEnabled; }
 
 		long getEntityID() const override { return entityID; }
@@ -72,7 +73,18 @@ namespace ginkgo
 		void setVelocity(const vec3& vel) override { velocity = vel; }
 		void setAcceleration(const vec3& acc) override { acceleration = acc; }
 		void addAcceleration(const vec3& acc) override { acceleration += acc; }
-		void setRotation(const vec3& ang) override { rotation = ang; }
+		void setRotation(const quat& rot) override 
+		{
+			if (physicsComponent != nullptr)
+			{
+				physicsComponent->setRotation(rot);
+			}
+			if (renderComponent != nullptr)
+			{
+				renderComponent->setRotation(rot);
+			}
+			rotation = rot;
+		}
 		void setEntityID(long ID) override { entityID = ID; }
 		void setGravityEnabled(bool enabled) override { gravityEnabled = enabled; }
 		void setMovementState(int newState) override { this->movementState = newState; }

@@ -112,7 +112,7 @@ namespace ginkgo
 		//COLLISION DETECTION
 		for (IPhysicsObject* p : physicsObjects)
 		{
-			if (p->getCollisionType() == CTYPE_WORLDSTATIC)
+			if (p->getCollisionType() == CTYPE_WORLDSTATIC || !p->doesCollide())
 			{
 				continue;
 			}
@@ -121,6 +121,10 @@ namespace ginkgo
 
 			for (IPhysicsObject* collider : colliders)
 			{
+				if (!collider->doesCollide())
+				{
+					continue;
+				}
 				//OPTIMIZATION: check existing tests (even if there was no result)
 				if (collider->getParent()->getEntityID() != p->getParent()->getEntityID())
 				{

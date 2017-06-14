@@ -15,9 +15,8 @@ namespace ginkgo
 		virtual const vec3& getPosition() const = 0;
 		virtual void setPosition(const vec3& pos) = 0;
 
-		virtual void setRotation(const vec3& axis, float angle) = 0;
-		virtual float getRotation() const = 0;
-		virtual const vec3& getAxis() const = 0;
+		virtual void setRotation(quat const& rotation) = 0;
+		virtual quat const& getRotation() const = 0;
 
 	};
 

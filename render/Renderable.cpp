@@ -28,8 +28,19 @@ namespace ginkgo {
 		mesh->draw(); 
 	}
 
+	Renderable::~Renderable()
+	{
+		delete material;
+	}
+
 	IRenderable* renderableFactory(const Mesh* mesh, Material* material)
 	{
 		return new Renderable(mesh, material);
 	}
+
+
+
+	// -- 
+
+	IRenderable::~IRenderable() {}
 }
