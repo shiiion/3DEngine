@@ -87,6 +87,7 @@
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="InputTest.cpp" />
     <ClCompile Include="RenderTest.cpp" />
+    <ClCompile Include="RenderTestTimerTick.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-/*
+
 #include <Windows.h>
 #include <iostream>
 
@@ -24,8 +24,24 @@
 #include <IRenderComponent.h>
 #include <GLFW\glfw3.h>
 
+#define IDT_NEWFRAME (101)
+#define TIMER_WINDOW_CLASS ("TIMER_WINDOW_CLASS")
+#define FRAME_DELAY (1000/60)
+
 
 using namespace ginkgo;
+
+struct rendervars {
+	IRenderer* renderer;
+	float pitch = 0;
+	float yaw = 0;
+	long long pt = 0;
+
+	int textID;
+	glm::vec3 rotup{ 0, 1, 0 };
+	bool whenToGo = false;
+	float strt;
+};
 
 bool pressf, pressb, pressl, pressr, mouselol;
 
@@ -187,7 +203,7 @@ void setupEntity()
 	newEnt1->setGravityEnabled(true);
 	newEnt2->setGravityEnabled(false);
 
-	
+
 	IRenderComponent* rc = renderComponentFactory(newEnt1, one);
 	IRenderComponent* rc2 = renderComponentFactory(newEnt2, two);
 	IRenderComponent* rc3 = renderComponentFactory(newEnt3, three);
@@ -217,29 +233,24 @@ void setupEntity()
 	//getWorld()->addEntity(newEnt6);
 }
 
-int main()
+VOID CALLBACK FrameCallback(PVOID param, BOOLEAN timerorwaitfired)
 {
-	IWindow* w = windowFactory("render", 800, 800, glm::vec4(0, 0, 0, 0));
+	PostMessage(*(HWND*)param, WM_TIMER, IDT_NEWFRAME, NULL); //just tell the window to do its thing
+}
 
-	startCore();
-	setupInput(w);
-	IRenderer* renderer = initRenderer(w);
-	setupRendering(renderer);
-	setupEntity();
-
-	//enables the text shader and loads given font
-	float pitch = 0, yaw = 0;
-	long long pt = 0;
-
-	int textID = renderer->addText("cool", 300, 650, 1, vec3(0, 0.2f, 0));
-	//vec3 v = getWorld()->getEntity(1)->getPosition();
-	vec3 rotup(0, 1, 0);
-	bool whenToGo = false;
-	srand(time(NULL));
-	float strt = getEngineTime();
-	while (true)
+LRESULT CALLBACK TimerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg) {
+	case WM_CREATE:
 	{
-		mat4 const& view = renderer->getCamera()->getView();
+		//don't do anything anymore. timer is handled elsewhere
+	}
+		break;
+	case WM_TIMER:
+	{
+		rendervars& vars = *(rendervars*)GetWindowLongPtr(hwnd, 0);
+		long long ppt = vars.pt;
+		mat4 const& view = vars.renderer->getCamera()->getView();
 		glm::vec3 right;
 		glm::vec3 forward;
 
@@ -254,40 +265,38 @@ int main()
 		if (pressf)
 		{
 			//up += 0.1f;
-			renderer->getCamera()->setCameraPosition(renderer->getCamera()->getCameraPosition() + forward);
+			vars.renderer->getCamera()->setCameraPosition(vars.renderer->getCamera()->getCameraPosition() + forward);
 		}
 		if (pressb)
 		{
 			//up -= 0.1f;
-			renderer->getCamera()->setCameraPosition(renderer->getCamera()->getCameraPosition() - forward);
+			vars.renderer->getCamera()->setCameraPosition(vars.renderer->getCamera()->getCameraPosition() - forward);
 		}
 		if (pressl)
 		{
-			renderer->getCamera()->setCameraPosition(renderer->getCamera()->getCameraPosition() - right);
+			vars.renderer->getCamera()->setCameraPosition(vars.renderer->getCamera()->getCameraPosition() - right);
 		}
 		if (pressr)
 		{
-			renderer->getCamera()->setCameraPosition(renderer->getCamera()->getCameraPosition() + right);
+			vars.renderer->getCamera()->setCameraPosition(vars.renderer->getCamera()->getCameraPosition() + right);
 			//whenToGo = true;
 		}
 		if (mouselol)
 		{
-			pitch += dy / 500.0f;
-			yaw += dx / 500.f;
-			renderer->getCamera()->setCameraRotation(glm::normalize(glm::angleAxis(pitch, vec3(1, 0, 0)) * glm::angleAxis(yaw, vec3(0, 1, 0))));
+			vars.pitch += dy / 500.0f;
+			vars.yaw += dx / 500.f;
+			vars.renderer->getCamera()->setCameraRotation(glm::normalize(glm::angleAxis(vars.pitch, vec3(1, 0, 0)) * glm::angleAxis(vars.yaw, vec3(0, 1, 0))));
 		}
 		auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		tickCore(1);
-		renderer->renderAndSwap();
+		vars.renderer->renderAndSwap();
 		//renderer->editText(textID, std::to_string(millis - pt));
-		std::cout << millis - pt << '\n';
 		//vec3 v = getWorld()->getEntity(1)->getPosition();
-		renderer->editText(textID, !whenToGo ? "Ready" : "GO!!");
-		pt = millis;
+		vars.renderer->editText(vars.textID, !vars.whenToGo ? "Ready" : "GO!!");
+		vars.pt = millis;
 
-		sleepTickTime();
 		vec3 max;
-		if (whenToGo)
+		if (vars.whenToGo)
 		{
 			for (int a = 1; a <= 6; a++)
 			{
@@ -300,9 +309,64 @@ int main()
 		}
 		max.z = 18;
 		max.x += 8;
-		max += up * rotup;
+		max += up * vars.rotup;
 
 		//renderer->getCamera()->setCameraPosition(max);
+		std::cout << millis - ppt << '\n';
+	}
+		break;
+	case WM_CLOSE:
+		DestroyWindow(hwnd);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);
+	}
+	return 0;
+}
+
+int main()
+{
+	IWindow* w = windowFactory("render", 800, 800, glm::vec4(0, 0, 0, 0));
+	
+	rendervars vars;
+
+	startCore();
+	setupInput(w);
+	vars.renderer = initRenderer(w);
+	setupRendering(vars.renderer);
+	setupEntity();
+
+	vars.textID = vars.renderer->addText("cool", 300, 650, 1, vec3(0, 0.2f, 0));
+	srand(time(NULL));
+	vars.strt = getEngineTime();
+
+	WNDCLASSEX wc;
+	ZeroMemory(&wc, sizeof(wc));
+	wc.cbSize = sizeof(wc);
+	wc.style = CS_VREDRAW | CS_HREDRAW;
+	wc.lpfnWndProc = TimerWinProc;
+	wc.hInstance = GetModuleHandle(NULL);
+	wc.cbClsExtra = 0;
+	wc.cbWndExtra = sizeof(void*);
+	wc.lpszClassName = TIMER_WINDOW_CLASS;
+
+	ATOM wcTimer = RegisterClassEx(&wc);
+	if (!wcTimer) {
+		MessageBox(NULL, "Window Registration Failed", "Error", MB_ICONERROR | MB_OK);
+		return -1;
+	}
+	HWND hwnd = CreateWindow(TIMER_WINDOW_CLASS, "timer dummy window", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 400, 300, NULL, NULL, GetModuleHandle(NULL), 0);
+	SetWindowLongPtr(hwnd, 0, (LONG_PTR)&vars);
+	
+	HANDLE frame_timer;
+	CreateTimerQueueTimer(&frame_timer, NULL, FrameCallback, &hwnd, 0, FRAME_DELAY, WT_EXECUTEDEFAULT);
+
+	MSG msg;
+	while (GetMessage(&msg, NULL, 0, 0) > 0) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 }
-*/
