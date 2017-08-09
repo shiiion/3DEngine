@@ -19,6 +19,7 @@ namespace ginkgo
 		virtual const mat4& getView() const = 0;
 		virtual const vec3& getCameraPosition() const = 0;
 		virtual const mat4& getCameraPositionTranslation() = 0;
+		virtual const quat& getCameraRotation() const = 0;
 
 		virtual void update() const = 0;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreReource.h"
+
 namespace ginkgo
 {
 	class IEntity;
@@ -15,4 +17,6 @@ namespace ginkgo
 
 		virtual IEntity* getParent() = 0;
 	};
+
+	DECLSPEC_CORE IComponent* createListener(IEntity* parent);
 }

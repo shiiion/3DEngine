@@ -39,6 +39,10 @@ namespace ginkgo {
 		}
 		const vec3& getCameraPosition() const override { return cameraPosition; }
 		const mat4& getCameraPositionTranslation() override;
+		const quat& getCameraRotation() const
+		{
+			return cameraRotation;
+		}
 		
 		void update() const override;
 

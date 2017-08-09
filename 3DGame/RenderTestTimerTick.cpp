@@ -15,6 +15,8 @@
 #include <glm/gtx/quaternion.hpp>
 #include <Renderer.h>
 
+#include <ISoundEmitter.h>
+
 #include <IAbstractInputSystem.h>
 #include <Core.h>
 #include <IEntity.h>
@@ -107,6 +109,10 @@ IRenderable* four;
 IRenderable* five;
 IRenderable* six;
 
+ISoundEmitter* se;
+IEntity* thePlayer;
+
+
 void setupRendering(IRenderer* renderer)
 {
 	createTexture("test_resources/textures/road.png", false, "road");
@@ -176,6 +182,7 @@ void setupEntity()
 	ICollisionMesh* moving5 = createCollisionMesh(6, 1.8f, 2);
 
 	ICollisionMesh* still = createCollisionMesh(40000, 1, 100);
+	ICollisionMesh* noting = createCollisionMesh(0, 0, 0);
 
 	PhysMaterial super;
 	PhysMaterial super2;
@@ -189,16 +196,30 @@ void setupEntity()
 	super5.reboundFraction = 0.7f;
 	IEntity* newEnt1 = entityFactory(glm::vec3(0, 5, 0));
 	IEntity* newEnt2 = entityFactory(glm::vec3(0, 0, 0));
-	IEntity* newEnt3 = entityFactory(glm::vec3(0, 5, -8));
+	IEntity* newEnt3 = entityFactory(glm::vec3(0, 100, -8));
 	IEntity* newEnt4 = entityFactory(glm::vec3(0, 5, -16));
 	IEntity* newEnt5 = entityFactory(glm::vec3(0, 5, -24));
 	IEntity* newEnt6 = entityFactory(glm::vec3(0, 5, -32));
+
+	thePlayer = entityFactory(glm::vec3(0, 15, 18));
+	thePlayer->setGravityEnabled(false);
+
+	IComponent* listener = createListener(thePlayer);
+	thePlayer->addComponent(listener);
+	
+	se = createSoundEmitter(newEnt3, false);
+	se->loadSound("crash", "crash.wav");
+	
+	newEnt3->addComponent(se);
+
 	newEnt1->setPhysics(physicsObjectFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true));
 	newEnt2->setPhysics(physicsObjectFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true));
 	newEnt3->setPhysics(physicsObjectFactory(newEnt3, moving2, CTYPE_WORLDDYNAMIC, 1, super2, true));
 	newEnt4->setPhysics(physicsObjectFactory(newEnt4, moving3, CTYPE_WORLDDYNAMIC, 1, super3, true));
 	newEnt5->setPhysics(physicsObjectFactory(newEnt5, moving4, CTYPE_WORLDDYNAMIC, 1, super4, true));
 	newEnt6->setPhysics(physicsObjectFactory(newEnt6, moving5, CTYPE_WORLDDYNAMIC, 1, super5, true));
+
+	thePlayer->setPhysics(physicsObjectFactory(thePlayer, noting, CTYPE_WORLDSTATIC, 1, super, false));
 
 	newEnt1->setGravityEnabled(true);
 	newEnt2->setGravityEnabled(false);
@@ -228,6 +249,7 @@ void setupEntity()
 	//getWorld()->addEntity(newEnt1);
 	getWorld()->addEntity(newEnt2);
 	getWorld()->addEntity(newEnt3);
+	getWorld()->addEntity(thePlayer);
 	//getWorld()->addEntity(newEnt4);
 	//getWorld()->addEntity(newEnt5);
 	//getWorld()->addEntity(newEnt6);
@@ -244,6 +266,7 @@ LRESULT CALLBACK TimerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	case WM_CREATE:
 	{
 		//don't do anything anymore. timer is handled elsewhere
+		se->emitSound("crash", 1);
 	}
 		break;
 	case WM_TIMER:
@@ -287,6 +310,8 @@ LRESULT CALLBACK TimerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			vars.yaw += dx / 500.f;
 			vars.renderer->getCamera()->setCameraRotation(glm::normalize(glm::angleAxis(vars.pitch, vec3(1, 0, 0)) * glm::angleAxis(vars.yaw, vec3(0, 1, 0))));
 		}
+		thePlayer->setPosition(vars.renderer->getCamera()->getCameraPosition());
+		thePlayer->setRotation(vars.renderer->getCamera()->getCameraRotation());
 		auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		tickCore(1);
 		vars.renderer->renderAndSwap();
