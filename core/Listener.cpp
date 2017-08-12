@@ -19,11 +19,6 @@ namespace ginkgo
 		parent = entity;
 	}
 
-	Listener::~Listener()
-	{
-		//nuttin?
-	}
-
 	IComponent* createListener(IEntity* parent)
 	{
 		return new Listener(parent);

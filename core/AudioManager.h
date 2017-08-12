@@ -29,7 +29,7 @@ namespace ginkgo
 
 		ALuint getSource(int id);
 
-		void updateListener(const vec3 &position, const vec3 &velocity, const quat &rotation);//first two not modified, 3rd is
+		void updateListener(const vec3 &position, const vec3 &velocity, const quat &rotation);
 
 		void setListenerVolume(float volume);
 

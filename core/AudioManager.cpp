@@ -1,9 +1,5 @@
 #include "AudioManager.h"
 #include "CoreReource.h"
-#include <glm/gtc/quaternion.hpp>
-#include <iostream>
-
-using namespace glm;
 
 namespace ginkgo
 {
@@ -20,22 +16,14 @@ namespace ginkgo
 	{
 		AudioBuffer buffer;
 
-		std::cout << alutGetError() << filepath.c_str() << "\n";
-
 		buffer.sound = alutCreateBufferFromFile(filepath.c_str());
 
-		std::cout << alutGetError() << "\n";
-
 		alGetBufferi(buffer.sound, AL_CHANNELS, &buffer.channels);
-
-		std::cout << buffer.channels;
-
-		//can get other buffer properties here
 
 		bufferMap.emplace(name, buffer);
 	}
 
-	int AudioManager::playSound(const std::string bufferName, bool loop, float volume, const vec3 &position, const vec3 &velocity, const quat &rotation)///source needs euler angles
+	int AudioManager::playSound(const std::string bufferName, bool loop, float volume, const vec3 &position, const vec3 &velocity, const quat &rotation)
 	{
 		ALuint buffer = bufferMap[bufferName].sound;
 
@@ -68,7 +56,7 @@ namespace ginkgo
 		return soundCounter++;
 	}
 
-	bool AudioManager::updateSound(int id, const vec3 &position, const vec3 &velocity, const quat &rotation)///source needs euler angles
+	bool AudioManager::updateSound(int id, const vec3 &position, const vec3 &velocity, const quat &rotation)
 	{
  		ALuint source = sourceMap[id];
 

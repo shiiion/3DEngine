@@ -17,7 +17,6 @@ namespace ginkgo
 
 		Listener(IEntity* entity);
 
-		~Listener();
 		void onDetach() {}
 	private:
 		IEntity* parent;
