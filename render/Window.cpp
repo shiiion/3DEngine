@@ -163,4 +163,6 @@ namespace ginkgo {
 	{
 		return new Window(name, width, height, clear_color, isFullScreen);
 	}
+
+	IWindow::~IWindow() {}
 }

@@ -22,6 +22,7 @@ namespace ginkgo
 
 		virtual void update() const = 0;
 
+		virtual ~ICamera() = 0;
 	};
 
 	DECLSPEC_RENDER ICamera* cameraFactory(const IWindow* win);

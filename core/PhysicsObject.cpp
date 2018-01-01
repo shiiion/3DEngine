@@ -169,4 +169,5 @@ namespace ginkgo
 		return new PhysicsObject(parent, collision, collisionType, mass, mat, canCollide);
 	}
 
+	IPhysicsObject::~IPhysicsObject() {}
 }

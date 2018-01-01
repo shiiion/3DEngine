@@ -32,6 +32,8 @@ namespace ginkgo
 		virtual void setMousePosition(double x, double y) const = 0;
 
 		virtual GLFWwindow* getInternalWindow() = 0;
+
+		virtual ~IWindow() = 0;
 	};
 
 	DECLSPEC_RENDER IWindow* windowFactory(const char* name, int width, int height, const vec4& clear_color, bool isFullScreen = false);

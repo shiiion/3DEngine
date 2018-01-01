@@ -27,6 +27,8 @@ namespace ginkgo
 		virtual void setUniform(const string& name, const DirectionalLight& directionalLight) const = 0;
 		virtual void setUniform(const string& name, const BaseLight& baseLight) const = 0;
 		virtual void setUniform(const string& name, const PointLight& pointLight) const = 0;
+
+		virtual ~IPhongShader() = 0;
 	};
 
 	DECLSPEC_RENDER IPhongShader* phongShaderFactory();

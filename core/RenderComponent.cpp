@@ -68,5 +68,9 @@ namespace ginkgo
 		getRendererInstance()->removeRenderable(mesh->getIndex());
 		delete mesh;
 	}
+
+	IRenderComponent::~IRenderComponent() {}
+
+	IComponent::~IComponent() {}
 }
 

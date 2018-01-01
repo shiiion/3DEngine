@@ -27,6 +27,9 @@ namespace ginkgo
 		virtual void runInput() = 0;
 
 		virtual Bind const& getControl(int inputState) = 0;
+
+
+		virtual ~IAbstractInputSystem() = 0;
 	};
 
 	DECLSPEC_CORE IAbstractInputSystem* createUserInputSystem();

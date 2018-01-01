@@ -132,4 +132,6 @@ namespace ginkgo {
 	{
 		return new Layer(renderables);
 	}
+
+	ILayer::~ILayer() {}
 }

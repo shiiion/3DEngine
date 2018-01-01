@@ -174,4 +174,6 @@ namespace ginkgo
 	{
 		return new UserInputSystem();
 	}
+
+	IAbstractInputSystem::~IAbstractInputSystem() {}
 }

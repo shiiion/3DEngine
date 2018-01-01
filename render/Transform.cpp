@@ -6,4 +6,6 @@ namespace ginkgo
 	{
 		return new Transform();
 	}
+
+	ITransform::~ITransform() {}
 }

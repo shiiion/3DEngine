@@ -160,4 +160,6 @@ namespace ginkgo
 	{
 		return new Surface(v1, v2, v3, v4);
 	}
+
+	ISurface::~ISurface() {}
 }

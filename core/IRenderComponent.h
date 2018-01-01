@@ -18,6 +18,8 @@ namespace ginkgo
 		virtual void setRotation(quat const& rotation) = 0;
 		virtual quat const& getRotation() const = 0;
 
+
+		virtual ~IRenderComponent() = 0;
 	};
 
 	DECLSPEC_CORE IRenderComponent* renderComponentFactory(IEntity* parent, IRenderable* renderable);

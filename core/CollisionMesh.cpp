@@ -771,4 +771,6 @@ namespace ginkgo
 		}
 		return false;
 	}
+
+	ICollisionMesh::~ICollisionMesh() {}
 }

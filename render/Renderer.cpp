@@ -181,4 +181,6 @@ namespace ginkgo
 	{
 		return primaryRenderer;
 	}
+
+	IRenderer::~IRenderer() {}
 }

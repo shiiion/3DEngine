@@ -23,6 +23,9 @@ namespace ginkgo
 		virtual void resetMovementControlFlag(int flag) = 0;
 
 		virtual int getMovementControlFlags() const = 0;
+
+
+		virtual ~ICharacter() = 0;
 	};
 
 	DECLSPEC_CORE ICharacter* characterFactory(const vec3& pos, const quat& rot = quat(), const vec3& vel = vec3(), const vec3& accel = vec3());

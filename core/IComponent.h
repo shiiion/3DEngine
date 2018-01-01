@@ -14,5 +14,8 @@ namespace ginkgo
 		virtual void onDetach() = 0;
 
 		virtual IEntity* getParent() = 0;
+
+
+		virtual ~IComponent() = 0;
 	};
 }

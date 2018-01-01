@@ -225,4 +225,6 @@ namespace ginkgo
 	{
 		character.setGravityEnabled(true);
 	}
+
+	ICharacter::~ICharacter() {}
 }

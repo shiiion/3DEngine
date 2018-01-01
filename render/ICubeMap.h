@@ -17,6 +17,8 @@ namespace ginkgo
 		virtual void draw(const mat4& transformProjectionView) const = 0;
 		virtual void bindCubeMapTexture() const = 0;
 		virtual void unbindCubeMapTexture() const = 0;
+
+		virtual ~ICubeMap() = 0;
 	};
 
 	DECLSPEC_RENDER ICubeMap* cubeMapFactory(map<unsigned int, string>& faces, float scale);

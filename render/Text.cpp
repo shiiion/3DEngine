@@ -138,4 +138,6 @@ namespace ginkgo {
 	{
 		return new Text(windowWidth, windowHeight, fontFilePath, fontSize);
 	}
+
+	IText::~IText() {}
 }

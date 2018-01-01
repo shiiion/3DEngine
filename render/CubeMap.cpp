@@ -116,4 +116,6 @@ namespace ginkgo {
 	{
 		return new CubeMap(faces, scale);
 	}
+
+	ICubeMap::~ICubeMap() {}
 }

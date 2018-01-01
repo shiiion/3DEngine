@@ -140,4 +140,5 @@ namespace ginkgo {
 		return new PhongShader();
 	}
 
+	IPhongShader::~IPhongShader() {}
 }

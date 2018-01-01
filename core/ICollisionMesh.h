@@ -39,6 +39,9 @@ namespace ginkgo
 		virtual int getCollisionShape() const = 0;
 
 		virtual void setRotation(quat const& rotation) = 0;
+
+
+		virtual ~ICollisionMesh() = 0;
 	};
 
 	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l);

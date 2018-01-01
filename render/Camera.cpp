@@ -43,4 +43,6 @@ namespace ginkgo
 	{
 		return new Camera(win);
 	}
+
+	ICamera::~ICamera() {}
 }

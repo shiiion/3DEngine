@@ -47,6 +47,8 @@ namespace ginkgo
 		virtual ICamera* getCamera() = 0;
 
 		virtual void renderAndSwap() = 0;
+
+		virtual ~IRenderer() = 0;
 	};
 
 	//renderer is a singleton, only one can exist 

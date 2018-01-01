@@ -24,6 +24,7 @@ namespace ginkgo
 
 		virtual void draw(const mat4& transformProjectionView, const vec3& cameraPosition, const IPhongShader& phongShader, const ICubeMap& cubeMap) const = 0;
 
+		virtual ~ILayer() = 0;
 	};
 
 	DECLSPEC_RENDER ILayer* layerFactory(const vector<IRenderable*>& renderables = vector<IRenderable*>());

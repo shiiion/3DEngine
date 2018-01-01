@@ -18,6 +18,8 @@ namespace ginkgo
 		virtual vec3 const& getScale() const = 0;
 		virtual vec3 const& getTranslation() const = 0;
 		virtual quat const& getRotation() const = 0;
+
+		virtual ~ITransform() = 0;
 	};
 
 	DECLSPEC_RENDER ITransform* transformFactory();

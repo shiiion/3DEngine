@@ -279,5 +279,7 @@ namespace ginkgo
 	{
 		worldTree.reinsert(entity);
 	}
+
+	IWorld::~IWorld() {}
 }
 

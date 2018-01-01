@@ -14,6 +14,8 @@ namespace ginkgo
 		virtual float getMaxCharWidth() const = 0;
 		virtual float getMaxCharHeight() const = 0;
 		virtual float getMinCharHeight() const = 0;
+
+		virtual ~IText() = 0;
 	};
 
 	DECLSPEC_RENDER IText* textRenderFactory(float windowWidth, float windowHeight, const char* fontFilePath, unsigned int fontSize);

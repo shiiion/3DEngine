@@ -59,6 +59,9 @@ namespace ginkgo
 		virtual std::forward_list<SurfaceData> const& getCollisionNormalList() const = 0;
 
 		virtual void removeNormal(SurfaceData const& data) = 0;
+
+
+		virtual ~IPhysicsObject() = 0;
 	};
 
 	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide = true);
