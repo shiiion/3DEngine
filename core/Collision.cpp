@@ -1,6 +1,6 @@
 #include "Collision.h"
 #include "ICollisionMesh.h"
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "Core.h"
 #include "IEntity.h"
 
@@ -173,7 +173,7 @@ namespace ginkgo
 
 	void Collision::impulseCorrection()
 	{
-		IPhysicsObject* refObj = manifold.thisMesh->getOwner(), *otherObj = manifold.otherMesh->getOwner();
+		IPhysicsComponent* refObj = manifold.thisMesh->getOwner(), *otherObj = manifold.otherMesh->getOwner();
 		float mass = refObj->getMass(), otherMass = otherObj->getMass();
 
 		vec3 const& vel = referenceResult.finalVel;
@@ -304,7 +304,7 @@ namespace ginkgo
 		markedForDestruction = !manifold.thisMesh->testCollisionStationary(*manifold.otherMesh, manifold);
 	}
 
-	bool Collision::eq(IPhysicsObject* a, IPhysicsObject* b) const
+	bool Collision::eq(IPhysicsComponent* a, IPhysicsComponent* b) const
 	{
 		long IDt = manifold.thisMesh->getOwner()->getParent()->getEntityID();
 		long IDo = manifold.otherMesh->getOwner()->getParent()->getEntityID();

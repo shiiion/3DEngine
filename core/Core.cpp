@@ -3,9 +3,9 @@
 #include "IEntity.h"
 #include "World.h"
 #include <Windows.h>
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "IAbstractInputSystem.h"
-#include "PhysicsObject.h"
+#include "PhysicsComponent.h"
 #include "CollisionMesh.h"
 #include "InputWrapper.h"
 #include <GLFW\glfw3.h>
@@ -90,7 +90,7 @@ namespace ginkgo
 	{
 		const vector<IEntity*>& entityList = world->getEntityList();
 
-		vector<IPhysicsObject*> physicsObjects;
+		vector<IPhysicsComponent*> PhysicsComponents;
 
  		for (IEntity* e : entityList)
 		{
@@ -98,19 +98,19 @@ namespace ginkgo
 			//world->function(); -- callback(characterInstance, elapsedTime);
 			
 			e->beginTick(elapsedTime);
-			if (e->getEntityType() >= physicsObject)
+			if (e->getEntityType() >= PhysicsComponent)
 			{
-				physicsObjects.emplace_back(e->getPhysics());
+				PhysicsComponents.emplace_back(e->getPhysics());
 			}
 			world->updateOctreeIndex(e);
 		}
 		//world->recalculateTree();
 		world->preCollisionTest();
 
-		vector<IPhysicsObject*> colliders;
+		vector<IPhysicsComponent*> colliders;
 
 		//COLLISION DETECTION
-		for (IPhysicsObject* p : physicsObjects)
+		for (IPhysicsComponent* p : PhysicsComponents)
 		{
 			if (p->getCollisionType() == CTYPE_WORLDSTATIC || !p->doesCollide())
 			{
@@ -119,7 +119,7 @@ namespace ginkgo
 
 			world->getEntityTree().retrieveCollisions(colliders, p);
 
-			for (IPhysicsObject* collider : colliders)
+			for (IPhysicsComponent* collider : colliders)
 			{
 				if (!collider->doesCollide())
 				{

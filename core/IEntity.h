@@ -33,9 +33,9 @@ namespace ginkgo
 
 		virtual IRenderComponent* getRenderable() = 0;
 		virtual IRenderComponent const* getRenderable() const = 0;
-		virtual IPhysicsObject* getPhysics() = 0;
-		virtual IPhysicsObject const* getPhysics() const = 0;
-		virtual void setPhysics(IPhysicsObject* component) = 0;
+		virtual IPhysicsComponent* getPhysics() = 0;
+		virtual IPhysicsComponent const* getPhysics() const = 0;
+		virtual void setPhysics(IPhysicsComponent* component) = 0;
 		virtual void setRenderable(IRenderComponent* component) = 0;
 		virtual void addComponent(IComponent* component) = 0;
 

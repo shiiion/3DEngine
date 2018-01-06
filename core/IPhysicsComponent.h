@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreReource.h"
+#include "IComponent.h"
 #include <forward_list>
 
 #define CSTATE_RESOLVE 1
@@ -23,10 +24,10 @@ namespace ginkgo
 	class IEntity;
 	struct Collision;
 
-	class IPhysicsObject
+	class IPhysicsComponent : public IComponent
 	{
 	public:
-		virtual bool checkCollision(float deltaTime, IPhysicsObject* other) = 0;
+		virtual bool checkCollision(float deltaTime, IPhysicsComponent* other) = 0;
 		
 		virtual void setMaterial(const PhysMaterial& mat) = 0;
 		virtual void setMass(float mass) = 0;
@@ -48,10 +49,6 @@ namespace ginkgo
 
 		virtual void setFinalMove(MoveResult const& finalMove) = 0;
 
-		virtual void onTick(float elapsedTime) = 0;
-
-		virtual IEntity* const getParent() const = 0;
-
 		virtual const MoveResult& getMoveResult() const = 0;
 		
 		//Returns a list of all collision normals for this object (updated per-tick)
@@ -61,8 +58,8 @@ namespace ginkgo
 		virtual void removeNormal(SurfaceData const& data) = 0;
 
 
-		virtual ~IPhysicsObject() = 0;
+		virtual ~IPhysicsComponent() = 0;
 	};
 
-	DECLSPEC_CORE IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide = true);
+	DECLSPEC_CORE IPhysicsComponent* PhysicsComponentFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide = true);
 }

@@ -28,7 +28,7 @@ functions:
 	gets/sets()
 }
 
-class PhysicsObject : public Renderable 
+class PhysicsComponent : public Renderable 
 {
 members:
 	-Collision Mesh as CollisionMesh
@@ -37,7 +37,7 @@ members:
 	-canCollide as boolean
 	-canGravity as boolean
 	-collisionflags as 8 bit thing
-	-vector of collided physicsobjects as vector
+	-vector of collided PhysicsComponents as vector
 functions:
 	ctor(mass, Material, mesh, pos, canGravity = true, canCollide = true, scale = 1,1,1, rot = 0,0,0, vel = 0,0,0, accel = 0,0,0)
 

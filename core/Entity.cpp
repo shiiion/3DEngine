@@ -1,7 +1,7 @@
 #include "IComponent.h"
 #include "Entity.h"
 #include "Core.h"
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "IWorld.h"
 #include "IRenderComponent.h"
 
@@ -122,7 +122,7 @@ namespace ginkgo
 		{
 			return entity;
 		}
-		return physicsObject;
+		return PhysicsComponent;
 	}
 	
 	void Entity::setGravityEnabled(bool enabled)
@@ -130,7 +130,7 @@ namespace ginkgo
 		gravityEnabled = enabled;
 	}
 
-	void Entity::setPhysics(IPhysicsObject* component)
+	void Entity::setPhysics(IPhysicsComponent* component)
 	{
 		physicsComponent = component;
 	}

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "Entity.h"
 
 namespace ginkgo
 {
-	class PhysicsObject : public IPhysicsObject
+	class PhysicsComponent : public IPhysicsComponent
 	{
 	private:
 		ICollisionMesh* collisionMesh;
@@ -24,9 +24,9 @@ namespace ginkgo
 		quat rotationBuffer;
 
 	public:
-		PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide = true);
+		PhysicsComponent(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide = true);
 
-		bool checkCollision(float deltaTime, IPhysicsObject* other) override;
+		bool checkCollision(float deltaTime, IPhysicsComponent* other) override;
 
 		void setMaterial(const PhysMaterial& mat) override;
 		void setMass(float mass) override;

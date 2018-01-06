@@ -21,6 +21,6 @@ World Object Hierarchy:
 
 	collision mesh has function to check collision with another collision mesh
 
-	physicsobjects have a collision time variable which controls how hard it will bounce (result velocity of two objects)
+	PhysicsComponents have a collision time variable which controls how hard it will bounce (result velocity of two objects)
 
 	add a layer!!

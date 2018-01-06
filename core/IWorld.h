@@ -44,7 +44,7 @@ namespace ginkgo
 
 		virtual void resolveCollisions(INT32 iterations) = 0;
 
-		virtual bool collisionExists(IPhysicsObject* a, IPhysicsObject* b) const = 0;
+		virtual bool collisionExists(IPhysicsComponent* a, IPhysicsComponent* b) const = 0;
 
 
 		virtual ~IWorld() = 0;

@@ -1,7 +1,7 @@
 #include "World.h"
 #include "IEntity.h"
 #include "IRenderable.h"
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "SurfaceCollisionMesh.h"
 
 namespace ginkgo
@@ -30,11 +30,11 @@ namespace ginkgo
 			return newEntityList;
 
 		}
-		else if (type == physicsObject)
+		else if (type == PhysicsComponent)
 		{
 			for (UINT32 a = 0; a < entityList.size(); a++)
 			{
-				if (entityList.at(a)->getEntityType() >= physicsObject)
+				if (entityList.at(a)->getEntityType() >= PhysicsComponent)
 				{
 					newEntityList.push_back(entityList.at(a));
 				}
@@ -81,7 +81,7 @@ namespace ginkgo
 	void World::addEntity(IEntity* entity)
 	{
 		entityList.push_back(entity);
-		if (entity->getEntityType() >= physicsObject)
+		if (entity->getEntityType() >= PhysicsComponent)
 		{
 			worldTree.insert(entity->getPhysics());
 		}
@@ -99,7 +99,7 @@ namespace ginkgo
 		{
 			return;
 		}
-		if (entityList[a]->getEntityType() == physicsObject)
+		if (entityList[a]->getEntityType() == PhysicsComponent)
 		{
 			worldTree.remove(ID);
 		}
@@ -122,10 +122,10 @@ namespace ginkgo
 		resultOut.ray = ray;
 		resultOut.rayDist = dist;
 
-		vector<IPhysicsObject*> possibleCollisions;
+		vector<IPhysicsComponent*> possibleCollisions;
 		worldTree.retrieveCollisions(possibleCollisions, ray, dist);
 
-		for (IPhysicsObject* collider : possibleCollisions)
+		for (IPhysicsComponent* collider : possibleCollisions)
 		{
 			if (collider->getCollisionMesh()->testRay(params, resultOut))
 			{
@@ -172,8 +172,8 @@ namespace ginkgo
 			if (!collisions[a].valid)
 			{
 				//collisions[a].manifold.thisMesh->getOwner()->setCollisionState(CSTATE_NO)
-				IPhysicsObject* t = collisions[a].manifold.thisMesh->getOwner();
-				IPhysicsObject* o = collisions[a].manifold.otherMesh->getOwner();
+				IPhysicsComponent* t = collisions[a].manifold.thisMesh->getOwner();
+				IPhysicsComponent* o = collisions[a].manifold.otherMesh->getOwner();
 				t->decrementCollision();
 				o->decrementCollision();
 				//TODO: give IDs to collisions for better stability
@@ -252,7 +252,7 @@ namespace ginkgo
 		}
 	}
 
-	bool World::collisionExists(IPhysicsObject* a, IPhysicsObject* b) const
+	bool World::collisionExists(IPhysicsComponent* a, IPhysicsComponent* b) const
 	{
 		bool found = false;
 

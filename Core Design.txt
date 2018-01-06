@@ -4,7 +4,7 @@ COLLISION HANDLING DESIGN:
 	sync implies the task will be waited on, async imples the task will not be waited on
 
 	-NEW ADDITIONS: ICharacter and Character (will be added)
-		inherits from PhysicsObject
+		inherits from PhysicsComponent
 		(design me here)
 
 	CORE (main thread)-
@@ -44,7 +44,7 @@ COLLISION HANDLING DESIGN:
 		-raytracing is a necessary part of the game, it allows testing collisions through a line segment
 		STRUCTS:	
 			RaytraceResult
-				IPhysicsObject* firstCollision - first object the line hit
+				IPhysicsComponent* firstCollision - first object the line hit
 				float collisionDist - distance from start which the ray hit the object
 				Ray ray - a ray representing point and direction of the trace
 				float rayDist - the total distance the ray would have traced

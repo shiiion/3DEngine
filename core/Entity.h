@@ -15,7 +15,7 @@ namespace ginkgo
 		vec3 acceleration;
 		bool gravityEnabled;//default true
 
-		IPhysicsObject* physicsComponent;
+		IPhysicsComponent* physicsComponent;
 		IRenderComponent* renderComponent;
 
 		vector<IComponent*> componentList;
@@ -40,11 +40,11 @@ namespace ginkgo
 		{
 			return renderComponent;
 		}
-		IPhysicsObject* getPhysics() override
+		IPhysicsComponent* getPhysics() override
 		{
-			return const_cast<IPhysicsObject*>(static_cast<Entity const*>(this)->getPhysics());
+			return const_cast<IPhysicsComponent*>(static_cast<Entity const*>(this)->getPhysics());
 		}
-		IPhysicsObject const* getPhysics() const override
+		IPhysicsComponent const* getPhysics() const override
 		{
 			return physicsComponent;
 		}
@@ -56,7 +56,7 @@ namespace ginkgo
 		void setRotation(const quat& ang) override;
 		void setEntityID(long ID) override;
 		void setRenderable(IRenderComponent* component) override;
-		void setPhysics(IPhysicsObject* component) override;
+		void setPhysics(IPhysicsComponent* component) override;
 		void setGravityEnabled(bool enabled) override;
 
 		EntityType getEntityType() const override;

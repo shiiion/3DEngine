@@ -35,12 +35,12 @@ namespace ginkgo
 	using glm::vec4;
 	using glm::quat;
 
-	class IPhysicsObject;
+	class IPhysicsComponent;
 	class ICollisionMesh;
 	class IAbstractInputSystem;
 	class ICharacter;
 
-	typedef bool(__cdecl* RaytraceFunc)(IPhysicsObject* hitObject);
+	typedef bool(__cdecl* RaytraceFunc)(IPhysicsComponent* hitObject);
 	typedef std::function<bool(const ICharacter&, float)> CheckIfMovementState;
 	typedef std::function<void(ICharacter&, float)> DoOnMovementState;
 	typedef std::function<void(ICharacter&, float)> OnMovementStateEnabled;
@@ -72,7 +72,7 @@ namespace ginkgo
 
 	enum EntityType
 	{
-		entity = 1, physicsObject = 3, character = 4
+		entity = 1, PhysicsComponent = 3, character = 4
 	};
 
 	struct Triangle
@@ -179,7 +179,7 @@ namespace ginkgo
 	{
 		bool didHit;
 
-		IPhysicsObject* firstCollision;
+		IPhysicsComponent* firstCollision;
 		float collisionDist;
 
 		Ray ray;
@@ -188,7 +188,7 @@ namespace ginkgo
 
 	struct RaytraceParams
 	{
-		vector<IPhysicsObject*> ignoreList;
+		vector<IPhysicsComponent*> ignoreList;
 		RaytraceFunc func;
 	};
 

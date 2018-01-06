@@ -17,7 +17,7 @@
 //#include <IAbstractInputSystem.h>
 //#include <Core.h>
 //#include <IEntity.h>
-//#include <IPhysicsObject.h>
+//#include <IPhysicsComponent.h>
 //#include <ICollisionMesh.h>
 //#include <IWorld.h>
 //#include <IRenderComponent.h>
@@ -160,7 +160,7 @@
 //	PhysMaterial super;
 //	super.reboundFraction = 0;
 //	IEntity* newEnt1 = entityFactory(glm::vec3(0, 0, 0));
-//	newEnt1->setPhysics(physicsObjectFactory(newEnt1, still, CTYPE_WORLDSTATIC, 1, super, true));
+//	newEnt1->setPhysics(PhysicsComponentFactory(newEnt1, still, CTYPE_WORLDSTATIC, 1, super, true));
 //
 //	newEnt1->setGravityEnabled(false);
 //
@@ -186,7 +186,7 @@
 //	PhysMaterial super;
 //	super.reboundFraction = 0;
 //	IEntity* water = entityFactory(glm::vec3(0, 0, 0), quat(), vec3(0, -5.f, 0));
-//	water->setPhysics(physicsObjectFactory(water, cm, CTYPE_WORLDDYNAMIC, 1, super, true));
+//	water->setPhysics(PhysicsComponentFactory(water, cm, CTYPE_WORLDDYNAMIC, 1, super, true));
 //
 //	water->setGravityEnabled(false);
 //

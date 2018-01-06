@@ -50,7 +50,7 @@ namespace ginkgo
 		vec3 cachedCenter;
 		vec3 cachedVel;
 
-		IPhysicsObject* owner;
+		IPhysicsComponent* owner;
 
 		MoveInfo lastMove;
 
@@ -72,7 +72,7 @@ namespace ginkgo
 		MoveInfo const& getLastMove() const override;
 		void generateVertexPath(float deltaTime) override;
 
-		virtual void setOwner(IPhysicsObject* owner) override;
+		virtual void setOwner(IPhysicsComponent* owner) override;
 
 		bool testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut) override;
 		bool testCollisionStationary(ICollisionMesh const& other, CollisionStationary& collisionOut) override;
@@ -88,7 +88,7 @@ namespace ginkgo
 		float getCollisionTime(vec3 const& axisNorm, CollisionMesh const& other, float deltaTime) const;
 		float getAxisOverlap(vec3 const& axisNorm, ICollisionMesh const& other) const override;
 
-		virtual IPhysicsObject* getOwner() const override;
+		virtual IPhysicsComponent* getOwner() const override;
 
 		void setCachedCenter(vec3 const& center) override;
 		vec3 const& getCachedCenter() const override;

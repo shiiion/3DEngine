@@ -4,7 +4,7 @@
 
 #include "IEntity.h"
 #include "ICollisionMesh.h"
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include <glm/gtx/rotate_vector.hpp>
 #include "CollisionMesh.h"
 
@@ -26,7 +26,7 @@ namespace ginkgo
 		mat.reboundFraction = rebound;
 		mat.friction = friction;
 
-		newEnt->setPhysics(physicsObjectFactory(newEnt, pcm, dyn, mass, mat));
+		newEnt->setPhysics(PhysicsComponentFactory(newEnt, pcm, dyn, mass, mat));
 		getWorld()->addEntity(newEnt);
 		return newEnt;
 	}

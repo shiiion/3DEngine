@@ -1,5 +1,5 @@
 #include "Character.h"
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "IComponent.h"
 #include "UserInputSystem.h"
 #include <GLFW\glfw3.h>

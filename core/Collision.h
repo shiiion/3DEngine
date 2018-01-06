@@ -3,7 +3,7 @@
 
 namespace ginkgo
 {
-	class IPhysicsObject;
+	class IPhysicsComponent;
 
 	struct Collision
 	{
@@ -42,7 +42,7 @@ namespace ginkgo
 		//This collision must be maintained through the current frame, it will be destroyed at the end of the frame(called in preCollisionCheck)
 		void preCollisionUpdate();
 
-		bool eq(IPhysicsObject* a, IPhysicsObject* b) const;
+		bool eq(IPhysicsComponent* a, IPhysicsComponent* b) const;
 
 		void getUpdatedParams();
 

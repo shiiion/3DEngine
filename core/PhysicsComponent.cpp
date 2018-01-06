@@ -1,4 +1,4 @@
-#include "PhysicsObject.h"
+#include "PhysicsComponent.h"
 #include "Core.h"
 #include "IWorld.h"
 #include "ICollisionMesh.h"
@@ -8,7 +8,7 @@
 namespace ginkgo
 {
 
-	PhysicsObject::PhysicsObject(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide)
+	PhysicsComponent::PhysicsComponent(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide)
 		: parent(parent)
 	{
 		this->mass = mass;
@@ -21,7 +21,7 @@ namespace ginkgo
 		collision->setRotation(parent->getRotation());
 	}
 
-	bool PhysicsObject::checkCollision(float deltaTime, IPhysicsObject* other)
+	bool PhysicsComponent::checkCollision(float deltaTime, IPhysicsComponent* other)
 	{
 		if (collisionType == CTYPE_WORLDSTATIC)
 		{
@@ -35,59 +35,59 @@ namespace ginkgo
 		{
 			getWorld()->addCollision(manifold, deltaTime);
 			normalList.emplace_front(SurfaceData(parent->getEntityID(), other->getParent()->getEntityID(), manifold.collisionNormal));
-			((PhysicsObject*)other)->normalList.emplace_front(SurfaceData(other->getParent()->getEntityID(),
+			((PhysicsComponent*)other)->normalList.emplace_front(SurfaceData(other->getParent()->getEntityID(),
 				parent->getEntityID(), -manifold.collisionNormal));
 			return true;
 		}
 		return false;
 	}
 
-	void PhysicsObject::setFinalMove(MoveResult const& result)
+	void PhysicsComponent::setFinalMove(MoveResult const& result)
 	{    
 		finalMove = result;
 	}
 
-	const PhysMaterial& PhysicsObject::getMaterial() const
+	const PhysMaterial& PhysicsComponent::getMaterial() const
 	{
 		return material;
 	}
 
-	float PhysicsObject::getMass() const
+	float PhysicsComponent::getMass() const
 	{
 		return mass;
 	}
 
-	bool PhysicsObject::doesCollide() const
+	bool PhysicsComponent::doesCollide() const
 	{
 		return canCollide;
 	}
 
-	ICollisionMesh* PhysicsObject::getCollisionMesh() const
+	ICollisionMesh* PhysicsComponent::getCollisionMesh() const
 	{
 		return collisionMesh;
 	}
 
-	UINT32 PhysicsObject::getNumCollisions() const
+	UINT32 PhysicsComponent::getNumCollisions() const
 	{
 		return numCollisions;
 	}
 
-	UINT32 PhysicsObject::getCollisionType() const
+	UINT32 PhysicsComponent::getCollisionType() const
 	{
 		return collisionType;
 	}
 
-	bool PhysicsObject::isMoving() const
+	bool PhysicsComponent::isMoving() const
 	{
 		return glm::length(parent->getVelocity()) > 0.f || glm::length(parent->getVelocity()) > 0.0f;
 	}
 
-	std::forward_list<SurfaceData> const& PhysicsObject::getCollisionNormalList() const
+	std::forward_list<SurfaceData> const& PhysicsComponent::getCollisionNormalList() const
 	{
 		return normalList;
 	}
 
-	void PhysicsObject::removeNormal(SurfaceData const& data)
+	void PhysicsComponent::removeNormal(SurfaceData const& data)
 	{
 		for (auto iter = normalList.before_begin(); iter != normalList.end();)
 		{
@@ -101,32 +101,32 @@ namespace ginkgo
 		}
 	}
 
-	void PhysicsObject::setMaterial(const PhysMaterial& mat)
+	void PhysicsComponent::setMaterial(const PhysMaterial& mat)
 	{
 		material = mat;
 	}
 
-	void PhysicsObject::setMass(float mass)
+	void PhysicsComponent::setMass(float mass)
 	{
 		this->mass = mass;
 	}
 
-	void PhysicsObject::setCanCollide(bool collides)
+	void PhysicsComponent::setCanCollide(bool collides)
 	{
 		canCollide = collides;
 	}
 
-	void PhysicsObject::setCollisionMesh(ICollisionMesh* collision)
+	void PhysicsComponent::setCollisionMesh(ICollisionMesh* collision)
 	{
 		collisionMesh = collision;
 	}
 
-	void PhysicsObject::incrementCollision()
+	void PhysicsComponent::incrementCollision()
 	{
 		numCollisions++;
 	}
 
-	void PhysicsObject::decrementCollision()
+	void PhysicsComponent::decrementCollision()
 	{
 		if (numCollisions > 0)
 		{
@@ -134,12 +134,12 @@ namespace ginkgo
 		}
 	}
 
-	void PhysicsObject::setMovementState(UINT32 state)
+	void PhysicsComponent::setMovementState(UINT32 state)
 	{
 		movementState = state;
 	}
 
-	void PhysicsObject::setRotation(const quat& rotation)
+	void PhysicsComponent::setRotation(const quat& rotation)
 	{
 		rotationBuffer = rotation;
 		if (collisionMesh != nullptr)
@@ -148,26 +148,28 @@ namespace ginkgo
 		}
 	}
 
-	void PhysicsObject::onTick(float elapsedTime)
+	void PhysicsComponent::onTick(float elapsedTime)
 	{
 		collisionMesh->generateVertexPath(elapsedTime);
 		finalMove = MoveResult(collisionMesh->getLastMove().centerEnd, collisionMesh->getLastMove().velEnd);
 	}
 
-	IEntity* const PhysicsObject::getParent() const
+	IEntity* const PhysicsComponent::getParent() const
 	{
 		return parent;
 	}
 
-	const MoveResult& PhysicsObject::getMoveResult() const
+	const MoveResult& PhysicsComponent::getMoveResult() const
 	{
 		return finalMove;
 	}
 	
-	IPhysicsObject* physicsObjectFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide)
+	IPhysicsComponent* PhysicsComponentFactory(IEntity* parent, ICollisionMesh* collision, UINT32 collisionType, float mass, PhysMaterial mat, bool canCollide)
 	{
-		return new PhysicsObject(parent, collision, collisionType, mass, mat, canCollide);
+		return new PhysicsComponent(parent, collision, collisionType, mass, mat, canCollide);
 	}
 
-	IPhysicsObject::~IPhysicsObject() {}
+	IPhysicsComponent::~IPhysicsComponent() {}
+
+	IComponent::~IComponent() {}
 }

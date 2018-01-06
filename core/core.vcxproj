@@ -177,9 +177,9 @@
     <ClInclude Include="ICollisionMesh.h" />
     <ClInclude Include="IEntity.h" />
     <ClInclude Include="ISurface.h" />
-    <ClInclude Include="IPhysicsObject.h" />
+    <ClInclude Include="IPhysicsComponent.h" />
     <ClInclude Include="IRenderComponent.h" />
-    <ClInclude Include="PhysicsObject.h" />
+    <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="IWorld.h" />
     <ClInclude Include="SurfaceCollisionMesh.h" />
@@ -196,7 +196,7 @@
     <ClCompile Include="JNAInterfaceFunctions.cpp" />
     <ClCompile Include="MovementStateCallbackManager.cpp" />
     <ClCompile Include="Octree.cpp" />
-    <ClCompile Include="PhysicsObject.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="SurfaceCollisionMesh.cpp" />

@@ -18,7 +18,7 @@
 #include <IAbstractInputSystem.h>
 #include <Core.h>
 #include <IEntity.h>
-#include <IPhysicsObject.h>
+#include <IPhysicsComponent.h>
 #include <ICollisionMesh.h>
 #include <IWorld.h>
 #include <IRenderComponent.h>
@@ -193,12 +193,12 @@ void setupEntity()
 	IEntity* newEnt4 = entityFactory(glm::vec3(0, 5, -16));
 	IEntity* newEnt5 = entityFactory(glm::vec3(0, 5, -24));
 	IEntity* newEnt6 = entityFactory(glm::vec3(0, 5, -32));
-	newEnt1->setPhysics(physicsObjectFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true));
-	newEnt2->setPhysics(physicsObjectFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true));
-	newEnt3->setPhysics(physicsObjectFactory(newEnt3, moving2, CTYPE_WORLDDYNAMIC, 1, super2, true));
-	newEnt4->setPhysics(physicsObjectFactory(newEnt4, moving3, CTYPE_WORLDDYNAMIC, 1, super3, true));
-	newEnt5->setPhysics(physicsObjectFactory(newEnt5, moving4, CTYPE_WORLDDYNAMIC, 1, super4, true));
-	newEnt6->setPhysics(physicsObjectFactory(newEnt6, moving5, CTYPE_WORLDDYNAMIC, 1, super5, true));
+	newEnt1->setPhysics(PhysicsComponentFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true));
+	newEnt2->setPhysics(PhysicsComponentFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true));
+	newEnt3->setPhysics(PhysicsComponentFactory(newEnt3, moving2, CTYPE_WORLDDYNAMIC, 1, super2, true));
+	newEnt4->setPhysics(PhysicsComponentFactory(newEnt4, moving3, CTYPE_WORLDDYNAMIC, 1, super3, true));
+	newEnt5->setPhysics(PhysicsComponentFactory(newEnt5, moving4, CTYPE_WORLDDYNAMIC, 1, super4, true));
+	newEnt6->setPhysics(PhysicsComponentFactory(newEnt6, moving5, CTYPE_WORLDDYNAMIC, 1, super5, true));
 
 	newEnt1->setGravityEnabled(true);
 	newEnt2->setGravityEnabled(false);

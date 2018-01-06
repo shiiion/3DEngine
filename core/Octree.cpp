@@ -1,6 +1,6 @@
 
 #include "Octree.h"
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "CollisionMesh.h"
 #include "IEntity.h"
 
@@ -66,7 +66,7 @@ namespace ginkgo
 			leaves[7] = new Octree(level + 1, Prism(bounds.x + w, bounds.y + h, bounds.z, w, h, l), this);
 	}
 
-	int Octree::getIndex(IPhysicsObject* object) const
+	int Octree::getIndex(IPhysicsComponent* object) const
 	{
 		int index = -1;
 		float hfWidth = bounds.x + bounds.w / 2.f;
@@ -241,7 +241,7 @@ namespace ginkgo
 		}
 	}
 
-	bool Octree::shouldMove(IPhysicsObject* object, Octree** cachedFind)
+	bool Octree::shouldMove(IPhysicsComponent* object, Octree** cachedFind)
 	{
 		int index = getIndex(object);
 		if (index != -1)
@@ -253,7 +253,7 @@ namespace ginkgo
 			return leaves[index]->shouldMove(object, cachedFind);
 		}
 		bool found = false;
-		for (IPhysicsObject* o : objects)
+		for (IPhysicsComponent* o : objects)
 		{
 			if (object->getParent()->getEntityID() == o->getParent()->getEntityID())
 			{
@@ -264,7 +264,7 @@ namespace ginkgo
 		return false;
 	}
 
-	void Octree::insert(IPhysicsObject* object)
+	void Octree::insert(IPhysicsComponent* object)
 	{
 		if (leaves[0] != nullptr)
 		{
@@ -302,7 +302,7 @@ namespace ginkgo
 		}
 	}
 
-	void Octree::retrieveCollisions(vector<IPhysicsObject*>& outObjects, IPhysicsObject* collider) const
+	void Octree::retrieveCollisions(vector<IPhysicsComponent*>& outObjects, IPhysicsComponent* collider) const
 	{
 		int index = getIndex(collider);
 		if (index != -1 && leaves[0] != nullptr)
@@ -316,7 +316,7 @@ namespace ginkgo
 		}
 	}
 
-	void Octree::retrieveCollisions(vector<IPhysicsObject*>& outList, Ray const& ray, float dist) const
+	void Octree::retrieveCollisions(vector<IPhysicsComponent*>& outList, Ray const& ray, float dist) const
 	{
 		int index = getIndex(ray, dist);
 		if (index != -1 && leaves[0] != nullptr)
@@ -349,7 +349,7 @@ namespace ginkgo
 	{
 		for (IEntity* object : objects)
 		{
-			if (object->getEntityType() >= physicsObject)
+			if (object->getEntityType() >= PhysicsComponent)
 			{
 				insert(object->getPhysics());
 			}
@@ -397,7 +397,7 @@ namespace ginkgo
 		return objects.empty();
 	}
 
-	void Octree::getChildLeaves(vector<IPhysicsObject*>& outList) const
+	void Octree::getChildLeaves(vector<IPhysicsComponent*>& outList) const
 	{
 		for (int a = 0; a < 8; a++)
 		{

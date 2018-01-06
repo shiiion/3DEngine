@@ -8,9 +8,10 @@ namespace ginkgo
 
 #define CMESH_SHAPE_OBB 1
 #define CMESH_SHAPE_CAPSULE 2
+#define CMESH_SHAPE_SPHERE 3
 
 	class ISurface;
-	class IPhysicsObject;
+	class IPhysicsComponent;
 
 	class ICollisionMesh
 	{
@@ -18,7 +19,7 @@ namespace ginkgo
 		virtual MoveInfo const& getLastMove() const = 0;
 		virtual void generateVertexPath(float deltaTime) = 0;
 
-		virtual void setOwner(IPhysicsObject* owner) = 0;
+		virtual void setOwner(IPhysicsComponent* owner) = 0;
 
 		virtual bool testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut) = 0;
 		//collisionOut should provide an axis normal to get penetration distance
@@ -28,7 +29,7 @@ namespace ginkgo
 		virtual void generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut) = 0;
 		virtual float getAxisOverlap(vec3 const& axisNorm, ICollisionMesh const& other) const = 0;
 
-		virtual IPhysicsObject* getOwner() const = 0;
+		virtual IPhysicsComponent* getOwner() const = 0;
 
 		virtual void setCachedCenter(vec3 const& center) = 0;
 		virtual vec3 const& getCachedCenter() const = 0;

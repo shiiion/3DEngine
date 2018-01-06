@@ -1,5 +1,5 @@
 #include "CollisionMesh.h"
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "ISurface.h"
 #include <glm/gtx/rotate_vector.hpp>
 #include "Core.h"
@@ -38,7 +38,7 @@ namespace ginkgo
 		cachedVel = lastMove.velEnd;
 	}
 
-	void CollisionMesh::setOwner(IPhysicsObject* owner)
+	void CollisionMesh::setOwner(IPhysicsComponent* owner)
 	{
 		this->owner = owner;
 		cachedCenter = owner->getParent()->getPosition();
@@ -713,7 +713,7 @@ namespace ginkgo
 		}
 	}
 
-	IPhysicsObject* CollisionMesh::getOwner() const
+	IPhysicsComponent* CollisionMesh::getOwner() const
 	{
 		return owner;
 	}

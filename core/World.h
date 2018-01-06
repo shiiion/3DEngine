@@ -55,7 +55,7 @@ namespace ginkgo
 		void clearCollisionCache() override;
 
 		void resolveCollisions(INT32 iterations) override;
-		bool collisionExists(IPhysicsObject* a, IPhysicsObject* b) const override;
+		bool collisionExists(IPhysicsComponent* a, IPhysicsComponent* b) const override;
 
 		void preCollisionTest();
 		void updateOctreeIndex(IEntity* entity);

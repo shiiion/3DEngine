@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ICharacter.h"
-#include "IPhysicsObject.h"
+#include "IPhysicsComponent.h"
 #include "Core.h"
 #include "IRenderComponent.h"
 
@@ -26,7 +26,7 @@ namespace ginkgo
 		float airSpeedFactor;
 
 		IRenderComponent* renderComponent;
-		IPhysicsObject* physicsComponent;
+		IPhysicsComponent* physicsComponent;
 
 		vector<int> movementStateList;
 		IAbstractInputSystem* inputSystem;
@@ -60,11 +60,11 @@ namespace ginkgo
 		{
 			return renderComponent;
 		}
-		IPhysicsObject* getPhysics() override
+		IPhysicsComponent* getPhysics() override
 		{
-			return const_cast<IPhysicsObject*>(static_cast<Character const*>(this)->getPhysics());
+			return const_cast<IPhysicsComponent*>(static_cast<Character const*>(this)->getPhysics());
 		}
-		IPhysicsObject const* getPhysics() const override
+		IPhysicsComponent const* getPhysics() const override
 		{
 			return physicsComponent;
 		}
@@ -89,7 +89,7 @@ namespace ginkgo
 		void setGravityEnabled(bool enabled) override { gravityEnabled = enabled; }
 		void setMovementState(int newState) override { this->movementState = newState; }
 		void setRenderable(IRenderComponent* component) override { renderComponent = component; }
-		void setPhysics(IPhysicsObject* component) override 
+		void setPhysics(IPhysicsComponent* component) override 
 		{ 
 			physicsComponent = component;
 		}
@@ -102,7 +102,7 @@ namespace ginkgo
 			{
 				return entity;
 			}
-			return physicsObject;
+			return PhysicsComponent;
 		}
 
 
