@@ -1,5 +1,8 @@
 #pragma once
 
+#define PHYSICS_COMPONENT 1
+#define RENDER_COMPONENT 2
+
 namespace ginkgo
 {
 	class IEntity;
@@ -15,6 +18,7 @@ namespace ginkgo
 
 		virtual IEntity* getParent() = 0;
 
+		virtual int type() const = 0;
 
 		virtual ~IComponent() = 0;
 	};

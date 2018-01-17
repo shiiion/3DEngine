@@ -167,70 +167,70 @@ void setupRendering(IRenderer* renderer)
 
 void setupEntity()
 {
-	setTickTime(1.f / 60.f);
+	//setTickTime(1.f / 60.f);
 
-	ICollisionMesh* moving = createCollisionMesh(6, 1.8f, 2);
-	ICollisionMesh* moving2 = createCollisionMesh(6, 1.8f, 2);
-	ICollisionMesh* moving3 = createCollisionMesh(6, 1.8f, 2);
-	ICollisionMesh* moving4 = createCollisionMesh(6, 1.8f, 2);
-	ICollisionMesh* moving5 = createCollisionMesh(6, 1.8f, 2);
+	//ICollisionMesh* moving = createCollisionMesh(6, 1.8f, 2);
+	//ICollisionMesh* moving2 = createCollisionMesh(6, 1.8f, 2);
+	//ICollisionMesh* moving3 = createCollisionMesh(6, 1.8f, 2);
+	//ICollisionMesh* moving4 = createCollisionMesh(6, 1.8f, 2);
+	//ICollisionMesh* moving5 = createCollisionMesh(6, 1.8f, 2);
 
-	ICollisionMesh* still = createCollisionMesh(40000, 1, 100);
+	//ICollisionMesh* still = createCollisionMesh(40000, 1, 100);
 
-	PhysMaterial super;
-	PhysMaterial super2;
-	PhysMaterial super3;
-	PhysMaterial super4;
-	PhysMaterial super5;
-	super.reboundFraction = 0.7f;
-	super2.reboundFraction = 0.7f;
-	super3.reboundFraction = 0.7f;
-	super4.reboundFraction = 0.7f;
-	super5.reboundFraction = 0.7f;
-	IEntity* newEnt1 = entityFactory(glm::vec3(0, 5, 0));
-	IEntity* newEnt2 = entityFactory(glm::vec3(0, 0, 0));
-	IEntity* newEnt3 = entityFactory(glm::vec3(0, 5, -8));
-	IEntity* newEnt4 = entityFactory(glm::vec3(0, 5, -16));
-	IEntity* newEnt5 = entityFactory(glm::vec3(0, 5, -24));
-	IEntity* newEnt6 = entityFactory(glm::vec3(0, 5, -32));
-	newEnt1->setPhysics(PhysicsComponentFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true));
-	newEnt2->setPhysics(PhysicsComponentFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true));
-	newEnt3->setPhysics(PhysicsComponentFactory(newEnt3, moving2, CTYPE_WORLDDYNAMIC, 1, super2, true));
-	newEnt4->setPhysics(PhysicsComponentFactory(newEnt4, moving3, CTYPE_WORLDDYNAMIC, 1, super3, true));
-	newEnt5->setPhysics(PhysicsComponentFactory(newEnt5, moving4, CTYPE_WORLDDYNAMIC, 1, super4, true));
-	newEnt6->setPhysics(PhysicsComponentFactory(newEnt6, moving5, CTYPE_WORLDDYNAMIC, 1, super5, true));
+	//PhysMaterial super;
+	//PhysMaterial super2;
+	//PhysMaterial super3;
+	//PhysMaterial super4;
+	//PhysMaterial super5;
+	//super.reboundFraction = 0.7f;
+	//super2.reboundFraction = 0.7f;
+	//super3.reboundFraction = 0.7f;
+	//super4.reboundFraction = 0.7f;
+	//super5.reboundFraction = 0.7f;
+	//IEntity* newEnt1 = entityFactory(glm::vec3(0, 5, 0));
+	//IEntity* newEnt2 = entityFactory(glm::vec3(0, 0, 0));
+	//IEntity* newEnt3 = entityFactory(glm::vec3(0, 5, -8));
+	//IEntity* newEnt4 = entityFactory(glm::vec3(0, 5, -16));
+	//IEntity* newEnt5 = entityFactory(glm::vec3(0, 5, -24));
+	//IEntity* newEnt6 = entityFactory(glm::vec3(0, 5, -32));
+	//newEnt1->setPhysics(PhysicsComponentFactory(newEnt1, moving, CTYPE_WORLDDYNAMIC, 1, super, true));
+	//newEnt2->setPhysics(PhysicsComponentFactory(newEnt2, still, CTYPE_WORLDSTATIC, 1, super, true));
+	//newEnt3->setPhysics(PhysicsComponentFactory(newEnt3, moving2, CTYPE_WORLDDYNAMIC, 1, super2, true));
+	//newEnt4->setPhysics(PhysicsComponentFactory(newEnt4, moving3, CTYPE_WORLDDYNAMIC, 1, super3, true));
+	//newEnt5->setPhysics(PhysicsComponentFactory(newEnt5, moving4, CTYPE_WORLDDYNAMIC, 1, super4, true));
+	//newEnt6->setPhysics(PhysicsComponentFactory(newEnt6, moving5, CTYPE_WORLDDYNAMIC, 1, super5, true));
 
-	newEnt1->setGravityEnabled(true);
-	newEnt2->setGravityEnabled(false);
+	//newEnt1->setGravityEnabled(true);
+	//newEnt2->setGravityEnabled(false);
 
 
-	IRenderComponent* rc = renderComponentFactory(newEnt1, one);
-	IRenderComponent* rc2 = renderComponentFactory(newEnt2, two);
-	IRenderComponent* rc3 = renderComponentFactory(newEnt3, three);
-	IRenderComponent* rc4 = renderComponentFactory(newEnt4, four);
-	IRenderComponent* rc5 = renderComponentFactory(newEnt5, five);
-	IRenderComponent* rc6 = renderComponentFactory(newEnt6, six);
+	//IRenderComponent* rc = renderComponentFactory(newEnt1, one);
+	//IRenderComponent* rc2 = renderComponentFactory(newEnt2, two);
+	//IRenderComponent* rc3 = renderComponentFactory(newEnt3, three);
+	//IRenderComponent* rc4 = renderComponentFactory(newEnt4, four);
+	//IRenderComponent* rc5 = renderComponentFactory(newEnt5, five);
+	//IRenderComponent* rc6 = renderComponentFactory(newEnt6, six);
 
-	rc2->setScale(vec3(40000, 1, 100));
-	rc->setScale(vec3(1, 1, 1));
-	rc3->setScale(vec3(6, 1.8f, 2));
-	rc4->setScale(vec3(6, 1.8f, 2));
-	rc5->setScale(vec3(6, 1.8f, 2));
-	rc6->setScale(vec3(6, 1.8f, 2));
+	//rc2->setScale(vec3(40000, 1, 100));
+	//rc->setScale(vec3(1, 1, 1));
+	//rc3->setScale(vec3(6, 1.8f, 2));
+	//rc4->setScale(vec3(6, 1.8f, 2));
+	//rc5->setScale(vec3(6, 1.8f, 2));
+	//rc6->setScale(vec3(6, 1.8f, 2));
 
-	newEnt1->setRenderable(rc);
-	newEnt2->setRenderable(rc2);
-	newEnt3->setRenderable(rc3);
-	newEnt4->setRenderable(rc4);
-	newEnt5->setRenderable(rc5);
-	newEnt6->setRenderable(rc6);
+	//newEnt1->setRenderable(rc);
+	//newEnt2->setRenderable(rc2);
+	//newEnt3->setRenderable(rc3);
+	//newEnt4->setRenderable(rc4);
+	//newEnt5->setRenderable(rc5);
+	//newEnt6->setRenderable(rc6);
 
-	//getWorld()->addEntity(newEnt1);
-	getWorld()->addEntity(newEnt2);
-	getWorld()->addEntity(newEnt3);
-	//getWorld()->addEntity(newEnt4);
-	//getWorld()->addEntity(newEnt5);
-	//getWorld()->addEntity(newEnt6);
+	////getWorld()->addEntity(newEnt1);
+	//getWorld()->addEntity(newEnt2);
+	//getWorld()->addEntity(newEnt3);
+	////getWorld()->addEntity(newEnt4);
+	////getWorld()->addEntity(newEnt5);
+	////getWorld()->addEntity(newEnt6);
 }
 
 VOID CALLBACK FrameCallback(PVOID param, BOOLEAN timerorwaitfired)

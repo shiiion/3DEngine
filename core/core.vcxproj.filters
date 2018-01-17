@@ -22,30 +22,30 @@
     <Filter Include="Header Files\General">
       <UniqueIdentifier>{34339552-aba1-4546-bcce-30e1eec7ea2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Implementations\Physics">
+      <UniqueIdentifier>{b3a0b742-3ec7-4d9a-aa77-a25872a133ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Interfaces\Physics">
+      <UniqueIdentifier>{b540ba6b-a2a8-40fd-a34a-169ebcf9610e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{63e7bbf6-9b28-4b3b-86d7-eeb0d66ab02d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Control">
+      <UniqueIdentifier>{11f4c06f-0af7-4363-b16c-d0c3cc591977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Interfaces\Control">
+      <UniqueIdentifier>{718940cc-6853-492d-9746-3c73cde2bf8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Implementations\Control">
+      <UniqueIdentifier>{4596442e-b5c0-4818-9655-68c2a0fd2e17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IEntity.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="ICollisionMesh.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="ISurface.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="IWorld.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionMesh.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="Surface.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
@@ -54,32 +54,8 @@
     <ClInclude Include="CoreReource.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
-    <ClInclude Include="SurfaceCollisionMesh.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="Octree.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="ICharacter.h">
       <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="IAbstractInputSystem.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInputSystem.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="JNAInterfaceFunctions.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="InputWrapper.h">
-      <Filter>Header Files\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementStateCallbackManager.h">
-      <Filter>Header Files\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>Header Files\Implementations</Filter>
@@ -93,11 +69,50 @@
     <ClInclude Include="RenderComponent.h">
       <Filter>Header Files\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="IPhysicsComponent.h">
-      <Filter>Header Files\Interfaces</Filter>
+    <ClInclude Include="UserInputSystem.h">
+      <Filter>Header Files\Implementations\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereMesh.h">
+      <Filter>Header Files\Implementations\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="OBBMesh.h">
+      <Filter>Header Files\Implementations\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="CapsuleMesh.h">
+      <Filter>Header Files\Implementations\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="InputWrapper.h">
+      <Filter>Header Files\Implementations\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Header Files\Implementations\Physics</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsComponent.h">
-      <Filter>Header Files\Implementations</Filter>
+      <Filter>Header Files\Implementations\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="IAbstractInputSystem.h">
+      <Filter>Header Files\Interfaces\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollisionManager.h">
+      <Filter>Header Files\Interfaces\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollisionMesh.h">
+      <Filter>Header Files\Interfaces\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="IPhysicsComponent.h">
+      <Filter>Header Files\Interfaces\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="IWorld.h">
+      <Filter>Header Files\Interfaces\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\Implementations\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Header Files\Implementations\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementStateCallbackManager.h">
+      <Filter>Header Files\Implementations\Control</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,44 +122,32 @@
     <ClCompile Include="Core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Surface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SurfaceCollisionMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Octree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInputSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="JNAInterfaceFunctions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputWrapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MovementStateCallbackManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UserInputSystem.cpp">
+      <Filter>Source Files\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="InputWrapper.cpp">
+      <Filter>Source Files\Control</Filter>
+    </ClCompile>
     <ClCompile Include="PhysicsComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementStateCallbackManager.cpp">
+      <Filter>Source Files\Control</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

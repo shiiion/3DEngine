@@ -27,6 +27,9 @@
 #define RAD_TO_DEG(r) ((r) * (180.0f / PI))
 #define MIN_THRESHOLD 0.000000001f
 
+// make this value modifiable
+#define BAUMGARTE 0.2f
+
 namespace ginkgo
 {
 	using std::vector;
@@ -60,19 +63,16 @@ namespace ginkgo
 	struct PhysMaterial
 	{
 		PhysMaterial()
-			: friction(0), reboundFraction(0)
+			: friction(0), elasticity(0)
 		{}
 
 		float friction;
-		//fraction of rebound velocity (restitution)
-		//minimum restitution is chosen in calculations
-		//0 = no bounce, 1 = 100% bounce
-		float reboundFraction;
+		float elasticity;
 	};
 
 	enum EntityType
 	{
-		entity = 1, PhysicsComponent = 3, character = 4
+		entity = 1, physicsComponent = 3, character = 4
 	};
 
 	struct Triangle
@@ -102,31 +102,35 @@ namespace ginkgo
 		vec3 velStart;
 		vec3 velEnd;
 
-		vec3 accel;
+		vec3 angleStart;
+		vec3 angleEnd;
+
+		vec3 angleVelStart;
+		vec3 angleVelEnd;
 
 		float deltaTime;
 	};
 
-	class ICollisionMesh;
+	class IPhysicsComponent;
 
-	//Collision manifold between two meshes
-	struct CollisionInfo
+	// Collision manifold
+	struct ManifoldData
 	{
-		CollisionInfo(ICollisionMesh* t, ICollisionMesh* o) : thisMesh(t), otherMesh(o) {}
+		ManifoldData(IPhysicsComponent* t, IPhysicsComponent* o)
+			: thisMesh(t), otherMesh(o) {}
 
-		ICollisionMesh* otherMesh;
-		ICollisionMesh* thisMesh;
+		IPhysicsComponent* otherMesh;
+		IPhysicsComponent* thisMesh;
+		
+		vec3 overlapNormal;
+		float overlapDist;
 
+		vec3 contactA, contactB;
+
+		// engine time when this Manifold was first generated
 		float collisionTime;
 
-		int lastSeparatingAxisType;
-		int intersectSide;
-		vec3 lastSeparatingAxis;
-
-		vec3 intersectionPoint;
-
-		vec3 collisionNormal;
-
+		// bool resting;
 	};
 
 	struct SurfaceData
@@ -154,25 +158,15 @@ namespace ginkgo
 		}
 	};
 
-	struct CollisionStationary
-	{
-		CollisionStationary(ICollisionMesh* t, ICollisionMesh* o) : thisMesh(t), otherMesh(o) {}
-
-		ICollisionMesh* otherMesh;
-		ICollisionMesh* thisMesh;
-
-		vec3 normal;
-
-		float overlapDist;
-	};
-
 	struct MoveResult
 	{
-		MoveResult(vec3 finalPos = vec3(), vec3 finalVel = vec3())
-			: finalPos(finalPos), finalVel(finalVel)
+		MoveResult(vec3 finalPos = vec3(), vec3 finalVel = vec3(), vec3 finalAng = vec3(), vec3 finalAngVel = vec3())
+			: finalPos(finalPos), finalVel(finalVel), finalAng(finalAng), finalAngVel(finalAngVel)
 		{}
 		vec3 finalPos;
 		vec3 finalVel;
+		vec3 finalAng;
+		vec3 finalAngVel;
 	};
 
 	struct RaytraceResult
@@ -229,6 +223,8 @@ namespace ginkgo
 		float x, y, z;
 		float l, w, h;
 	};
+
+#pragma region Input
 
 #define INPUTTYPE_INVALID	-1
 #define INPUTTYPE_USER		1
@@ -322,4 +318,7 @@ namespace ginkgo
 		bool prevSet;
 		Command* command;
 	};
+
+#pragma endregion
+
 };

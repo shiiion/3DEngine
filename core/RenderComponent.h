@@ -26,6 +26,7 @@ namespace ginkgo
 
 		void onTick(float elapsedTime) override;
 		void onTickEnd(float elapsedTime) override;
+		int type() const override;
 
 		void onDetach() override;
 	};

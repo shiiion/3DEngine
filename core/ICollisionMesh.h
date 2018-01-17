@@ -10,40 +10,61 @@ namespace ginkgo
 #define CMESH_SHAPE_CAPSULE 2
 #define CMESH_SHAPE_SPHERE 3
 
-	class ISurface;
 	class IPhysicsComponent;
 
+	// Make subclass of me for each shape
+	struct MeshProperties
+	{
+		MeshProperties() : scale(vec3()) {}
+
+		vec3 scale;
+	};
+
+	struct OBBProperties : public MeshProperties
+	{
+	public:
+		float halfWidth;
+		float halfLength;
+		float halfHeight;
+	};
+
+	struct SphereProperties : public MeshProperties
+	{
+	public:
+		float radius;
+	};
+
+	struct CapsuleProperties : public MeshProperties
+	{
+	public:
+		float length;
+		float radius;
+	};
+
+
+
+	// Reduced the size a lot!!!!
 	class ICollisionMesh
 	{
 	public:
-		virtual MoveInfo const& getLastMove() const = 0;
-		virtual void generateVertexPath(float deltaTime) = 0;
 
 		virtual void setOwner(IPhysicsComponent* owner) = 0;
+		virtual IPhysicsComponent* getOwner() = 0;
 
-		virtual bool testCollision(ICollisionMesh const& other, float deltaTime, CollisionInfo& collisionOut) = 0;
-		//collisionOut should provide an axis normal to get penetration distance
-		virtual bool testCollisionStationary(ICollisionMesh const& other, CollisionStationary& collisionOut) = 0;
-		virtual bool testRay(RaytraceParams& params, RaytraceResult& resultOut) const = 0;
+		virtual vec3 support(vec3 const& direction) const = 0;
 
-		virtual void generateCollisionInfo(ICollisionMesh const& other, CollisionInfo& collisionOut) = 0;
-		virtual float getAxisOverlap(vec3 const& axisNorm, ICollisionMesh const& other) const = 0;
+		virtual int getMeshType() const = 0;
 
-		virtual IPhysicsComponent* getOwner() const = 0;
-
-		virtual void setCachedCenter(vec3 const& center) = 0;
-		virtual vec3 const& getCachedCenter() const = 0;
-
-		virtual void setCachedVelocity(vec3 const& vel) = 0;
-		virtual vec3 const& getCachedVelocity() const = 0;
-
-		virtual int getCollisionShape() const = 0;
-
-		virtual void setRotation(quat const& rotation) = 0;
-
+		// Subclasses of ICollisionMesh must also make subclass of MeshProperties
+		virtual void setMeshProperties(MeshProperties const& prop) = 0;
+		virtual MeshProperties const& getMeshProperties() const = 0;
 
 		virtual ~ICollisionMesh() = 0;
 	};
 
-	DECLSPEC_CORE ICollisionMesh* createCollisionMesh(float w, float h, float l);
+	DECLSPEC_CORE ICollisionMesh* createSphereCollision(float radius);
+	// length is of the internal cylinder, excluding hemispheres
+	DECLSPEC_CORE ICollisionMesh* createCapsuleCollision(float length, float radius);
+	// length follows z, width follows x, height follows y
+	DECLSPEC_CORE ICollisionMesh* createOBBCollision(float halfLength, float halfWidth, float halfHeight);
 }

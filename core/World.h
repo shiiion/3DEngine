@@ -1,7 +1,6 @@
 #pragma once
 #include "IWorld.h"
 #include "Octree.h"
-#include "Collision.h"
 #include "MovementStateCallbackManager.h"
 //world space is a box spanning -4000000 ~ 4000000 L, W, and H
 #define WORLD_DIMENSIONS -4000000.f, -4000000.f, -4000000.f, 8000000.f, 8000000.f, 8000000.f
@@ -16,8 +15,8 @@ namespace ginkgo
 	private:
 		vec3 gravity;
 		vector<IEntity*> entityList;
-		Octree worldTree;
-		vector<Collision> collisions;
+		ICollisionManager* collisionMgr;
+		//Octree worldTree;
 		MovementStateCallbackManager manager;
 
 	public:
@@ -51,13 +50,6 @@ namespace ginkgo
 			return worldTree;
 		}
 
-		void addCollision(CollisionInfo const& info, float deltaTime) override;
-		void clearCollisionCache() override;
-
-		void resolveCollisions(INT32 iterations) override;
-		bool collisionExists(IPhysicsComponent* a, IPhysicsComponent* b) const override;
-
-		void preCollisionTest();
 		void updateOctreeIndex(IEntity* entity);
 	};
 }

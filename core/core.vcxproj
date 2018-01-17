@@ -160,46 +160,41 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CapsuleMesh.h" />
     <ClInclude Include="Character.h" />
-    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="IAbstractInputSystem.h" />
     <ClInclude Include="ICharacter.h" />
-    <ClInclude Include="CollisionMesh.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CoreReource.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="ICollisionManager.h" />
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="InputWrapper.h" />
-    <ClInclude Include="JNAInterfaceFunctions.h" />
     <ClInclude Include="MovementStateCallbackManager.h" />
+    <ClInclude Include="OBBMesh.h" />
     <ClInclude Include="Octree.h" />
-    <ClInclude Include="Surface.h" />
     <ClInclude Include="ICollisionMesh.h" />
     <ClInclude Include="IEntity.h" />
-    <ClInclude Include="ISurface.h" />
     <ClInclude Include="IPhysicsComponent.h" />
     <ClInclude Include="IRenderComponent.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="IWorld.h" />
-    <ClInclude Include="SurfaceCollisionMesh.h" />
+    <ClInclude Include="SphereMesh.h" />
     <ClInclude Include="UserInputSystem.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
-    <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="CollisionMesh.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="InputWrapper.cpp" />
-    <ClCompile Include="JNAInterfaceFunctions.cpp" />
     <ClCompile Include="MovementStateCallbackManager.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
-    <ClCompile Include="Surface.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
-    <ClCompile Include="SurfaceCollisionMesh.cpp" />
     <ClCompile Include="UserInputSystem.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

@@ -28,5 +28,5 @@ namespace ginkgo
 		virtual ~ICharacter() = 0;
 	};
 
-	DECLSPEC_CORE ICharacter* characterFactory(const vec3& pos, const quat& rot = quat(), const vec3& vel = vec3(), const vec3& accel = vec3());
+	DECLSPEC_CORE ICharacter* characterFactory(const vec3& pos, const vec3& rot = vec3(), const vec3& vel = vec3(), const vec3& accel = vec3());
 }

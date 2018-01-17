@@ -10,18 +10,20 @@ namespace ginkgo
 
 	protected:
 		vec3 position;
-		quat rotation;
+		vec3 rotation;
+		vec3 angularVelocity;
 		vec3 velocity;
 		vec3 acceleration;
 		bool gravityEnabled;//default true
 
-		IPhysicsComponent* physicsComponent;
-		IRenderComponent* renderComponent;
+		IPhysicsComponent* physics;
 
 		vector<IComponent*> componentList;
 
+		MoveResult finalMove;
+
 	public:
-		Entity(const vec3& pos, const quat& rot = quat(), const vec3& vel = vec3(), const vec3& accel = vec3());
+		Entity(const vec3& pos, const vec3& rot = vec3(), const vec3& vel = vec3(), const vec3& accel = vec3());
 
 		virtual void beginTick(float elapsedTime) override;
 		virtual void endTick(float elapsedTime) override;
@@ -29,39 +31,25 @@ namespace ginkgo
 		const vec3& getPosition() const override;
 		const vec3& getVelocity() const override;
 		const vec3& getAcceleration() const override;
-		const quat& getRotation() const override;
+		quat getRotationQ() const override;
+		const vec3& getRotation() const override;
 		long getEntityID() const override;
 		bool isGravityEnabled() const override;
-		IRenderComponent* getRenderable() override
-		{
-			return const_cast<IRenderComponent*>(static_cast<Entity const*>(this)->getRenderable());
-		}
-		IRenderComponent const* getRenderable() const override
-		{
-			return renderComponent;
-		}
-		IPhysicsComponent* getPhysics() override
-		{
-			return const_cast<IPhysicsComponent*>(static_cast<Entity const*>(this)->getPhysics());
-		}
-		IPhysicsComponent const* getPhysics() const override
-		{
-			return physicsComponent;
-		}
 
 		void setPosition(const vec3& pos) override;
 		void setVelocity(const vec3& vel) override;
 		void setAcceleration(const vec3& acc) override;
 		void addAcceleration(const vec3& acc) override { acceleration += acc; }
-		void setRotation(const quat& ang) override;
+		void setRotationQ(const quat& ang) override;
+		void setRotation(const vec3& ang) override;
 		void setEntityID(long ID) override;
-		void setRenderable(IRenderComponent* component) override;
-		void setPhysics(IPhysicsComponent* component) override;
 		void setGravityEnabled(bool enabled) override;
 
 		EntityType getEntityType() const override;
 
 		void addComponent(IComponent* component) override;
+
+		IPhysicsComponent* getPhysics() override;
 
 		virtual ~Entity();
 	};

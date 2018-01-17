@@ -10,7 +10,7 @@ namespace ginkgo
 		: parent(parent)
 	{
 		this->mesh = mesh;
-		setRotation(parent->getRotation());
+		setRotation(parent->getRotationQ());
 	}
 
 	const vec3& RenderComponent::getScale() const
@@ -45,12 +45,12 @@ namespace ginkgo
 
 	void RenderComponent::onTick(float elapsedTime)
 	{
-
 	}
 
 	void RenderComponent::onTickEnd(float elapsedTime)
 	{
 		setPosition(parent->getPosition());
+		setRotation(parent->getRotationQ());
 	}
 
 	IEntity* RenderComponent::getParent() 
@@ -67,6 +67,11 @@ namespace ginkgo
 	{
 		getRendererInstance()->removeRenderable(mesh->getIndex());
 		delete mesh;
+	}
+
+	int RenderComponent::type() const
+	{
+		return RENDER_COMPONENT;
 	}
 
 	IRenderComponent::~IRenderComponent() {}

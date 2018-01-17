@@ -39,14 +39,6 @@ namespace ginkgo
 		virtual void checkMovementStates(float elapsedTime) = 0;
 		virtual void doMovementStates(float elapsedTime) = 0;
 
-		virtual void addCollision(CollisionInfo const& info, float deltaTime) = 0;
-		virtual void clearCollisionCache() = 0;
-
-		virtual void resolveCollisions(INT32 iterations) = 0;
-
-		virtual bool collisionExists(IPhysicsComponent* a, IPhysicsComponent* b) const = 0;
-
-
 		virtual ~IWorld() = 0;
 	};
 }

@@ -90,7 +90,7 @@ namespace ginkgo
 	{
 		const vector<IEntity*>& entityList = world->getEntityList();
 
-		vector<IPhysicsComponent*> PhysicsComponents;
+		vector<IPhysicsComponent*> physicsComponents;
 
  		for (IEntity* e : entityList)
 		{
@@ -98,26 +98,28 @@ namespace ginkgo
 			//world->function(); -- callback(characterInstance, elapsedTime);
 			
 			e->beginTick(elapsedTime);
-			if (e->getEntityType() >= PhysicsComponent)
+			if (e->getEntityType() >= physicsComponent)
 			{
-				PhysicsComponents.emplace_back(e->getPhysics());
+				physicsComponents.emplace_back(e->getPhysics());
 			}
 			world->updateOctreeIndex(e);
 		}
 		//world->recalculateTree();
-		world->preCollisionTest();
+		//world->preCollisionTest();
 
 		vector<IPhysicsComponent*> colliders;
 
 		//COLLISION DETECTION
-		for (IPhysicsComponent* p : PhysicsComponents)
+		for (IPhysicsComponent* p : physicsComponents)
 		{
 			if (p->getCollisionType() == CTYPE_WORLDSTATIC || !p->doesCollide())
 			{
 				continue;
 			}
 
-			world->getEntityTree().retrieveCollisions(colliders, p);
+			//world->getEntityTree().retrieveCollisions(colliders, p);
+
+			auto& entList = world->getEntityList();
 
 			for (IPhysicsComponent* collider : colliders)
 			{
